@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Financial Reporting &amp; Analysis Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap');
+
+  :root {
+    --green: #1D9E75;
+    --green-light: #E1F5EE;
+    --green-dark: #0F6E56;
+    --red: #E24B4A;
+    --red-light: #FCEBEB;
+    --red-dark: #A32D2D;
+    --blue: #2563EB;
+    --bg: #F9FAFB;
+    --card: #FFFFFF;
+    --border: #E5E7EB;
+    --text: #111827;
+    --text2: #6B7280;
+    --text3: #9CA3AF;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--text);
+    text-align: center;
+  }
+
+  .header-sub {
+    font-size: 11px;
+    color: var(--text2);
+    text-align: center;
+    margin-top: 2px;
+  }
+
+  .prog-bar {
+    height: 3px;
+    background: var(--border);
+    position: sticky;
+    top: 61px;
+    z-index: 9;
+  }
+
+  .prog-fill {
+    height: 3px;
+    background: var(--green);
+    transition: width 0.4s ease;
+  }
+
+  .container {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+  }
+
+  .q-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .q-num {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text2);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .q-score {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--green);
+    background: var(--green-light);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .q-unit {
+    font-size: 11px;
+    color: var(--text3);
+    margin-bottom: 10px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .q-text {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  .opts {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .opt {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 15px 14px;
+    text-align: left;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    width: 100%;
+    min-height: 56px;
+    line-height: 1.45;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  }
+
+  .opt:active:not(:disabled) {
+    transform: scale(0.98);
+    background: #F3F4F6;
+  }
+
+  .opt:disabled { cursor: default; }
+
+  .lbl {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text2);
+    margin-top: 0px;
+    flex-shrink: 0;
+  }
+
+  .opt.correct { border-color: var(--green); background: var(--green-light); }
+  .opt.correct .lbl { background: var(--green); border-color: var(--green); color: #fff; }
+  .opt.wrong { border-color: var(--red); background: var(--red-light); }
+  .opt.wrong .lbl { background: var(--red); border-color: var(--red); color: #fff; }
+
+  .fb {
+    margin-top: 14px;
+    font-size: 14px;
+    padding: 13px 15px;
+    border-radius: var(--radius);
+    line-height: 1.6;
+    display: none;
+  }
+
+  .fb.ok { background: var(--green-light); color: var(--green-dark); border-left: 3px solid var(--green); }
+  .fb.bad { background: var(--red-light); color: var(--red-dark); border-left: 3px solid var(--red); }
+
+  .nxt-wrap { display: none; margin-top: 16px; }
+
+  .nxt {
+    background: var(--text);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 16px;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    -webkit-appearance: none;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+
+  .nxt:active { opacity: 0.85; transform: scale(0.98); }
+
+  /* Result screen */
+  .result {
+    text-align: center;
+    padding: 20px 0 40px;
+  }
+
+  .result-circle {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: var(--green-light);
+    border: 4px solid var(--green);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+
+  .result-big {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    color: var(--green-dark);
+    line-height: 1;
+  }
+
+  .result-pct {
+    font-size: 13px;
+    color: var(--green-dark);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .result-grade {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .result-msg {
+    font-size: 14px;
+    color: var(--text2);
+    margin-bottom: 24px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 8px;
+  }
+
+  .stat-v {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .stat-l {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 3px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .rst {
+    background: var(--text);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 16px;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    -webkit-appearance: none;
+    transition: opacity 0.15s;
+  }
+
+  .rst:active { opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">Financial Reporting &amp; Analysis</div>
+  <div class="header-sub">30 Questions &bull; All Units</div>
+</div>
+<div class="prog-bar"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+
+<div class="container">
+  <div id="area"></div>
+</div>
+
+<script>
+var qs = [
+  {u:"Unit 1",q:"What is the primary aim of financial statements?",opts:["To calculate income tax liabilities","To provide useful financial information to investors, lenders, and creditors","To help the government monitor corporate activity","To replace the need for external audits"],ans:1,exp:"The primary aim is to provide financial information useful to present and potential investors, lenders, and other creditors in making decisions about providing resources to the entity."},
+  {u:"Unit 1",q:"Which qualitative characteristic ensures that different knowledgeable observers can reach consensus that an item is faithfully represented?",opts:["Relevance","Timeliness","Verifiability","Comparability"],ans:2,exp:"Verifiability ensures that different knowledgeable and independent observers can reach consensus that an item is faithfully represented."},
+  {u:"Unit 1",q:"Schedule III of the Companies Act, 2013 took effect from which date?",opts:["1st April 2013","1st April 2014","1st January 2015","1st April 2016"],ans:1,exp:"Schedule III took effect from 1st April 2014, replacing the older Schedule VI under the Companies Act, 1956."},
+  {u:"Unit 1",q:"Division II of Schedule III applies to companies following which framework?",opts:["Accounting Standards (AS) Rules, 2006","Indian Accounting Standards (Ind AS)","IFRS directly","US GAAP"],ans:1,exp:"Division II is applicable to companies preparing financial statements in compliance with Indian Accounting Standards (Ind AS), as per the Companies (Ind AS) Rules, 2015."},
+  {u:"Unit 1",q:"Which cash flow activities include cash received from customers and cash paid to suppliers?",opts:["Investing activities","Financing activities","Operating activities","Non-operating activities"],ans:2,exp:"Operating activities include the principal revenue-generating activities such as cash received from customers and cash paid to suppliers and employees."},
+  {u:"Unit 1",q:"Which Cash Flow Statement method begins with net profit and adjusts for non-cash items and working capital changes?",opts:["Direct method","Accrual method","Indirect method","Cash basis method"],ans:2,exp:"The indirect method begins with net profit and makes adjustments for non-cash items (e.g., depreciation) and changes in working capital. It is widely used in India."},
+  {u:"Unit 2",q:"Inventories are valued at which of the following under AS 2 / Ind AS 2?",opts:["Cost price only","Net realizable value only","Cost or net realizable value, whichever is lower","Fair market value"],ans:2,exp:"Inventories are valued at cost or net realizable value, whichever is lower, as per AS 2 or Ind AS 2."},
+  {u:"Unit 2",q:"Which of the following assets is NOT subject to depreciation?",opts:["Buildings","Machinery","Land","Furniture and fixtures"],ans:2,exp:"Land is generally considered to have an infinite useful life and is non-depreciable."},
+  {u:"Unit 2",q:"What is the depreciable value of an asset?",opts:["The original purchase price","The current market value","The cost minus the residual (salvage) value","The accumulated depreciation charged so far"],ans:2,exp:"Depreciable value = Cost of asset minus Residual (salvage) value. E.g., a machine costing Rs. 5,00,000 with residual value Rs. 50,000 has a depreciable value of Rs. 4,50,000."},
+  {u:"Unit 2",q:"Deferred Tax Liability (DTL) arises when:",opts:["Taxable profit exceeds accounting profit","Accounting profit exceeds taxable profit","The company makes a loss","Depreciation is higher in tax returns than in books"],ans:1,exp:"DTL arises when accounting profit exceeds taxable profit due to temporary differences, meaning taxes will be payable in future periods."},
+  {u:"Unit 2",q:"Which is a primary objective of depreciation?",opts:["To set aside cash for asset replacement","To match the cost of the asset with revenues over its useful life","To reduce the market value of assets","To comply with dividend distribution rules"],ans:1,exp:"A primary objective is adherence to the matching principle, spreading the asset's cost over the periods that benefit from its use to accurately measure periodic profitability."},
+  {u:"Unit 2",q:"Short-term borrowings repayable within 12 months fall under which category?",opts:["Non-current liabilities","Shareholders' funds","Current liabilities","Deferred tax liabilities"],ans:2,exp:"Short-term borrowings (bank overdrafts, cash credit, commercial paper etc.) are current liabilities as they are expected to be settled within 12 months."},
+  {u:"Unit 3",q:"Asset cost Rs. 6,00,000 | Residual value Rs. 60,000 | Useful life 6 years. What is the annual SLM depreciation?",opts:["Rs. 1,00,000","Rs. 90,000","Rs. 80,000","Rs. 1,10,000"],ans:1,exp:"Annual Depreciation = (Rs. 6,00,000 - Rs. 60,000) / 6 = Rs. 5,40,000 / 6 = Rs. 90,000 per year."},
+  {u:"Unit 3",q:"Asset cost Rs. 1,00,000, WDV rate 20%. What is the depreciation in Year 2?",opts:["Rs. 20,000","Rs. 18,000","Rs. 16,000","Rs. 14,000"],ans:2,exp:"Year 1: Rs. 1,00,000 x 20% = Rs. 20,000, Closing value Rs. 80,000. Year 2: Rs. 80,000 x 20% = Rs. 16,000."},
+  {u:"Unit 3",q:"The SYD denominator formula for a useful life of 5 years is:",opts:["n x n","n(n+1)/2","n(n-1)/2","n squared / 2"],ans:1,exp:"Sum of years digits = n(n+1)/2. For useful life = 5 years: 5 x 6 / 2 = 15."},
+  {u:"Unit 3",q:"Which depreciation method does the Income Tax Act, 1961 predominantly use in India?",opts:["Straight-Line Method","Units of Production Method","Sum of Years Digits Method","Written Down Value (WDV) Method"],ans:3,exp:"The Income Tax Act, 1961 primarily uses the WDV method. SLM is only permitted for power generation undertakings."},
+  {u:"Unit 3",q:"Under the Periodic Inventory System, the COGS formula is:",opts:["Opening Inventory - Closing Inventory","Opening Inventory + Purchases - Closing Inventory","Purchases - Closing Inventory","Opening Inventory + Sales - Closing Inventory"],ans:1,exp:"COGS = Opening Inventory + Purchases - Closing Inventory under the Periodic Inventory System."},
+  {u:"Unit 3",q:"Which inventory system updates stock records in real-time after every transaction using ERP and barcode technology?",opts:["Periodic Inventory System","Manual Inventory System","Perpetual Inventory System","Batch Inventory System"],ans:2,exp:"The Perpetual Inventory System records every movement instantly using systems like POS, ERP, barcode scanners, and RFID."},
+  {u:"Unit 4",q:"Opening: 100 units at Rs. 10. Purchase: 200 units at Rs. 12. Sold: 150 units. What is COGS under FIFO?",opts:["Rs. 1,800","Rs. 1,600","Rs. 1,500","Rs. 2,000"],ans:1,exp:"FIFO uses oldest costs first. COGS = 100 x Rs. 10 + 50 x Rs. 12 = Rs. 1,000 + Rs. 600 = Rs. 1,600."},
+  {u:"Unit 4",q:"Which inventory valuation method is NOT permitted under IFRS and Ind AS?",opts:["FIFO","Weighted Average Cost","LIFO","Specific Identification"],ans:2,exp:"LIFO is prohibited under IFRS and Ind AS. AS 2 and Ind AS 2 only permit FIFO and Weighted Average Cost."},
+  {u:"Unit 4",q:"The Weighted Average Cost per unit is calculated as:",opts:["Closing inventory cost / units sold","(Opening inventory cost + Purchase cost) / (Opening units + Units purchased)","Total purchases / number of orders","(COGS + Closing inventory) / 2"],ans:1,exp:"WAC per unit = (Cost of Opening Inventory + Cost of Purchases) divided by (Opening Units + Units Purchased)."},
+  {u:"Unit 4",q:"Which valuation method tracks the actual cost of each individual item and is used for jewelry, luxury autos, or real estate?",opts:["FIFO","LIFO","Weighted Average Cost","Specific Identification"],ans:3,exp:"The Specific Identification Method attributes the actual cost of each specific item directly to it. It is suited for unique, high-value, or distinguishable items."},
+  {u:"Unit 4",q:"In an inflationary environment, which method gives the highest ending inventory value on the balance sheet?",opts:["LIFO","Weighted Average Cost","FIFO","Specific Identification"],ans:2,exp:"FIFO assigns older (cheaper) costs to COGS and leaves the most recent (higher) costs in ending inventory, giving the highest balance sheet value during inflation."},
+  {u:"Unit 5",q:"The standard COGS formula is:",opts:["Revenue - Gross Profit","Opening Inventory + Net Purchases + Direct Expenses - Closing Inventory","Sales - Operating Expenses","Net Purchases - Closing Inventory"],ans:1,exp:"COGS = Opening Inventory + Net Purchases + Direct Expenses - Closing Inventory. This determines gross profit."},
+  {u:"Unit 5",q:"Opening Rs. 20,000 | Gross Purchases Rs. 80,000 | Returns Rs. 5,000 | Carriage Inward Rs. 3,000 | Closing Rs. 18,000. What is COGS?",opts:["Rs. 75,000","Rs. 80,000","Rs. 78,000","Rs. 85,000"],ans:1,exp:"COGS = Rs. 20,000 + (Rs. 80,000 - Rs. 5,000) + Rs. 3,000 - Rs. 18,000 = Rs. 80,000."},
+  {u:"Unit 5",q:"Which of the following is a NON-operating expense?",opts:["Advertising and promotion","Salaries of administrative staff","Interest expense on bank loans","Office rent"],ans:2,exp:"Interest expense arises from financing activities, not core business operations. It is reported below EBIT to arrive at Profit Before Tax (PBT)."},
+  {u:"Unit 5",q:"The Interest Coverage Ratio is calculated as:",opts:["Net Profit / Interest Expense","EBIT / Interest Expense","Revenue / Interest Expense","Operating Cash Flow / Total Debt"],ans:1,exp:"Interest Coverage Ratio = EBIT divided by Interest Expense. It shows how easily a company can cover interest costs from operating profit."},
+  {u:"Unit 6",q:"Under Ind AS 115, which condition is NOT required for revenue recognition?",opts:["A contract with identifiable performance obligations","Cash has been received from the customer","Control of goods or services is transferred","Transaction price can be measured reliably"],ans:1,exp:"Under Ind AS 115, revenue is recognized when control is transferred and other conditions are met, not when cash is received. Cash receipt is the basis under the cash method only."},
+  {u:"Unit 6",q:"How many steps does the Ind AS 115 revenue recognition model have?",opts:["Three steps","Four steps","Five steps","Two steps"],ans:2,exp:"Ind AS 115 / IFRS 15 outlines a five-step model: (1) identify the contract, (2) identify performance obligations, (3) determine transaction price, (4) allocate the price, (5) recognize revenue when obligations are satisfied."},
+  {u:"Unit 6",q:"Under Ind AS 115, how is interest income recognized?",opts:["When cash is received","At the end of the financial year","Using the effective interest method","When the loan agreement is signed"],ans:2,exp:"Interest income is recognized using the effective interest method, spreading it over the period using the effective interest rate of the financial instrument."}
+];
+
+var cur = 0, score = 0, answered = false;
+
+function render() {
+  if (cur >= qs.length) { showResult(); return; }
+  var q = qs[cur];
+  document.getElementById('prog').style.width = (cur / qs.length * 100) + '%';
+  var html = '';
+  html += '<div class="q-meta"><span class="q-num">Q' + (cur+1) + ' / ' + qs.length + '</span><span class="q-score">Score: ' + score + '</span></div>';
+  html += '<div class="q-unit">' + q.u + '</div>';
+  html += '<div class="q-text">' + q.q + '</div>';
+  html += '<div class="opts">';
+  for (var i = 0; i < q.opts.length; i++) {
+    html += '<button class="opt" onclick="choose(' + i + ')" id="o' + i + '"><span class="lbl">' + String.fromCharCode(65+i) + '</span><span>' + q.opts[i] + '</span></button>';
+  }
+  html += '</div>';
+  html += '<div class="fb" id="fb"></div>';
+  html += '<div class="nxt-wrap" id="nw"><button class="nxt" onclick="next()">' + (cur < qs.length - 1 ? 'Next Question' : 'See My Results') + '</button></div>';
+  document.getElementById('area').innerHTML = html;
+}
+
+function choose(i) {
+  if (answered) return;
+  answered = true;
+  var q = qs[cur];
+  var btns = document.querySelectorAll('.opt');
+  for (var b = 0; b < btns.length; b++) btns[b].disabled = true;
+  if (i === q.ans) { document.getElementById('o'+i).className = 'opt correct'; score++; }
+  else { document.getElementById('o'+i).className = 'opt wrong'; document.getElementById('o'+q.ans).className = 'opt correct'; }
+  var el = document.getElementById('fb');
+  el.style.display = 'block';
+  el.className = 'fb ' + (i === q.ans ? 'ok' : 'bad');
+  el.textContent = (i === q.ans ? 'Correct! ' : 'Incorrect. ') + q.exp;
+  document.getElementById('nw').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function next() {
+  cur++; answered = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  render();
+}
+
+function showResult() {
+  document.getElementById('prog').style.width = '100%';
+  var pct = Math.round(score / qs.length * 100);
+  var wrong = qs.length - score;
+  var grade, msg;
+  if (score >= 27) { grade = 'Outstanding!'; msg = 'Distinction level performance. Excellent grasp of all units.'; }
+  else if (score >= 24) { grade = 'Excellent!'; msg = 'Merit level. You have a strong understanding of the material.'; }
+  else if (score >= 18) { grade = 'Good Pass'; msg = 'Solid understanding. A little more revision will get you to merit.'; }
+  else if (score >= 12) { grade = 'Fair'; msg = 'You are getting there. Keep revising the weaker units.'; }
+  else { grade = 'Keep Going'; msg = 'Revisit all units and try again. You will improve!'; }
+
+  var html = '<div class="result">';
+  html += '<div class="result-circle"><div class="result-big">' + score + '/' + qs.length + '</div><div class="result-pct">' + pct + '%</div></div>';
+  html += '<div class="result-grade">' + grade + '</div>';
+  html += '<div class="result-msg">' + msg + '</div>';
+  html += '<div class="stats">';
+  html += '<div class="stat"><div class="stat-v" style="color:#1D9E75">' + score + '</div><div class="stat-l">Correct</div></div>';
+  html += '<div class="stat"><div class="stat-v" style="color:#E24B4A">' + wrong + '</div><div class="stat-l">Wrong</div></div>';
+  html += '<div class="stat"><div class="stat-v">' + pct + '%</div><div class="stat-l">Score</div></div>';
+  html += '</div>';
+  html += '<button class="rst" onclick="restart()">Retake Quiz</button>';
+  html += '</div>';
+  document.getElementById('area').innerHTML = html;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restart() { cur = 0; score = 0; answered = false; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+render();
+</script>
+</body>
+</html>
