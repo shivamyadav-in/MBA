@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Marketing Management Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+  :root {
+    --primary: #0F6FBE;
+    --primary-light: #EFF6FF;
+    --green: #15803D;
+    --green-light: #DCFCE7;
+    --red: #B91C1C;
+    --red-light: #FEE2E2;
+    --gold: #B45309;
+    --gold-light: #FEF3C7;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --border: #E2E8F0;
+    --text: #0F172A;
+    --text2: #64748B;
+    --text3: #94A3B8;
+    --radius: 16px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  .header {
+    background: var(--card); border-bottom: 1px solid var(--border);
+    padding: 14px 20px 12px; position: sticky; top: 0; z-index: 10;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+  }
+  .header-inner { max-width: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .header-title { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--text); line-height: 1.2; }
+  .header-badge { font-size: 11px; font-weight: 700; color: var(--primary); background: var(--primary-light); padding: 4px 11px; border-radius: 20px; white-space: nowrap; letter-spacing: 0.03em; }
+
+  .prog-track { height: 3px; background: var(--border); position: sticky; top: 57px; z-index: 9; }
+  .prog-fill { height: 3px; background: linear-gradient(90deg, var(--primary), #0EA5E9); transition: width 0.45s cubic-bezier(0.4,0,0.2,1); border-radius: 0 2px 2px 0; }
+
+  .container { max-width: 600px; margin: 0 auto; padding: 22px 16px 70px; }
+
+  .q-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .q-counter { font-size: 11px; font-weight: 700; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .q-unit-tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; color: var(--primary); background: var(--primary-light); padding: 4px 10px; border-radius: 8px; margin-bottom: 10px; letter-spacing: 0.02em; }
+  .case-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; color: var(--gold); background: var(--gold-light); padding: 3px 9px; border-radius: 6px; margin-bottom: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .q-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; box-shadow: var(--shadow); }
+  .q-text { font-size: 16px; font-weight: 600; line-height: 1.55; color: var(--text); }
+
+  .opts { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .opt { display: flex; align-items: flex-start; gap: 12px; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; padding: 13px 15px; cursor: pointer; text-align: left; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text); transition: border-color 0.15s, background 0.15s, transform 0.1s; line-height: 1.45; box-shadow: 0 1px 3px rgba(0,0,0,0.04); -webkit-appearance: none; width: 100%; }
+  .opt:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-light); transform: translateY(-1px); }
+  .opt:active:not(:disabled) { transform: translateY(0); }
+  .opt .lbl { min-width: 26px; height: 26px; border-radius: 8px; background: var(--bg); border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--text2); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; margin-top: 1px; }
+  .opt.correct { border-color: var(--green); background: var(--green-light); }
+  .opt.correct .lbl { background: var(--green); border-color: var(--green); color: #fff; }
+  .opt.wrong { border-color: var(--red); background: var(--red-light); }
+  .opt.wrong .lbl { background: var(--red); border-color: var(--red); color: #fff; }
+
+  .fb { display: none; border-radius: 12px; padding: 14px 16px; font-size: 13.5px; line-height: 1.6; margin-bottom: 14px; border-left: 4px solid transparent; }
+  .fb.ok { background: var(--green-light); border-color: var(--green); color: #14532D; }
+  .fb.bad { background: var(--red-light); border-color: var(--red); color: #7F1D1D; }
+  .fb-head { font-weight: 700; font-size: 13px; margin-bottom: 4px; display: block; }
+
+  .nxt-wrap { display: none; }
+  .nxt { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--primary), #0EA5E9); color: #fff; border: none; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 0.02em; box-shadow: 0 4px 14px rgba(15,111,190,0.3); transition: opacity 0.15s, transform 0.1s; }
+  .nxt:hover { opacity: 0.92; transform: translateY(-1px); }
+  .nxt:active { transform: translateY(0); }
+
+  .splash { text-align: center; padding: 48px 24px; }
+  .splash-icon { font-size: 52px; margin-bottom: 16px; }
+  .splash-title { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text); margin-bottom: 10px; line-height: 1.3; }
+  .splash-sub { font-size: 14px; color: var(--text2); line-height: 1.6; max-width: 340px; margin: 0 auto 28px; }
+  .splash-stats { display: flex; justify-content: center; gap: 24px; margin-bottom: 28px; }
+  .splash-stat { text-align: center; }
+  .splash-stat-v { font-size: 22px; font-weight: 800; color: var(--primary); }
+  .splash-stat-l { font-size: 11px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+  .start-btn { width: 100%; max-width: 320px; padding: 16px; background: linear-gradient(135deg, var(--primary), #0EA5E9); color: #fff; border: none; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 20px rgba(15,111,190,0.3); letter-spacing: 0.02em; transition: opacity 0.15s, transform 0.1s; }
+  .start-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+
+  .result { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 24px; text-align: center; box-shadow: var(--shadow); }
+  .result-ring { width: 130px; height: 130px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #0EA5E9); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 8px 30px rgba(15,111,190,0.25); }
+  .result-big { font-size: 32px; font-weight: 800; color: #fff; line-height: 1; }
+  .result-pct { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.8); margin-top: 4px; }
+  .result-grade { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text); margin-bottom: 8px; }
+  .result-msg { font-size: 14px; color: var(--text2); max-width: 340px; margin: 0 auto 24px; line-height: 1.6; }
+  .stats { display: flex; justify-content: center; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+  .stat { flex: 1; padding: 14px 8px; border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: none; }
+  .stat-v { font-size: 22px; font-weight: 800; margin-bottom: 3px; }
+  .stat-l { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
+  .rst { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--primary), #0EA5E9); color: #fff; border: none; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(15,111,190,0.3); transition: opacity 0.15s; }
+  .rst:hover { opacity: 0.92; }
+
+  .err-banner { background: #FEE2E2; border: 2px solid #B91C1C; border-radius: 12px; padding: 16px 20px; color: #7F1D1D; font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
+  .err-banner strong { display: block; margin-bottom: 6px; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-title">Marketing Management</div>
+    <div class="header-badge" id="hbadge">50 Questions</div>
+  </div>
+</div>
+<div class="prog-track"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+<div class="container"><div id="area"></div></div>
+
+<script>
+/* =============================================================
+   QUIZ DATA — 50 questions, 14 units, 8 case studies
+   ans = 0-based index of the correct option in opts[]
+   Validation runs automatically at page load.
+   ============================================================= */
+var qs = [
+
+  /* ── UNIT 1: Fundamentals of Marketing ── */
+  {u:"Unit 1", cs:false,
+   q:"According to the text, which of the following BEST defines marketing in its modern, evolved sense?",
+   opts:[
+     "The act of selling and advertising products to generate short-term revenue",
+     "An integrated process that identifies, anticipates, and satisfies customer needs profitably, encompassing product development, pricing, distribution, and communication",
+     "A department within an organisation responsible only for running promotional campaigns",
+     "A scientific discipline focused exclusively on market research and data collection"
+   ],
+   ans:1,
+   exp:"Marketing has evolved from being product-centric to customer-centric. It is an integrated process that goes beyond selling and advertising — encompassing product development, pricing, distribution, and communication — all aimed at creating value and satisfying customer needs profitably."},
+
+  {u:"Unit 1", cs:false,
+   q:"What is the key difference between 'wants' and 'demands' in core marketing concepts?",
+   opts:[
+     "Wants are biological and universal; demands are culturally shaped",
+     "Wants and demands are identical — both are backed by purchasing power",
+     "Wants are shaped by culture and individual preference; demands arise when wants are backed by purchasing power",
+     "Demands refer to what producers supply; wants refer to what consumers prefer"
+   ],
+   ans:2,
+   exp:"Needs are basic human requirements. Wants are shaped by culture, society, and individual preferences (e.g., needing food but wanting pizza). Demands arise when wants are backed by purchasing power — the consumer desires the product AND has the ability to buy it."},
+
+  {u:"Unit 1", cs:false,
+   q:"Marketing philosophies evolved over time. Which philosophy is MOST associated with a customer-centric, value-creation approach?",
+   opts:[
+     "Production concept — focus on maximising output and lowering unit costs",
+     "Product concept — focus on making the highest quality product",
+     "Selling concept — focus on aggressive promotion to push products",
+     "Marketing concept — focus on identifying and satisfying customer needs better than competitors"
+   ],
+   ans:3,
+   exp:"The marketing concept represents the modern, evolved philosophy — it focuses on identifying and satisfying target customer needs more effectively than competitors, rather than just producing, improving, or aggressively pushing products."},
+
+  {u:"Unit 1", cs:true,
+   q:"CASE STUDY: A company manufactures high-quality fountain pens but is struggling with declining sales, despite consistent product quality. The CEO insists the product is excellent and simply needs more aggressive push advertising. A marketing consultant argues the company should research why consumers are shifting to digital note-taking and adapt accordingly. Which marketing philosophy does the CEO represent, and which does the consultant represent?",
+   opts:[
+     "CEO = Marketing concept; Consultant = Production concept",
+     "CEO = Product concept; Consultant = Marketing concept",
+     "CEO = Selling concept; Consultant = Product concept",
+     "CEO = Selling concept; Consultant = Societal marketing concept"
+   ],
+   ans:1,
+   exp:"The CEO represents the Product concept — believing excellent product quality alone will drive sales, ignoring market shifts. The consultant represents the Marketing concept — recommending research into customer needs and adapting the offering to match evolving consumer behaviour (shift to digital)."},
+
+  /* ── UNIT 2: Role of Marketing and Marketing Mix ── */
+  {u:"Unit 2", cs:false,
+   q:"Which of the following is the FIRST and most crucial element of the 4Ps of marketing?",
+   opts:[
+     "Price — it directly determines revenue and customer affordability",
+     "Promotion — it creates awareness without which no product can sell",
+     "Product — without a viable product, the other elements cannot function",
+     "Place — distribution determines whether the product reaches the customer"
+   ],
+   ans:2,
+   exp:"The Product is described as the first and most crucial element of the 4Ps (Product, Price, Place, Promotion). Without a viable product that meets consumer needs, the other elements — pricing, promoting, and distributing — have nothing to work with."},
+
+  {u:"Unit 2", cs:false,
+   q:"Which role of marketing involves using tools like CRM software, loyalty programmes, and post-purchase follow-up to build long-term engagement?",
+   opts:[
+     "Creation of demand",
+     "Strategic positioning in competitive markets",
+     "Customer satisfaction and relationship management",
+     "Enabling product innovation and differentiation"
+   ],
+   ans:2,
+   exp:"Customer satisfaction and relationship management is the role of marketing that uses tools like CRM software, loyalty programmes, Net Promoter Scores, and post-purchase follow-up to build long-term engagement and transform one-time buyers into repeat customers and brand advocates."},
+
+  {u:"Unit 2", cs:false,
+   q:"Marketing to industrial (B2B) markets differs from consumer (B2C) marketing primarily because:",
+   opts:[
+     "B2B markets rely on mass advertising; B2C markets rely on direct sales",
+     "B2B buying behaviour is rational and multi-layered, emphasising functionality and relationships; B2C is often impulse-driven and emotion-based",
+     "B2B markets are larger in size; B2C markets are smaller and more niche",
+     "B2B products are always cheaper than B2C products because they are sold in bulk"
+   ],
+   ans:1,
+   exp:"B2B (industrial) buying is rational, multi-layered, involves technical requirements, long sales cycles, and relationship-building. B2C buying is often impulse-driven, emotion-influenced, and mass-marketed. The emphasis in B2B is on functionality, cost-effectiveness, and ROI rather than brand image and excitement."},
+
+  /* ── UNIT 3: Marketing Environment ── */
+  {u:"Unit 3", cs:false,
+   q:"In the marketing environment, which of the following belongs to the MACRO environment?",
+   opts:[
+     "Suppliers and their reliability in delivering raw materials",
+     "Marketing intermediaries and distributors",
+     "Competitors and their new product launches",
+     "Technological advancements, economic trends, and socio-cultural shifts"
+   ],
+   ans:3,
+   exp:"The macro environment (often analysed via PESTEL) consists of large-scale, largely uncontrollable forces: Political, Economic, Social/Cultural, Technological, Environmental, and Legal factors. Suppliers, intermediaries, and competitors are part of the micro environment — closer and more directly interactive."},
+
+  {u:"Unit 3", cs:false,
+   q:"Which internal marketing environment factor refers to a company's financial resources, human talent, technological infrastructure, and brand equity?",
+   opts:[
+     "Company mission and vision",
+     "Organisational resources and capabilities",
+     "Internal communication and coordination",
+     "Market segmentation and targeting"
+   ],
+   ans:1,
+   exp:"Organisational resources and capabilities include financial resources (affecting campaign scale), human talent (creativity and execution), technological infrastructure (CRM, analytics, AI), and brand equity (premium pricing and trust). These internal assets define what the company can deliver and how effectively it can compete."},
+
+  {u:"Unit 3", cs:true,
+   q:"CASE STUDY: A food company that relies heavily on a single agricultural supplier notices that erratic monsoon seasons are causing supply disruptions and price spikes. Simultaneously, a new government regulation requires clear nutritional labelling on all packaged foods. Which marketing environment components are MOST directly affecting this company?",
+   opts:[
+     "Macro: Technological factors; Micro: Competitors",
+     "Micro: Suppliers; Macro: Natural/Environmental and Legal/Political factors",
+     "Internal: Organisational resources; Micro: Customers",
+     "Macro: Social/Cultural factors; Internal: Mission and vision"
+   ],
+   ans:1,
+   exp:"The supplier disruption due to erratic monsoons is a Micro environment issue (Suppliers are part of the micro/external environment). The weather pattern is a Macro Natural/Environmental factor, and the government labelling regulation is a Macro Legal/Political factor. Multiple environment layers interact in this scenario."},
+
+  /* ── UNIT 4: Consumer Behaviour & Brand ── */
+  {u:"Unit 4", cs:false,
+   q:"In the marketing and sales funnel, what is the PRIMARY goal of the Bottom of the Funnel (BOFU) stage?",
+   opts:[
+     "Attract the broadest possible audience using SEO and social media content",
+     "Nurture leads by providing detailed whitepapers and product comparisons",
+     "Convert ready-to-buy leads into customers using strong calls-to-action, demos, pricing, and testimonials",
+     "Build initial brand awareness through influencer campaigns and blog posts"
+   ],
+   ans:2,
+   exp:"BOFU (Bottom of the Funnel) is where the lead is closest to purchasing. The goal is to convert them into customers using strong calls-to-action, demos, pricing information, testimonials, and sales team involvement. TOFU focuses on awareness; MOFU focuses on nurturing."},
+
+  {u:"Unit 4", cs:false,
+   q:"Which funnel stage uses lead magnets, email sign-ups, and interactive content like polls and quizzes to move prospects from passive awareness to active interest?",
+   opts:[
+     "Awareness",
+     "Interest",
+     "Consideration",
+     "Intent"
+   ],
+   ans:1,
+   exp:"The Interest stage uses engagement tools like interactive content (polls, quizzes, live sessions), lead magnets (eBooks, free trials in exchange for contact details), and product education content to deepen engagement — moving prospects from simply knowing the brand to actively exploring it."},
+
+  {u:"Unit 4", cs:false,
+   q:"In brand management, what does 'brand equity' primarily refer to?",
+   opts:[
+     "The total monetary value of all products sold under the brand name",
+     "The number of social media followers a brand has accumulated",
+     "The added value a brand name gives to a product over and above its functional attributes",
+     "The legal trademark registrations held by the brand in different markets"
+   ],
+   ans:2,
+   exp:"Brand equity refers to the added value — in terms of consumer perception, trust, loyalty, and willingness to pay a premium — that a brand name gives to a product beyond its functional attributes. Strong brand equity enables premium pricing and sustained customer loyalty."},
+
+  /* ── UNIT 5: STP Framework ── */
+  {u:"Unit 5", cs:false,
+   q:"Which segmentation basis divides a market based on personality traits, values, lifestyle, and attitudes?",
+   opts:[
+     "Demographic segmentation",
+     "Geographic segmentation",
+     "Behavioural segmentation",
+     "Psychographic segmentation"
+   ],
+   ans:3,
+   exp:"Psychographic segmentation is based on consumer personality, values, attitudes, interests, and lifestyles — for example, targeting eco-conscious consumers or risk-averse individuals. Demographic is based on age/income; geographic on location; behavioural on purchase patterns."},
+
+  {u:"Unit 5", cs:false,
+   q:"A segmentation approach where marketers target a single, niche segment with specialised offerings — ideal for startups with limited resources — is called:",
+   opts:[
+     "Undifferentiated targeting",
+     "Differentiated targeting",
+     "Concentrated targeting",
+     "Micromarketing"
+   ],
+   ans:2,
+   exp:"Concentrated targeting (also called niche targeting) focuses all resources on one specific segment. It allows deep specialisation and expertise. Though it carries high risk (dependence on one segment), it is ideal for firms with limited budgets or those seeking deep market penetration in a specific niche."},
+
+  {u:"Unit 5", cs:false,
+   q:"Which of the five criteria for EFFECTIVE segmentation states that a segment must be large and profitable enough to justify the marketing investment?",
+   opts:[
+     "Measurability",
+     "Accessibility",
+     "Substantiality",
+     "Actionability"
+   ],
+   ans:2,
+   exp:"Substantiality means the segment must be sufficiently large and profitable to warrant a dedicated marketing strategy. Tiny niches may be measurable and accessible but still unviable if they don't generate enough return. Luxury brands may target small but highly affluent segments that still meet this criterion."},
+
+  {u:"Unit 5", cs:true,
+   q:"CASE STUDY: A sustainable skincare brand wants to position itself in the market. Their research shows their most engaged buyers are women aged 25–40 in urban areas who value eco-friendly living, follow wellness influencers, and are willing to pay a premium for cruelty-free products. Which segmentation bases are MOST prominently at work here?",
+   opts:[
+     "Demographic and geographic segmentation only",
+     "Behavioural segmentation only — based on purchase frequency",
+     "Demographic, geographic, and psychographic segmentation combined",
+     "Undifferentiated segmentation — targeting the mass market"
+   ],
+   ans:2,
+   exp:"This scenario combines three segmentation bases: Demographic (women, aged 25–40), Geographic (urban areas), and Psychographic (value eco-friendly living, wellness-oriented lifestyle, willingness to pay premium for ethical products). Most real-world targeting uses a combination of bases for precision."},
+
+  /* ── UNIT 6: Product Fundamentals ── */
+  {u:"Unit 6", cs:false,
+   q:"A smartphone's 'core product' is best described as:",
+   opts:[
+     "Its sleek design, brand name, user interface, and camera features",
+     "Its warranty, customer support, software updates, and accessories",
+     "The fundamental benefit it provides — communication and connectivity",
+     "Its retail price, packaging design, and store display"
+   ],
+   ans:2,
+   exp:"The core product is the fundamental benefit or value the customer derives from it. For a smartphone, that is communication and connectivity. The actual product includes design and brand; the augmented product includes warranties and customer service. Kotler's three-level model distinguishes these layers."},
+
+  {u:"Unit 6", cs:false,
+   q:"Which type of consumer product requires the HIGHEST level of consumer involvement, has strong brand loyalty, and is often sold through exclusive distribution channels?",
+   opts:[
+     "Convenience products",
+     "Shopping products",
+     "Specialty products",
+     "Unsought products"
+   ],
+   ans:2,
+   exp:"Specialty products (e.g., Rolex watches, Gucci handbags, Tesla cars) have unique attributes and strong brand identities that attract specific consumers. They require high purchase effort, command premium prices, are sold through exclusive channels, and generate strong brand loyalty — all characteristics of the highest consumer involvement level."},
+
+  {u:"Unit 6", cs:false,
+   q:"Unsought products are BEST described as goods that:",
+   opts:[
+     "Consumers purchase frequently with minimal planning, like toothpaste and snacks",
+     "Consumers compare carefully on price and quality before buying, like appliances",
+     "Consumers do not actively think about or seek out until a specific need arises, requiring aggressive marketing",
+     "Are sold only in premium outlets and have exclusive brand identity"
+   ],
+   ans:2,
+   exp:"Unsought products are goods consumers do not think about frequently or seek out until a specific circumstance triggers the need. They require aggressive push strategies — personal selling, direct mail, fear-based appeals — to create demand. Examples include funeral services or life insurance."},
+
+  /* ── UNIT 7: Strategic Product Decisions ── */
+  {u:"Unit 7", cs:false,
+   q:"In the BCG Matrix, a 'Cash Cow' is characterised by:",
+   opts:[
+     "High market growth and high market share — requires heavy ongoing investment",
+     "Low market growth and low market share — typically recommended for divestment",
+     "High market growth but low market share — strategic decision to invest or divest",
+     "Low market growth but high market share — generates steady cash with minimal investment needed"
+   ],
+   ans:3,
+   exp:"Cash Cows have high market share in a low-growth, mature market. They generate consistent, predictable cash flow without requiring large ongoing investment. Their profits are redirected to fund Stars and promising Question Marks. They are the primary revenue engines of the portfolio."},
+
+  {u:"Unit 7", cs:false,
+   q:"What does 'Depth' refer to in the context of product mix decisions?",
+   opts:[
+     "The total number of different product lines a company offers",
+     "The total number of products across all lines combined",
+     "The number of versions, variants, or models offered within a single product in a line",
+     "How closely related the different product lines are to each other"
+   ],
+   ans:2,
+   exp:"Product mix Depth refers to the number of versions, models, sizes, or formulations offered for each product within a line. For example, a shampoo brand offering 10 variants (for different hair types, sizes, scents) has great depth. Width = number of lines; Length = total products; Consistency = relatedness."},
+
+  {u:"Unit 7", cs:false,
+   q:"In the Ansoff Matrix, which growth strategy involves selling EXISTING products into NEW markets?",
+   opts:[
+     "Market Penetration — increasing share in existing markets",
+     "Product Development — creating new products for existing markets",
+     "Market Development — taking existing products into new markets",
+     "Diversification — new products for new markets"
+   ],
+   ans:2,
+   exp:"Market Development is the Ansoff Matrix strategy of taking existing products into new markets — new geographies, new customer segments, or new distribution channels. Market Penetration = existing products, existing markets. Product Development = new products, existing markets. Diversification = new products, new markets."},
+
+  {u:"Unit 7", cs:true,
+   q:"CASE STUDY: A large tech company has four products in its portfolio: (A) a cloud storage platform with rapidly growing demand and dominant market share; (B) a legacy productivity suite with stable, large revenue and low growth; (C) a new AI assistant app with promising market growth but a small user base; (D) an old MP3 player app with very low share and minimal growth. Using the BCG Matrix, how should resources be allocated?",
+   opts:[
+     "Invest equally across A, B, C, and D to maintain a balanced portfolio",
+     "A = Star (invest aggressively), B = Cash Cow (harvest profits to fund A and C), C = Question Mark (invest selectively), D = Dog (consider phasing out)",
+     "A = Cash Cow (reduce investment), B = Star (invest heavily), C = Dog (divest), D = Question Mark (evaluate)",
+     "Divest all four products and start fresh with new market research"
+   ],
+   ans:1,
+   exp:"A correct BCG classification: A (fast growth + dominant share) = Star → invest aggressively; B (stable revenue + low growth) = Cash Cow → harvest profits to fund Stars and Question Marks; C (high growth + low share) = Question Mark → invest selectively to potentially convert to Star; D (low growth + low share) = Dog → consider phasing out or harvesting."},
+
+  /* ── UNIT 8: Product Life Cycle ── */
+  {u:"Unit 8", cs:false,
+   q:"Theodore Levitt is credited with popularising the Product Life Cycle concept. During which stage do sales PEAK, competition is intense, and innovation shifts to packaging and value-added services?",
+   opts:[
+     "Introduction stage — building awareness and generating first sales",
+     "Growth stage — rapid sales increase and rising profits",
+     "Maturity stage — peak sales, intense competition, and margin pressure",
+     "Decline stage — falling sales and reduced investment"
+   ],
+   ans:2,
+   exp:"The Maturity stage is where sales peak and then stabilise. Intense competition leads to price reductions, and innovation shifts to packaging, bundling, or value-added services to retain customers. Profit margins may decline due to high marketing and competitive pressures."},
+
+  {u:"Unit 8", cs:false,
+   q:"Which marketing strategy is MOST appropriate during the INTRODUCTION stage of the Product Life Cycle?",
+   opts:[
+     "Aggressive price reductions and loyalty promotions to sustain customer interest",
+     "Heavy investment in advertising, free trials, influencer endorsements, and selective distribution to build awareness and encourage trial",
+     "Market segmentation and brand repositioning to defend against intense competition",
+     "Minimising promotional investment and focusing on clearing remaining inventory"
+   ],
+   ans:1,
+   exp:"During the Introduction stage, marketing focuses on building awareness and encouraging trial among early adopters. This requires heavy advertising spend, free samples or trials, influencer PR, and selective distribution. The goal is not immediate large-scale sales but establishing a market foothold."},
+
+  {u:"Unit 8", cs:false,
+   q:"Analog televisions and DVD players are often cited as examples of products in which PLC stage?",
+   opts:[
+     "Introduction — brand-new and entering the market",
+     "Growth — rapidly gaining consumer acceptance",
+     "Maturity — at peak sales with high competition",
+     "Decline — falling due to technological advancement and shifting consumer preference"
+   ],
+   ans:3,
+   exp:"Analog televisions and DVD players are in the Decline stage — sales have fallen significantly due to technological advancement (smart TVs, streaming services) and changes in consumer preference. Companies may withdraw, harvest, or attempt to revamp declining products."},
+
+  /* ── UNIT 9: New Product Development ── */
+  {u:"Unit 9", cs:false,
+   q:"Which stage of the NPD process involves introducing the product in limited geographic areas to assess consumer response before a full-scale national launch?",
+   opts:[
+     "Idea Screening — evaluating feasibility of ideas",
+     "Concept Development and Testing — validating product concepts with target groups",
+     "Business Analysis — forecasting sales and profit",
+     "Market Testing — controlled/regional launch to gather real-world data"
+   ],
+   ans:3,
+   exp:"Market Testing involves launching the product in limited markets (regional or controlled) to evaluate promotional tactics, pricing, and distribution before full commercialisation. It reduces financial and reputational risk and generates real-world insights for adjustments."},
+
+  {u:"Unit 9", cs:false,
+   q:"A product that is an existing product 'repositioned' to appeal to a different use case is exemplified by which of the following?",
+   opts:[
+     "The first electric vehicle — creating an entirely new market",
+     "A new soft drink flavour — line extension",
+     "Baking soda repositioned from a baking ingredient to a deodoriser",
+     "A prototype of an AI-powered voice assistant before commercial launch"
+   ],
+   ans:2,
+   exp:"Repositioned products are existing offerings marketed in new ways to attract different segments or address different needs. Baking soda being repositioned as a deodoriser or air freshener is a classic example — the product didn't change, but its positioning and target use case did."},
+
+  {u:"Unit 9", cs:false,
+   q:"Which of the following is a key REASON for new product FAILURE according to the text?",
+   opts:[
+     "Excessive market testing that delays the launch beyond optimal market timing",
+     "Overestimating market size, poor product-market fit, or inadequate attention to customer needs",
+     "Having too many employees in the R&D department slowing innovation cycles",
+     "Pricing the product too low during the introduction stage"
+   ],
+   ans:1,
+   exp:"New products commonly fail due to: overestimating demand or market size, poor understanding of customer needs, inadequate concept testing, flawed product-market fit, and insufficient attention to competitive realities. These strategic errors in the early NPD stages lead to costly failures post-launch."},
+
+  /* ── UNIT 10: Pricing ── */
+  {u:"Unit 10", cs:false,
+   q:"'Price Elasticity of Demand' is used by marketers to understand:",
+   opts:[
+     "How efficiently the supply chain delivers products to consumers",
+     "How sensitive consumer demand is to changes in the product's price",
+     "How quickly a product moves from introduction to maturity in the PLC",
+     "How a brand's equity affects its ability to charge premium prices"
+   ],
+   ans:1,
+   exp:"Price elasticity of demand measures how sensitive consumer demand is to price changes. Inelastic demand (elasticity < 1) means demand changes little when price changes — allowing premium pricing. Elastic demand (elasticity > 1) means consumers are very price-sensitive, requiring competitive pricing strategies."},
+
+  {u:"Unit 10", cs:false,
+   q:"Which pricing strategy involves setting a HIGH initial price for a new product to maximise revenue from early adopters before gradually lowering it?",
+   opts:[
+     "Penetration Pricing — entering with a low price to gain rapid market share",
+     "Cost-Plus Pricing — adding a markup percentage to total production cost",
+     "Price Skimming — setting a high initial price to skim maximum revenue from early adopters",
+     "Psychological Pricing — setting prices like ₹999 to create a perception of lower cost"
+   ],
+   ans:2,
+   exp:"Price Skimming sets a high initial price targeting early adopters willing to pay a premium, then gradually reduces the price to attract more price-sensitive segments. It helps recover R&D costs quickly and reinforces a premium image. It contrasts with Penetration Pricing which starts low to build rapid market share."},
+
+  {u:"Unit 10", cs:false,
+   q:"Which EXTERNAL determinant of pricing states that in a monopolistic market, firms enjoy significant freedom in setting prices, while in highly competitive markets, pricing is constrained by market norms?",
+   opts:[
+     "Customer demand and price sensitivity",
+     "Cost structure and break-even analysis",
+     "Product positioning and branding decisions",
+     "Market competition and competitive dynamics"
+   ],
+   ans:3,
+   exp:"Market competition is an external pricing determinant. In a monopoly, firms have wide freedom. In oligopolistic or highly competitive markets, prices are often dictated by market leaders or competitive norms. Companies may match, slightly undercut, or price above competitors depending on their value differentiation."},
+
+  {u:"Unit 10", cs:true,
+   q:"CASE STUDY: A new electric scooter brand enters the market and sets a price significantly LOWER than established competitors — even at a slight loss initially — to attract a large customer base quickly and discourage new entrants. Which pricing strategy is this, and what is the key risk?",
+   opts:[
+     "Price Skimming — risk is that early profits are limited",
+     "Psychological Pricing — risk is that consumers may doubt quality at round-number prices",
+     "Penetration Pricing — risk is unsustainability of low prices in the long term and potential price wars",
+     "Cost-Plus Pricing — risk is ignoring market demand and competitive prices"
+   ],
+   ans:2,
+   exp:"This is Penetration Pricing — entering at a low price to attract a large customer base and build market share quickly, discouraging new competition. The key risks are: it may not be sustainable long-term, it can trigger damaging price wars with established players, and it may signal low quality to some premium-seeking segments."},
+
+  /* ── UNIT 11: Promotion Fundamentals ── */
+  {u:"Unit 11", cs:false,
+   q:"In the communication process of promotion, 'noise' refers to:",
+   opts:[
+     "The volume of the advertisement's audio in broadcast media",
+     "The number of competitors advertising simultaneously in the same market",
+     "Anything that distorts or interferes with the promotional message — clutter, misinterpretation, language barriers",
+     "The feedback received by the company from customer complaints"
+   ],
+   ans:2,
+   exp:"Noise in the promotional communication process refers to any interference that distorts or blocks the intended message — including media clutter, competing ads, language barriers, technical glitches, or consumer misinterpretation. Marketers minimise noise with compelling visuals, clear language, and strong emotional hooks."},
+
+  {u:"Unit 11", cs:false,
+   q:"Which function of promotion is MOST relevant during the MATURITY and DECLINE stages of a product's life cycle, where the goal is to prevent brand switching and maintain visibility?",
+   opts:[
+     "Informing — educating consumers about a new product or feature",
+     "Persuading — convincing consumers to prefer one brand over competitors",
+     "Reminding — keeping the brand top-of-mind to prevent switching and encourage repeat purchase",
+     "Launching — generating buzz for a newly introduced product"
+   ],
+   ans:2,
+   exp:"Reminding promotion is most relevant in the maturity and decline stages, where awareness is already high but competition is intense and brand switching is a risk. Seasonal reminders, retargeting ads, loyalty notifications, and brand-centric social content keep the brand top-of-mind and encourage repeat purchase."},
+
+  {u:"Unit 11", cs:false,
+   q:"Which INTERNAL factor influencing the promotion mix states that consumer goods requiring mass purchase (like soap or snacks) need mass advertising, while complex industrial goods need personal selling?",
+   opts:[
+     "Budget availability",
+     "Stage of the product life cycle",
+     "Nature of the product",
+     "Company's marketing objectives"
+   ],
+   ans:2,
+   exp:"The Nature of the Product strongly shapes the promotion mix. Simple, high-frequency consumer goods (soap, snacks) are best served by mass advertising due to low involvement. Complex, expensive industrial goods (machinery, enterprise software) require personal selling and demonstrations because of technical complexity and high purchase stakes."},
+
+  /* ── UNIT 12: Promotion Tools ── */
+  {u:"Unit 12", cs:false,
+   q:"Which characteristic of advertising ensures that the company or brand behind the message is clearly identified, distinguishing it from editorial content or organic social media posts?",
+   opts:[
+     "Non-personal communication",
+     "Paid form of promotion",
+     "Identifiable sponsor",
+     "Mass reach and standardised message"
+   ],
+   ans:2,
+   exp:"An identifiable sponsor is a defining characteristic of advertising — the message clearly shows who is behind it (brand name, logo, slogan). This transparency builds accountability and trust, and distinguishes ads from editorial content, organic posts, or peer recommendations where the source may be unknown."},
+
+  {u:"Unit 12", cs:false,
+   q:"Which TYPE of advertising is primarily used during the INTRODUCTION phase of a product's life cycle to educate consumers about a new product's features and benefits?",
+   opts:[
+     "Reminder advertising — to prevent brand switching",
+     "Persuasive advertising — to build preference over competitors",
+     "Informative advertising — to educate and build awareness of a new offering",
+     "Comparative advertising — to directly benchmark against competitor products"
+   ],
+   ans:2,
+   exp:"Informative advertising is used during the Introduction phase to educate consumers about what a new product is, what it does, how it works, and why it matters. It answers foundational questions and stimulates primary demand — especially for technologically complex or novel products."},
+
+  {u:"Unit 12", cs:false,
+   q:"Personal selling differs from advertising primarily because personal selling:",
+   opts:[
+     "Reaches a much larger audience at a lower cost per impression",
+     "Involves direct, one-on-one interaction allowing real-time message adaptation based on customer response",
+     "Is non-personal and uses standardised messages across all customers",
+     "Is a paid form of promotion with an identifiable sponsor"
+   ],
+   ans:1,
+   exp:"Personal selling involves direct, face-to-face (or voice-to-voice) interaction between a salesperson and a prospect. Unlike advertising — which is non-personal and standardised — personal selling allows real-time adaptation of the message based on the customer's reactions, questions, and objections. It is most effective for complex, high-value purchases."},
+
+  {u:"Unit 12", cs:true,
+   q:"CASE STUDY: A pharmaceutical company needs to market a new specialised drug to a limited number of hospital procurement officers across the country. The drug is complex, expensive, and requires detailed explanation of clinical trials, dosage protocols, and regulatory approvals. Which promotional tool is MOST appropriate and why?",
+   opts:[
+     "Mass television advertising — to reach the broadest possible medical audience simultaneously",
+     "Sales promotion with coupons and discounts — to lower the cost barrier for hospitals",
+     "Personal selling — because the product is complex, the audience is limited, and the buyer needs detailed customised information and relationship-building",
+     "Social media advertising — because healthcare professionals are active on LinkedIn and Instagram"
+   ],
+   ans:2,
+   exp:"Personal selling is the most appropriate tool here. The product is complex (requiring detailed clinical explanation), the target audience is small (limited hospital procurement officers), and relationship-building is critical in healthcare B2B sales. Personal selling allows the sales rep to present tailored clinical data, answer specific objections in real time, and build trust — none of which mass advertising can achieve."},
+
+  /* ── UNIT 13: Channels of Distribution ── */
+  {u:"Unit 13", cs:false,
+   q:"Which emerging distribution model BYPASSES traditional intermediaries (wholesalers, distributors, retailers) and allows brands to sell directly to end consumers through owned websites or outlets?",
+   opts:[
+     "Omnichannel retailing",
+     "Subscription-based models",
+     "Direct-to-Consumer (DTC)",
+     "Social commerce"
+   ],
+   ans:2,
+   exp:"Direct-to-Consumer (DTC) bypasses traditional intermediaries entirely, allowing brands to sell directly through their own websites, apps, or physical outlets. Benefits include higher profit margins (no middleman commissions), full control over brand experience, first-party customer data, and faster feedback loops. Examples: Warby Parker, Mamaearth, Boat Lifestyle."},
+
+  {u:"Unit 13", cs:false,
+   q:"Omnichannel retailing is best described as:",
+   opts:[
+     "Selling only through online platforms to maximise digital reach and reduce overhead",
+     "Integrating physical and digital sales channels seamlessly so customers can browse, buy, return, and interact across both without friction",
+     "Using multiple independent channels that each operate separately with different pricing and branding",
+     "A subscription model that delivers products to consumers at regular intervals automatically"
+   ],
+   ans:1,
+   exp:"Omnichannel retailing integrates physical and digital channels so customers experience a seamless, consistent journey — browsing online, buying offline, returning in-store what was bought online (BORIS), or click-and-collect. CRM tools maintain continuity across touchpoints. It differs from multichannel retail where channels operate independently."},
+
+  {u:"Unit 13", cs:false,
+   q:"Which technological distribution channel uses platforms like Instagram, Facebook, and TikTok to combine social media engagement with direct in-app purchasing functionality?",
+   opts:[
+     "E-commerce platforms",
+     "Mobile commerce (m-commerce)",
+     "Social commerce",
+     "Direct-to-consumer (DTC)"
+   ],
+   ans:2,
+   exp:"Social commerce combines social media's engagement capabilities with e-commerce functionality for product discovery and direct in-app purchases. Platforms like Instagram, Facebook, TikTok, and Pinterest offer shoppable posts, live-stream shopping, and embedded product tags. Influencers and user-generated content drive purchase intent."},
+
+  /* ── UNIT 14: Marketing Trends and ESG ── */
+  {u:"Unit 14", cs:false,
+   q:"'Greenwashing' in marketing refers to:",
+   opts:[
+     "Using green and nature-inspired colour palettes in product packaging and advertising",
+     "Launching eco-friendly product lines that are certified by third-party environmental agencies",
+     "Making misleading or exaggerated claims about a product's or company's environmental benefits without substantiation",
+     "A marketing strategy focused exclusively on rural and agricultural consumer segments"
+   ],
+   ans:2,
+   exp:"Greenwashing is the practice of making misleading or unsubstantiated claims about environmental benefits. Examples include vague language ('eco-friendly'), irrelevant claims, or symbolic green gestures that distract from genuinely harmful practices. It erodes consumer trust, invites legal action, and damages brand reputation."},
+
+  {u:"Unit 14", cs:false,
+   q:"Flywheel marketing differs from the traditional sales funnel model primarily because:",
+   opts:[
+     "It focuses only on acquiring new customers rather than retaining existing ones",
+     "It treats customers as the END of the journey; once they buy, the process restarts",
+     "It generates momentum where delighted customers become a key force in accelerating ongoing growth through referrals and repeat purchases",
+     "It is exclusively used by B2B companies to manage long sales cycles"
+   ],
+   ans:2,
+   exp:"Flywheel marketing generates continuous momentum — delighted customers don't mark the END of the process (as in a funnel), but become accelerators of growth through referrals, reviews, and repeat purchases. It aligns marketing, sales, and service around customer delight to keep the flywheel spinning."},
+
+  {u:"Unit 14", cs:false,
+   q:"In the context of ESG (Environmental, Social, Governance) marketing, which of the following is an example of the 'Social' dimension?",
+   opts:[
+     "Reducing carbon emissions and switching to renewable energy sources in production",
+     "Ensuring board diversity, transparent financial reporting, and ethical business conduct",
+     "Fair labour practices, community development programmes, and inclusive supply chain policies",
+     "Using biodegradable packaging and pursuing energy-efficiency certifications"
+   ],
+   ans:2,
+   exp:"The Social dimension of ESG covers how a company manages relationships with employees, suppliers, communities, and society. Examples include fair labour practices, community development, inclusive supply chain policies, diversity and inclusion, and human rights standards. Environmental = emissions, energy. Governance = board structure, ethics, transparency."},
+
+  {u:"Unit 14", cs:false,
+   q:"H2H (Human-to-Human) marketing, as a modern trend, emphasises:",
+   opts:[
+     "Using AI and automation to replace human interaction in marketing communications",
+     "Emotional connection, authenticity, and conversational communication between brands and real people",
+     "A data-driven, algorithm-first approach to personalisation and segmentation",
+     "The use of virtual reality and augmented reality to create immersive product demonstrations"
+   ],
+   ans:1,
+   exp:"H2H (Human-to-Human) marketing is a philosophy that emphasises emotional connection, authenticity, and conversational communication — recognising that despite B2B or B2C labels, all business transactions ultimately occur between people. It shifts from transactional to relational marketing, building trust through genuine human engagement."},
+
+  {u:"Unit 14", cs:true,
+   q:"CASE STUDY: A clothing brand launches a campaign claiming their new collection is '100% eco-friendly' and 'carbon neutral.' However, investigative journalists discover the brand still uses a coal-powered manufacturing facility and the 'eco-friendly' claim applies only to the packaging material, not the garment production. Which marketing practice does this represent, and what is the likely business consequence?",
+   opts:[
+     "Green product positioning — a legitimate strategy to attract sustainable consumers, with minimal business risk",
+     "Greenwashing — misleading environmental claims that are likely to damage brand credibility, invite regulatory scrutiny, and trigger consumer backlash",
+     "Eco-friendly branding — using environmental messaging is always acceptable even if partially accurate",
+     "Contextual marketing — targeting environmentally aware consumers with relevant content"
+   ],
+   ans:1,
+   exp:"This is a clear case of Greenwashing — making broad, unsubstantiated environmental claims ('100% eco-friendly,' 'carbon neutral') that apply only to a minor aspect of the product (packaging) while ignoring major harmful practices (coal-powered manufacturing). Consequences include: loss of consumer trust, social media backlash, regulatory investigation by bodies like ASCI or FTC, and potential legal penalties. Authentic green marketing requires evidence-backed, specific, and certified claims."}
+
+,
+
+  {u:"Unit 9", cs:true,
+   q:"CASE STUDY: A consumer electronics company completes rigorous laboratory testing on a new wireless earbud product. When the product is quietly launched in two cities before the national rollout, customers report that the carrying case cracks within two weeks and the battery drains 40% faster than advertised. The national launch is postponed. Which NPD stage caught these critical failures, and what would have happened had this stage been skipped?",
+   opts:[
+     "Idea Screening — without it, a flawed concept would have reached development, wasting R&D investment",
+     "Business Analysis — without it, the financial projections would have been wrong, causing revenue shortfalls",
+     "Market Testing — without it, these product defects would have surfaced only after the national launch, causing widespread reputational damage and costly recalls",
+     "Commercialisation — without it, the product could not have been mass produced and distributed efficiently"
+   ],
+   ans:2,
+   exp:"Market Testing is the NPD stage where the product is launched in limited geographic areas to identify real-world problems before full commercialisation. The cracking case and battery drain issue were caught here. Without Market Testing, these defects would have emerged only after the national launch — leading to widespread customer dissatisfaction, negative reviews, costly product recalls, and potentially irreversible reputational damage."}
+
+]; /* end of qs array */
+
+/* =============================================================
+   RUNTIME VALIDATION — Runs BEFORE quiz starts.
+   Catches any data error and shows a clear error banner.
+   ============================================================= */
+(function validate() {
+  var errors = [];
+  if (!Array.isArray(qs) || qs.length === 0) {
+    errors.push("qs array is empty or not defined.");
+  } else {
+    for (var i = 0; i < qs.length; i++) {
+      var q = qs[i];
+      // Check required fields exist
+      if (!q.u || typeof q.u !== 'string') errors.push("Q" + (i+1) + ": missing or invalid unit label (u)");
+      if (!q.q || typeof q.q !== 'string' || q.q.trim() === '') errors.push("Q" + (i+1) + ": question text (q) is empty");
+      if (!Array.isArray(q.opts) || q.opts.length < 2) errors.push("Q" + (i+1) + ": opts must be an array with at least 2 items");
+      if (typeof q.ans !== 'number') errors.push("Q" + (i+1) + ": ans must be a number, got " + typeof q.ans);
+      if (!q.exp || typeof q.exp !== 'string' || q.exp.trim() === '') errors.push("Q" + (i+1) + ": explanation (exp) is empty");
+      // Check ans is in range
+      if (Array.isArray(q.opts) && typeof q.ans === 'number') {
+        if (q.ans < 0 || q.ans >= q.opts.length) {
+          errors.push("Q" + (i+1) + ": ans=" + q.ans + " is OUT OF RANGE (opts has " + q.opts.length + " items, valid: 0–" + (q.opts.length-1) + ")");
+        }
+      }
+      // Check no opt is empty
+      if (Array.isArray(q.opts)) {
+        for (var j = 0; j < q.opts.length; j++) {
+          if (!q.opts[j] || q.opts[j].trim() === '') errors.push("Q" + (i+1) + ": option " + j + " text is empty");
+        }
+      }
+    }
+  }
+  if (errors.length > 0) {
+    document.addEventListener('DOMContentLoaded', function() {
+      var banner = '<div class="err-banner"><strong>⚠ Quiz Data Errors (' + errors.length + '):</strong>' + errors.map(function(e){ return '<br>• ' + e; }).join('') + '</div>';
+      document.getElementById('area').innerHTML = banner;
+    });
+    // Prevent quiz from running
+    window.__quizHasErrors = true;
+  }
+})();
+
+/* =============================================================
+   QUIZ ENGINE
+   ============================================================= */
+var cur = 0, score = 0, answered = false;
+
+function showSplash() {
+  if (window.__quizHasErrors) return;
+  var total = qs.length;
+  var csCount = qs.filter(function(q){ return q.cs; }).length;
+  var units = {};
+  qs.forEach(function(q){ units[q.u] = 1; });
+  var numUnits = Object.keys(units).length;
+
+  var html = '<div class="splash">';
+  html += '<div class="splash-icon">📈</div>';
+  html += '<div class="splash-title">Marketing Management</div>';
+  html += '<div class="splash-sub">A comprehensive test across all 14 units — from marketing fundamentals and STP to pricing, promotion tools, distribution channels, and ESG trends.</div>';
+  html += '<div class="splash-stats">';
+  html += '<div class="splash-stat"><div class="splash-stat-v">' + total + '</div><div class="splash-stat-l">Questions</div></div>';
+  html += '<div class="splash-stat"><div class="splash-stat-v">' + numUnits + '</div><div class="splash-stat-l">Units</div></div>';
+  html += '<div class="splash-stat"><div class="splash-stat-v">' + csCount + '</div><div class="splash-stat-l">Case Studies</div></div>';
+  html += '</div>';
+  html += '<button class="start-btn" onclick="startQuiz()">Start Quiz →</button>';
+  html += '</div>';
+  document.getElementById('area').innerHTML = html;
+  document.getElementById('prog').style.width = '0%';
+  document.getElementById('hbadge').textContent = total + ' Questions';
+}
+
+function startQuiz() {
+  if (window.__quizHasErrors) return;
+  cur = 0; score = 0; answered = false;
+  render();
+}
+
+function render() {
+  if (cur >= qs.length) { showResult(); return; }
+  var q = qs[cur];
+  var pct = (cur / qs.length * 100);
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('hbadge').textContent = 'Score: ' + score + '/' + cur;
+
+  var html = '';
+  html += '<div class="q-meta"><span class="q-counter">Q' + (cur + 1) + ' of ' + qs.length + '</span></div>';
+  html += '<div class="q-unit-tag">📖 ' + q.u + '</div>';
+  if (q.cs) html += '<div class="case-badge">📋 Case Study</div>';
+  html += '<div class="q-card"><div class="q-text">' + q.q + '</div></div>';
+  html += '<div class="opts">';
+  for (var i = 0; i < q.opts.length; i++) {
+    html += '<button class="opt" onclick="choose(' + i + ')" id="o' + i + '">';
+    html += '<span class="lbl">' + String.fromCharCode(65 + i) + '</span>';
+    html += '<span>' + q.opts[i] + '</span>';
+    html += '</button>';
+  }
+  html += '</div>';
+  html += '<div class="fb" id="fb"><span class="fb-head" id="fbh"></span><span id="fbt"></span></div>';
+  var nextLabel = (cur < qs.length - 1) ? 'Next Question →' : 'See My Results →';
+  html += '<div class="nxt-wrap" id="nw"><button class="nxt" onclick="next()">' + nextLabel + '</button></div>';
+  document.getElementById('area').innerHTML = html;
+}
+
+function choose(i) {
+  if (answered) return;
+  answered = true;
+  var q = qs[cur];
+  // Disable all options
+  var btns = document.querySelectorAll('.opt');
+  for (var b = 0; b < btns.length; b++) btns[b].disabled = true;
+  // Mark correct and wrong
+  var isCorrect = (i === q.ans);
+  if (isCorrect) {
+    document.getElementById('o' + i).className = 'opt correct';
+    score++;
+  } else {
+    document.getElementById('o' + i).className = 'opt wrong';
+    document.getElementById('o' + q.ans).className = 'opt correct';
+  }
+  // Show feedback
+  var fb = document.getElementById('fb');
+  fb.style.display = 'block';
+  fb.className = 'fb ' + (isCorrect ? 'ok' : 'bad');
+  document.getElementById('fbh').textContent = isCorrect ? '✓ Correct!' : '✗ Incorrect';
+  document.getElementById('fbt').textContent = q.exp;
+  document.getElementById('nw').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function next() {
+  cur++;
+  answered = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  render();
+}
+
+function showResult() {
+  document.getElementById('prog').style.width = '100%';
+  document.getElementById('hbadge').textContent = 'Complete!';
+  var total = qs.length;
+  var pct = Math.round(score / total * 100);
+  var wrong = total - score;
+  var grade, msg, emoji;
+  if (score >= 45)      { grade = 'Outstanding!';   emoji = '🏆'; msg = 'Distinction-level. You have mastered Marketing Management across all 14 units.'; }
+  else if (score >= 40) { grade = 'Excellent!';      emoji = '🌟'; msg = 'Merit-level performance. Strong command across STP, PLC, pricing, and promotion.'; }
+  else if (score >= 30) { grade = 'Good Pass';       emoji = '👍'; msg = 'Solid understanding. Revisit BCG Matrix, NPD stages, and promotion tools for higher scores.'; }
+  else if (score >= 20) { grade = 'Getting There';   emoji = '📖'; msg = 'Keep going! Focus on Units 7–12 — product decisions, pricing, and promotion strategy.'; }
+  else                   { grade = 'Keep Going';      emoji = '💪'; msg = 'Revisit all 14 units and retake. Consistency will get you there!'; }
+
+  var html = '<div class="result">';
+  html += '<div class="result-ring"><div class="result-big">' + score + '/' + total + '</div><div class="result-pct">' + pct + '%</div></div>';
+  html += '<div style="font-size:32px;margin-bottom:8px">' + emoji + '</div>';
+  html += '<div class="result-grade">' + grade + '</div>';
+  html += '<div class="result-msg">' + msg + '</div>';
+  html += '<div class="stats">';
+  html += '<div class="stat"><div class="stat-v" style="color:var(--green)">' + score + '</div><div class="stat-l">Correct</div></div>';
+  html += '<div class="stat"><div class="stat-v" style="color:var(--red)">' + wrong + '</div><div class="stat-l">Wrong</div></div>';
+  html += '<div class="stat"><div class="stat-v" style="color:var(--primary)">' + pct + '%</div><div class="stat-l">Score</div></div>';
+  html += '</div>';
+  html += '<button class="rst" onclick="restart()">🔄 Retake Quiz</button>';
+  html += '</div>';
+  document.getElementById('area').innerHTML = html;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restart() {
+  cur = 0; score = 0; answered = false;
+  showSplash();
+}
+
+// Init
+showSplash();
+</script>
+</body>
+</html>
