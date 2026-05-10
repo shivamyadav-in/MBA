@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Leadership &amp; Organizational Behaviour Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+  :root {
+    --primary: #1E40AF;
+    --primary-light: #EFF6FF;
+    --green: #15803D;
+    --green-light: #DCFCE7;
+    --red: #B91C1C;
+    --red-light: #FEE2E2;
+    --gold: #B45309;
+    --gold-light: #FEF3C7;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --border: #E2E8F0;
+    --text: #0F172A;
+    --text2: #64748B;
+    --text3: #94A3B8;
+    --radius: 16px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  .header {
+    background: var(--card); border-bottom: 1px solid var(--border);
+    padding: 14px 20px 12px; position: sticky; top: 0; z-index: 10;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+  }
+  .header-inner {
+    max-width: 600px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .header-title { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--text); line-height: 1.2; }
+  .header-badge {
+    font-size: 11px; font-weight: 700; color: var(--primary);
+    background: var(--primary-light); padding: 4px 11px; border-radius: 20px;
+    white-space: nowrap; letter-spacing: 0.03em;
+  }
+
+  .prog-track { height: 3px; background: var(--border); position: sticky; top: 57px; z-index: 9; }
+  .prog-fill {
+    height: 3px; background: linear-gradient(90deg, var(--primary), #7C3AED);
+    transition: width 0.45s cubic-bezier(0.4,0,0.2,1); border-radius: 0 2px 2px 0;
+  }
+
+  .container { max-width: 600px; margin: 0 auto; padding: 22px 16px 70px; }
+
+  .q-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .q-counter { font-size: 11px; font-weight: 700; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .q-unit-tag {
+    display: inline-flex; align-items: center; font-size: 11px; font-weight: 600;
+    color: var(--primary); background: var(--primary-light); padding: 4px 10px;
+    border-radius: 8px; margin-bottom: 10px; letter-spacing: 0.02em;
+  }
+  .case-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700;
+    color: var(--gold); background: var(--gold-light); padding: 3px 9px;
+    border-radius: 6px; margin-bottom: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+
+  .q-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 14px; box-shadow: var(--shadow);
+  }
+  .q-text { font-size: 16px; font-weight: 600; line-height: 1.55; color: var(--text); }
+
+  .opts { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .opt {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--card); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 13px 15px; cursor: pointer; text-align: left;
+    font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text);
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    line-height: 1.45; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    -webkit-appearance: none; width: 100%;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-light); transform: translateY(-1px); }
+  .opt:active:not(:disabled) { transform: translateY(0); }
+  .opt .lbl {
+    min-width: 26px; height: 26px; border-radius: 8px;
+    background: var(--bg); border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: var(--text2); flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s, color 0.15s; margin-top: 1px;
+  }
+  .opt.correct { border-color: var(--green); background: var(--green-light); }
+  .opt.correct .lbl { background: var(--green); border-color: var(--green); color: #fff; }
+  .opt.wrong { border-color: var(--red); background: var(--red-light); }
+  .opt.wrong .lbl { background: var(--red); border-color: var(--red); color: #fff; }
+
+  .fb {
+    display: none; border-radius: 12px; padding: 14px 16px;
+    font-size: 13.5px; line-height: 1.6; margin-bottom: 14px; border-left: 4px solid transparent;
+  }
+  .fb.ok { background: var(--green-light); border-color: var(--green); color: #14532D; }
+  .fb.bad { background: var(--red-light); border-color: var(--red); color: #7F1D1D; }
+  .fb-head { font-weight: 700; font-size: 13px; margin-bottom: 4px; display: block; }
+
+  .nxt-wrap { display: none; }
+  .nxt {
+    width: 100%; padding: 15px;
+    background: linear-gradient(135deg, var(--primary), #7C3AED);
+    color: #fff; border: none; border-radius: 12px;
+    font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
+    cursor: pointer; letter-spacing: 0.02em;
+    box-shadow: 0 4px 14px rgba(30,64,175,0.3);
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .nxt:hover { opacity: 0.92; transform: translateY(-1px); }
+  .nxt:active { transform: translateY(0); }
+
+  /* SPLASH */
+  .splash { text-align: center; padding: 48px 24px; }
+  .splash-icon { font-size: 52px; margin-bottom: 16px; }
+  .splash-title { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text); margin-bottom: 10px; line-height: 1.3; }
+  .splash-sub { font-size: 14px; color: var(--text2); line-height: 1.6; max-width: 340px; margin: 0 auto 28px; }
+  .splash-stats { display: flex; justify-content: center; gap: 24px; margin-bottom: 28px; }
+  .splash-stat { text-align: center; }
+  .splash-stat-v { font-size: 22px; font-weight: 800; color: var(--primary); }
+  .splash-stat-l { font-size: 11px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+  .start-btn {
+    width: 100%; max-width: 320px; padding: 16px;
+    background: linear-gradient(135deg, var(--primary), #7C3AED);
+    color: #fff; border: none; border-radius: 12px;
+    font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700;
+    cursor: pointer; box-shadow: 0 6px 20px rgba(30,64,175,0.3);
+    letter-spacing: 0.02em; transition: opacity 0.15s, transform 0.1s;
+  }
+  .start-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+
+  /* RESULT */
+  .result { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 24px; text-align: center; box-shadow: var(--shadow); }
+  .result-ring {
+    width: 130px; height: 130px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), #7C3AED);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    margin: 0 auto 20px; box-shadow: 0 8px 30px rgba(30,64,175,0.25);
+  }
+  .result-big { font-size: 32px; font-weight: 800; color: #fff; line-height: 1; }
+  .result-pct { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.8); margin-top: 4px; }
+  .result-grade { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text); margin-bottom: 8px; }
+  .result-msg { font-size: 14px; color: var(--text2); max-width: 340px; margin: 0 auto 24px; line-height: 1.6; }
+  .stats { display: flex; justify-content: center; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+  .stat { flex: 1; padding: 14px 8px; border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: none; }
+  .stat-v { font-size: 22px; font-weight: 800; margin-bottom: 3px; }
+  .stat-l { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
+  .rst {
+    width: 100%; padding: 15px;
+    background: linear-gradient(135deg, var(--primary), #7C3AED);
+    color: #fff; border: none; border-radius: 12px;
+    font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
+    cursor: pointer; box-shadow: 0 4px 14px rgba(30,64,175,0.3);
+    transition: opacity 0.15s;
+  }
+  .rst:hover { opacity: 0.92; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-title">Leadership &amp; Org. Behaviour</div>
+    <div class="header-badge" id="hbadge">70 Questions</div>
+  </div>
+</div>
+<div class="prog-track"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+
+<div class="container"><div id="area"></div></div>
+
+<script>
+/* =========================================================
+   QUIZ DATA — 70 questions across 14 modules
+   ans = 0-based index of the correct option in opts[]
+   ========================================================= */
+var qs = [
+
+  /* ── MODULE 1: Nature and Scope of Management ── */
+  {m:"Module 1", cs:false,
+   q:"Which of the following BEST defines management according to its process-oriented nature?",
+   opts:["A one-time decision made by the CEO to allocate resources",
+         "A continuous process of planning, organising, leading, and controlling resources to achieve goals",
+         "The act of hiring employees and assigning tasks",
+         "A financial function focused only on budgeting and cost control"],
+   ans:1,
+   exp:"Management is defined as a continuous process—not a one-time act—involving planning, organising, leading, and controlling resources (people, money, materials) to achieve specific goals efficiently and effectively."},
+
+  {m:"Module 1", cs:false,
+   q:"Management is described as 'not an exact science like physics or chemistry' primarily because:",
+   opts:["It does not use any principles or theories",
+         "It is only applicable in manufacturing organisations",
+         "Human behaviour, which management must deal with, is unpredictable",
+         "Its principles change every year and cannot be relied upon"],
+   ans:2,
+   exp:"While management has systematic knowledge and universal principles (like science), it is not an exact science because it deals with human behaviour, which is inherently unpredictable and varies across situations and individuals."},
+
+  {m:"Module 1", cs:false,
+   q:"The ethical standards promoted by the All India Management Association (AIMA) relate to which aspect of management?",
+   opts:["Management as a Science","Management as an Art","Management as a Profession","Management as a Group Activity"],
+   ans:2,
+   exp:"Management as a Profession is characterised by formal education, a code of conduct, and a service motive. AIMA promotes ethical standards that professionals in management are expected to follow."},
+
+  {m:"Module 1", cs:false,
+   q:"Which of the following is a functional area of management that deals with budgets, investments, and financial planning?",
+   opts:["Production Management","Marketing Management","Financial Management","Human Resource Management"],
+   ans:2,
+   exp:"Financial Management deals with managing budgets, investments, and financial planning. The other options cover operations, promotion/sales, and people management respectively."},
+
+  {m:"Module 1", cs:true,
+   q:"CASE STUDY: A hospital administrator plans patient admission schedules, coordinates between doctors and nurses, hires qualified medical staff, motivates the care team, and monitors patient outcomes monthly. Which management concept does this scenario BEST illustrate?",
+   opts:["Management as purely an art based on intuition",
+         "The functional scope of management applied across Planning, Organising, Staffing, Directing, and Controlling",
+         "The sectoral scope of management limited to healthcare industries",
+         "Management as a science with fixed universal outcomes"],
+   ans:1,
+   exp:"This illustrates the functional scope of management — the five functions of Planning (schedules), Organising (coordinating departments), Staffing (hiring staff), Directing (motivating the team), and Controlling (monitoring outcomes) all applied in one setting."},
+
+  /* ── MODULE 2: Management Foundations ── */
+  {m:"Module 2", cs:false,
+   q:"Which of the following is a key feature that makes Planning the 'foundation of other functions' of management?",
+   opts:["Planning eliminates all uncertainty in business",
+         "All other functions — organising, staffing, directing, and controlling — depend on planning",
+         "Planning is performed only by top-level managers",
+         "Planning focuses exclusively on short-term daily tasks"],
+   ans:1,
+   exp:"Planning is called the foundation of other functions because all subsequent functions — organising resources, staffing roles, directing people, and controlling performance — are built upon and flow from the plans established first."},
+
+  {m:"Module 2", cs:false,
+   q:"Departmentalisation based on 'Geographical' criteria means grouping activities by:",
+   opts:["The type of product manufactured","The specific function performed (e.g., HR, Finance)",
+         "Locations or regions","Customer segments being served"],
+   ans:2,
+   exp:"Geographical departmentalisation groups activities based on locations or regions (e.g., North India division, South India division). Other bases include functional, product-based, customer-based, and process-based departmentalisation."},
+
+  {m:"Module 2", cs:false,
+   q:"The principle 'Accountability Cannot Be Delegated' in delegation means:",
+   opts:["Tasks cannot be assigned to subordinates under any circumstance",
+         "A manager can pass all responsibility to the subordinate permanently",
+         "While tasks and authority can be delegated, the manager remains ultimately responsible for outcomes",
+         "Subordinates must seek approval for every decision they make"],
+   ans:2,
+   exp:"This principle means that while a manager may delegate tasks and grant authority to subordinates, the manager retains ultimate accountability for the results. Responsibility for outcomes cannot be passed away entirely."},
+
+  {m:"Module 2", cs:false,
+   q:"Which function of management involves monitoring performance and making adjustments to ensure goals are met?",
+   opts:["Planning","Organising","Staffing","Controlling"],
+   ans:3,
+   exp:"Controlling is the management function that involves monitoring actual performance, comparing it against standards set during planning, and making corrective adjustments where performance deviates from the plan."},
+
+  {m:"Module 2", cs:true,
+   q:"CASE STUDY: A retail chain's CEO sets a target to open 20 new stores in 12 months. The HR head recruits store managers, the finance team allocates budgets per store, and regional heads are each given authority over 5 stores with weekly reporting requirements. Which management principle is MOST at risk if each store manager is made to report to both the HR head AND the regional head simultaneously?",
+   opts:["Span of Control","Unity of Command","Parity of Authority and Responsibility","Scalar Chain"],
+   ans:1,
+   exp:"Unity of Command states that each employee should report to only ONE supervisor to avoid confusion and conflict. Making store managers report to both HR head and regional head simultaneously violates this principle, creating divided loyalty and conflicting instructions."},
+
+  /* ── MODULE 3: Planning ── */
+  {m:"Module 3", cs:false,
+   q:"Which feature of planning states that plans should be regularly revised and updated as conditions change?",
+   opts:["Goal-Oriented","Pervasive","Continuous Process","Futuristic"],
+   ans:2,
+   exp:"The 'Continuous Process' feature of planning states that plans are not made once and forgotten — they must be regularly revised and updated in response to changing internal and external conditions."},
+
+  {m:"Module 3", cs:false,
+   q:"Which of the following is listed as a LIMITATION of planning?",
+   opts:["It provides direction to employees","It reduces risk and uncertainty",
+         "It may lead to rigidity, restricting flexibility and creativity","It improves resource utilisation"],
+   ans:2,
+   exp:"A key limitation of planning is rigidity — once plans are set, they can restrict the organisation's flexibility and creativity in responding to unexpected changes. The other options are actually benefits of planning."},
+
+  {m:"Module 3", cs:false,
+   q:"Planning is described as 'Pervasive' because:",
+   opts:["It is done only by senior management at the top level",
+         "It is required at all levels and in all departments of an organisation",
+         "It applies only to long-term strategic decisions",
+         "It is performed once a year during the annual budget cycle"],
+   ans:1,
+   exp:"'Pervasive' means that planning is required at all management levels (top, middle, operational) and across all departments — not just by senior management or for long-term goals only."},
+
+  {m:"Module 3", cs:false,
+   q:"Which benefit of planning helps align activities across departments and ensures collaboration?",
+   opts:["Efficiency","Coordination","Motivation","Control Mechanism"],
+   ans:1,
+   exp:"Coordination is the benefit of planning that aligns activities across different departments, ensuring they work harmoniously toward common goals rather than in silos or at cross-purposes."},
+
+  /* ── MODULE 4: Organising ── */
+  {m:"Module 4", cs:false,
+   q:"The 'Span of Control' principle in organising refers to:",
+   opts:["The number of departments in an organisation",
+         "The chain of authority from top to bottom management",
+         "The number of subordinates a manager can effectively supervise",
+         "The degree of authority delegated to lower-level managers"],
+   ans:2,
+   exp:"Span of Control refers to the number of subordinates a single manager can effectively supervise. A narrow span means close supervision; a wide span allows more subordinate autonomy."},
+
+  {m:"Module 4", cs:false,
+   q:"What distinguishes 'Formal Groups' from 'Informal Groups' in organisations?",
+   opts:["Formal groups are smaller in size than informal groups",
+         "Formal groups are created by the organisation with defined roles and duties; informal groups form naturally based on personal relationships",
+         "Formal groups have no leader, while informal groups are always led by a manager",
+         "Formal groups exist only at the top management level"],
+   ans:1,
+   exp:"Formal groups are deliberately created by the organisation to fulfil specific tasks and have defined roles, duties, and responsibilities (e.g., departments, project teams). Informal groups form naturally among employees based on friendships or shared interests, without official recognition."},
+
+  {m:"Module 4", cs:false,
+   q:"The 'Scalar Chain' principle of organising means:",
+   opts:["Employees must specialise in one specific task only",
+         "A clear, unbroken line of authority from the top of the organisation to the bottom",
+         "Resources must be allocated equally across all departments",
+         "Each manager should supervise no more than five subordinates"],
+   ans:1,
+   exp:"The Scalar Chain is a clear, unbroken line of authority that runs from the top of the organisation hierarchy down to the lowest level. It defines the chain of command through which communication and authority flow."},
+
+  {m:"Module 4", cs:false,
+   q:"Which step in the organising process involves granting the necessary authority to carry out assigned responsibilities?",
+   opts:["Identification of Activities","Grouping of Activities","Delegation of Authority","Establishing Relationships"],
+   ans:2,
+   exp:"Delegation of Authority is the step where the organisation grants individuals or teams the power to make decisions, access resources, and act on behalf of the organisation to carry out their assigned responsibilities."},
+
+  {m:"Module 4", cs:true,
+   q:"CASE STUDY: A software company assigns a project manager authority over a team of six developers to deliver a product in three months. The manager is given a budget, the right to make hiring decisions within the team, but the VP Engineering still holds accountability to the board. Which organisational concept does this arrangement exemplify?",
+   opts:["Centralisation with no delegation",
+         "Delegation of authority with retained accountability at the higher level",
+         "Violation of the unity of command principle",
+         "Informal organisation replacing formal structure"],
+   ans:1,
+   exp:"This exemplifies delegation — the VP Engineering grants the project manager authority (budget, hiring decisions) and assigns responsibilities. However, consistent with the principle that 'accountability cannot be delegated,' the VP Engineering retains ultimate accountability to the board for project outcomes."},
+
+  /* ── MODULE 5: Staffing and Controlling ── */
+  {m:"Module 5", cs:false,
+   q:"Which source of recruitment refers to advancing an existing employee to a higher position to boost morale?",
+   opts:["Campus Recruitment","Internal Promotion","Walk-in Job Fair","Online Job Portal"],
+   ans:1,
+   exp:"Internal Promotion is an internal source of recruitment where an existing employee is advanced to a higher position. It boosts morale and loyalty, reduces hiring time and cost, and ensures cultural fit."},
+
+  {m:"Module 5", cs:false,
+   q:"In the selection process, 'Assessment Centres' are used to:",
+   opts:["Verify educational qualifications and past employment",
+         "Conduct basic screening to eliminate unqualified candidates early",
+         "Evaluate a wide range of skills through simulations and exercises",
+         "Determine salary expectations through negotiation"],
+   ans:2,
+   exp:"Assessment Centres involve simulations and practical exercises designed to evaluate a wide range of skills (leadership, teamwork, communication, problem-solving) that may be difficult to assess through interviews alone."},
+
+  {m:"Module 5", cs:false,
+   q:"The leadership style in which the leader makes decisions alone without consulting others is called:",
+   opts:["Democratic","Laissez-faire","Autocratic","Situational"],
+   ans:2,
+   exp:"Autocratic leadership is characterised by the leader holding all decision-making power without consulting team members. It is directive and control-focused. Democratic leadership involves participation; laissez-faire is hands-off; situational adapts to context."},
+
+  {m:"Module 5", cs:false,
+   q:"Which component of delegation involves holding the subordinate answerable for outcomes?",
+   opts:["Assignment of Duties","Granting Authority","Accountability","Scalar Chain"],
+   ans:2,
+   exp:"Accountability is the third component of delegation. After duties are assigned (component 1) and authority is granted (component 2), accountability holds the subordinate answerable for the outcomes of the tasks they were delegated."},
+
+  /* ── MODULE 6: Leadership Theories ── */
+  {m:"Module 6", cs:false,
+   q:"Which leadership style is MOST appropriate in a military operation or emergency requiring rapid, firm decisions?",
+   opts:["Democratic","Laissez-faire","Situational","Autocratic"],
+   ans:3,
+   exp:"Autocratic leadership is most appropriate when quick, firm decisions are needed without time for group consultation — such as military operations, emergency management, or high-precision manufacturing. It maintains strong discipline and order."},
+
+  {m:"Module 6", cs:false,
+   q:"The Trait Theory of leadership is associated with the 'Great Man Theory' because it proposes that:",
+   opts:["Anyone can become a great leader through proper training",
+         "Leaders are born with natural qualities, not made through experience",
+         "Effective leaders must adapt their style to situations",
+         "Leadership effectiveness depends solely on observable behaviours"],
+   ans:1,
+   exp:"Trait Theory, associated with the 'Great Man Theory' (late 1800s–early 1900s), proposed that certain people are naturally born with leadership qualities. It assumed that effective leaders possess a distinct set of stable, innate traits not found in non-leaders."},
+
+  {m:"Module 6", cs:false,
+   q:"The Ohio State Studies identified 'Consideration' as a leadership behaviour that focuses on:",
+   opts:["Setting goals and assigning responsibilities clearly",
+         "Monitoring and controlling team performance strictly",
+         "Building rapport, showing concern for team members, and fostering trust",
+         "Making unilateral decisions without team input"],
+   ans:2,
+   exp:"In the Ohio State Studies, 'Consideration' is a people-focused behaviour where leaders build rapport, show genuine concern for team members' well-being, and foster trust and respect — contrasted with 'Initiating Structure,' which is task-focused."},
+
+  {m:"Module 6", cs:false,
+   q:"In Blake and Mouton's Managerial Grid, the (1,9) style is called 'Country Club Management' because it features:",
+   opts:["High concern for production, low concern for people",
+         "High concern for people, low concern for production",
+         "High concern for both people and production",
+         "Low concern for both people and production"],
+   ans:1,
+   exp:"Country Club Management (1,9) has HIGH concern for people but LOW concern for production. Leaders prioritise employee comfort and harmony over work results, creating a friendly atmosphere but often lacking discipline and productivity."},
+
+  {m:"Module 6", cs:false,
+   q:"Which style in the Managerial Grid is considered the IDEAL leadership style?",
+   opts:["Impoverished Management (1,1)","Country Club Management (1,9)",
+         "Task Management (9,1)","Team Management (9,9)"],
+   ans:3,
+   exp:"Team Management (9,9) is considered the ideal leadership style. It features HIGH concern for BOTH people AND production, leading to high satisfaction and high productivity through teamwork, trust, and commitment."},
+
+  {m:"Module 6", cs:false,
+   q:"A key criticism of Trait Theory is that it:",
+   opts:["Focuses too much on behaviour and ignores personal qualities",
+         "Ignores environmental and situational influences on leadership effectiveness",
+         "Only applies to democratic leaders",
+         "Was developed after behavioural theories and is therefore outdated"],
+   ans:1,
+   exp:"A major criticism of Trait Theory is that it ignores environmental, contextual, and situational factors — it cannot explain why a person with all the 'right' traits may fail in some situations or why people without those traits can still become effective leaders."},
+
+  {m:"Module 6", cs:true,
+   q:"CASE STUDY: A manager scores very high on 'Concern for Production' (score: 9) but very low on 'Concern for People' (score: 1) on the Managerial Grid. He consistently meets targets but has a high employee turnover rate and poor team morale. Which grid style does he represent, and what is the likely consequence?",
+   opts:["(9,9) Team Management — leads to burnout because of high standards",
+         "(1,9) Country Club — morale is good but productivity suffers",
+         "(9,1) Task Management — high productivity but low team satisfaction and high turnover",
+         "(5,5) Middle-of-the-Road — average performance and average morale"],
+   ans:2,
+   exp:"This manager represents (9,1) Task Management — high concern for production, low concern for people. The consequences match: consistently meeting targets (high production focus) paired with high employee turnover and poor morale (low people concern). Blake and Mouton identified this style as effective short-term but damaging long-term."},
+
+  /* ── MODULE 7: Situational and Relational Leadership ── */
+  {m:"Module 7", cs:false,
+   q:"In the Hersey-Blanchard model, a D1 follower (Low Competence, High Commitment) should be matched with which leadership style?",
+   opts:["Delegating (Low Task – Low Relationship)",
+         "Participating (Low Task – High Relationship)",
+         "Telling (High Task – Low Relationship)",
+         "Selling (High Task – High Relationship)"],
+   ans:2,
+   exp:"D1 followers have low competence but high commitment (eager but unskilled). They need the 'Telling' style: high task direction (clear instructions, close supervision) with low relationship support, since they are motivated but need clear guidance on what to do."},
+
+  {m:"Module 7", cs:false,
+   q:"The 'Selling' leadership style in Hersey-Blanchard is used for D2 followers because these followers have:",
+   opts:["High competence and high commitment",
+         "High competence but variable commitment",
+         "Some competence but low commitment",
+         "Low competence but high commitment"],
+   ans:2,
+   exp:"D2 followers have some competence but low commitment — they've begun developing skills but may lack confidence or motivation. The 'Selling' style (High Task + High Relationship) provides both direction and emotional support to build their confidence."},
+
+  {m:"Module 7", cs:false,
+   q:"LMX Theory was originally known as 'Vertical Dyad Linkage (VDL) Theory' because it focuses on:",
+   opts:["The hierarchy from CEO to frontline worker",
+         "The one-on-one (dyadic) relationship between a leader and each individual follower",
+         "The vertical flow of communication in a formal organisation chart",
+         "Linking leadership style to management levels"],
+   ans:1,
+   exp:"LMX (Leader-Member Exchange) Theory, originally called Vertical Dyad Linkage Theory, focuses on the unique dyadic (one-on-one) relationship between a leader and each individual team member — recognising that these relationships differ in quality and influence outcomes."},
+
+  {m:"Module 7", cs:false,
+   q:"In LMX Theory, 'Out-Group' members are characterised by:",
+   opts:["Having the highest level of trust and autonomy from the leader",
+         "Receiving challenging assignments and being involved in decision-making",
+         "Receiving basic supervision, formal communication, and limited growth opportunities",
+         "Being the most productive employees in the team"],
+   ans:2,
+   exp:"Out-Group members have a low-quality exchange relationship with the leader. They receive only basic supervision, formal and limited communication, fewer growth opportunities, and are less involved in decisions — often feeling excluded or undervalued."},
+
+  {m:"Module 7", cs:false,
+   q:"Which of the following BEST describes the key difference between a manager and a leader?",
+   opts:["A manager focuses on inspiring vision; a leader focuses on compliance and rules",
+         "A manager administers systems, maintains stability, and focuses on doing things right; a leader innovates, builds trust, and focuses on doing the right things",
+         "A manager motivates employees through personal charisma; a leader controls through authority",
+         "There is no meaningful difference; both terms refer to the same role"],
+   ans:1,
+   exp:"Managers typically administer existing systems, maintain stability, focus on processes, and ask 'how and when.' Leaders innovate, build trust, inspire people toward a vision, and ask 'what and why.' Transitioning from manager to leader requires shifting from control to inspiration."},
+
+  {m:"Module 7", cs:true,
+   q:"CASE STUDY: A team leader notices that one of her senior developers (10 years' experience, consistently delivers results independently) is given the same amount of detailed instructions and close supervision as a new intern. According to Hersey-Blanchard, what is the problem and what should the leader do?",
+   opts:["The leader is applying Selling (S2) to a D4 follower; she should switch to Telling (S1)",
+         "The leader is applying Telling (S1) to a D4 follower; she should switch to Delegating (S4)",
+         "The leader is applying Participating (S3) to a D2 follower; she should switch to Selling (S2)",
+         "The leader is applying Delegating (S4) to a D1 follower; she should switch to Telling (S1)"],
+   ans:1,
+   exp:"A senior developer with 10 years' experience and consistent independent results is a D4 follower (High Competence, High Commitment). Providing detailed instructions (Telling/S1) is mismatched — it over-supervises and may feel condescending. The correct style is Delegating (S4): low task, low relationship — trust them to take ownership and work independently."},
+
+  /* ── MODULE 8: Group Behaviour and Change ── */
+  {m:"Module 8", cs:false,
+   q:"In Tuckman's Model, which stage is described as the group working efficiently, with clear roles, high cooperation, and focus on achieving goals?",
+   opts:["Forming","Storming","Norming","Performing"],
+   ans:3,
+   exp:"The 'Performing' stage is where the group works efficiently and effectively. Roles are clear, cooperation is high, and the group is productive and often self-managing. This follows the Storming (conflict) and Norming (settling) stages."},
+
+  {m:"Module 8", cs:false,
+   q:"The Nominal Group Technique (NGT) is designed to avoid which specific problem in group decision-making?",
+   opts:["Lack of sufficient ideas","Over-reliance on data and analysis",
+         "Domination of the discussion by vocal or assertive members","Excessive voting that leads to confusion"],
+   ans:2,
+   exp:"NGT is a structured method where members write ideas silently and individually first, then share in turn — specifically designed to prevent any one vocal or assertive person from dominating the group discussion and ensuring all voices are heard equally."},
+
+  {m:"Module 8", cs:false,
+   q:"In Kurt Lewin's Three-Stage Change Model, the 'Unfreezing' stage is primarily about:",
+   opts:["Implementing the actual change and training employees on new systems",
+         "Reinforcing the new way of doing things through policies and rewards",
+         "Making people aware that change is necessary and breaking down the current status quo",
+         "Evaluating the outcomes of the change initiative"],
+   ans:2,
+   exp:"Unfreezing is the preparation stage. Its goal is to make people recognise that change is necessary by identifying the need for change, communicating reasons, creating urgency, and overcoming resistance — before the actual change begins."},
+
+  {m:"Module 8", cs:false,
+   q:"Which source of resistance to change involves employees distrusting a new initiative because earlier changes failed or caused problems?",
+   opts:["Fear of the Unknown","Loss of Control",
+         "Bad Experience with Past Changes","Peer Pressure"],
+   ans:2,
+   exp:"'Bad Experience with Past Changes' is a source of resistance where employees who have seen previous changes fail or cause harm develop scepticism and distrust toward new initiatives, even if those new initiatives are well-designed."},
+
+  {m:"Module 8", cs:false,
+   q:"Which group decision-making technique involves generating a large volume of ideas without early criticism, relying on free-flowing discussion?",
+   opts:["Nominal Group Technique","Brainstorming","Delphi Method","Six Thinking Hats"],
+   ans:1,
+   exp:"Brainstorming is a free-flowing group discussion technique aimed at generating as many ideas as possible. Criticism is withheld initially to encourage creative thinking — quantity of ideas is the priority, with evaluation happening later."},
+
+  {m:"Module 8", cs:true,
+   q:"CASE STUDY: A manufacturing company decides to automate its assembly line. Management announces the change without consulting workers. Employees immediately slow down work, rumours spread, and two senior workers resign. According to Lewin's model, which stage was mishandled and what should management have done?",
+   opts:["Refreezing was skipped — they should have provided rewards sooner",
+         "Performing stage failed — they needed more skilled workers",
+         "Unfreezing was mishandled — management should have communicated the need for change, involved employees, and addressed fears before implementation",
+         "Norming was skipped — groups should have been formed before any announcement"],
+   ans:2,
+   exp:"The Unfreezing stage was mishandled. Management failed to prepare employees for the change — there was no communication of why change was needed, no involvement of workers, and no strategy to manage resistance. This caused the typical consequences of poor unfreezing: rumours, slowdowns, and resignations. Proper unfreezing requires building urgency, transparency, and reducing fear before implementation begins."},
+
+  /* ── MODULE 9: Nature and Scope of OB ── */
+  {m:"Module 9", cs:false,
+   q:"Organisational Behaviour (OB) is best described as:",
+   opts:["The study of financial performance and budgeting in organisations",
+         "The systematic study of how individuals and groups act within organisations",
+         "A field focused exclusively on leadership and management training",
+         "The legal framework governing employment contracts and labour laws"],
+   ans:1,
+   exp:"OB is the systematic study of how individuals and groups act within organisations, drawing from psychology, sociology, and management to understand workplace behaviour, improve effectiveness, and enhance employee well-being."},
+
+  {m:"Module 9", cs:false,
+   q:"Which discipline contributes to OB by explaining group dynamics, communication patterns, power, and organisational culture?",
+   opts:["Psychology","Sociology","Anthropology","Economics"],
+   ans:1,
+   exp:"Sociology studies social systems and group behaviour. Its key contributions to OB include understanding group dynamics, organisational structure, communication patterns, power and politics, and organisational culture — all social-level phenomena."},
+
+  {m:"Module 9", cs:false,
+   q:"'Cross-Cultural Management' — understanding how work ethics and values differ between societies — is a contribution of which discipline to OB?",
+   opts:["Psychology","Sociology","Anthropology","Political Science"],
+   ans:2,
+   exp:"Anthropology studies human societies, cultures, and development. Its contributions to OB include understanding cultural values and norms, organisational culture, cross-cultural management, and comparative analysis of organisations across cultures."},
+
+  {m:"Module 9", cs:false,
+   q:"Which challenge to OB involves managing the impact of AI, automation, and digital tools on employee behaviour and job roles?",
+   opts:["Managing Workforce Diversity","Globalization and Cross-Cultural Issues",
+         "Technological Advancements and Automation","Ethical and Moral Issues"],
+   ans:2,
+   exp:"Technological Advancements and Automation is an OB challenge involving keeping up with rapid technology change, training employees, managing job displacement due to AI and automation, and maintaining human connection in virtual or remote workplaces."},
+
+  {m:"Module 9", cs:false,
+   q:"OB examines three levels of analysis. Which level focuses on organisational culture, change, and the overall structure and functioning of the organisation?",
+   opts:["Individual Level","Group Level","Organisational Level","Societal Level"],
+   ans:2,
+   exp:"The Organisational Level focuses on the entire organisation — including its culture, climate, structure, policies, strategy, and change management. This is distinct from the Individual Level (personality, motivation) and Group Level (teamwork, conflict, leadership)."},
+
+  /* ── MODULE 10: Personality ── */
+  {m:"Module 10", cs:false,
+   q:"Type A personality, as developed by Friedman and Rosenman, is characterised by which set of traits?",
+   opts:["Relaxed, patient, cooperative, and handles stress well",
+         "Creative, idea-driven, and loves brainstorming new concepts",
+         "Competitive, impatient, time-conscious, and prone to stress and burnout",
+         "Reflective, reserved, and prefers working alone in quiet settings"],
+   ans:2,
+   exp:"Type A personality (Friedman and Rosenman) is characterised by being competitive, achievement-oriented, impatient, time-conscious, prone to multitasking, and high levels of stress and burnout risk. Type B is the opposite — relaxed, patient, and less competitive."},
+
+  {m:"Module 10", cs:false,
+   q:"In the Big Five (OCEAN) model, 'Neuroticism' refers to:",
+   opts:["Being open to new experiences and ideas",
+         "Being cooperative, compassionate, and empathetic",
+         "The tendency to experience negative emotions such as anxiety, insecurity, and emotional instability",
+         "Being organised, disciplined, and dependable"],
+   ans:2,
+   exp:"Neuroticism reflects emotional instability and the tendency to experience negative emotions such as anxiety, insecurity, and being easily upset. Low Neuroticism (emotional stability) means being calm, confident, and able to handle stress well."},
+
+  {m:"Module 10", cs:false,
+   q:"Which of the following statements about the MBTI 'Thinking vs. Feeling' dimension is CORRECT?",
+   opts:["Thinking types make decisions based on personal values and emotions; Feeling types use logic",
+         "Thinking types prefer structure; Feeling types prefer flexibility",
+         "Thinking types make decisions using logic and objectivity; Feeling types base decisions on values and emotions",
+         "Thinking types are introverted; Feeling types are extroverted"],
+   ans:2,
+   exp:"In MBTI, the Thinking (T) vs. Feeling (F) dimension describes how decisions are made. Thinking types rely on logic and objectivity; Feeling types rely on personal values, empathy, and how decisions affect others. This is independent of the introversion/extraversion dimension."},
+
+  {m:"Module 10", cs:false,
+   q:"According to the text, which personality factor acts as 'the first and most powerful socialising agent' in shaping an individual's personality?",
+   opts:["Culture","Society and Peer Groups","Family","Situational Factors"],
+   ans:2,
+   exp:"Family is described as the first and most powerful socialising agent. Parents, siblings, and family values deeply influence early behaviour, emotional regulation, and interpersonal styles. Parenting style significantly affects confidence, discipline, and self-concept."},
+
+  {m:"Module 10", cs:true,
+   q:"CASE STUDY: An HR manager is building a team for a new innovation lab. She needs people who are creative and open to new ideas, dependable in meeting project deadlines, and able to work harmoniously in a team. Using the Big Five model, which combination of traits should she PRIORITISE?",
+   opts:["High Neuroticism, High Agreeableness, Low Conscientiousness",
+         "High Openness, High Conscientiousness, High Agreeableness",
+         "Low Openness, High Extraversion, Low Agreeableness",
+         "High Neuroticism, Low Conscientiousness, High Extraversion"],
+   ans:1,
+   exp:"The HR manager needs: creativity and openness to new ideas → High Openness; dependability in meeting deadlines → High Conscientiousness; harmonious teamwork → High Agreeableness. The Big Five model predicts that this combination (High O, C, A) best fits the innovation lab's needs. High Neuroticism would be counterproductive in a creative, collaborative setting."},
+
+  /* ── MODULE 11: Perception ── */
+  {m:"Module 11", cs:false,
+   q:"Which stage of the perceptual process involves the initial detection of stimuli through senses, without any meaning being assigned?",
+   opts:["Attention","Interpretation","Sensation","Response"],
+   ans:2,
+   exp:"Sensation is the first stage — the initial, physiological detection of stimuli through the sensory organs (sight, hearing, touch, etc.). At this stage, the brain receives raw, unprocessed data without any meaning or interpretation being assigned to it."},
+
+  {m:"Module 11", cs:false,
+   q:"The external factor of 'Contrast' in perceptual selectivity means we are more likely to notice:",
+   opts:["Objects that are very large compared to others",
+         "Stimuli that are moving rather than static",
+         "Stimuli that stand out sharply from their background",
+         "Stimuli we have encountered many times before"],
+   ans:2,
+   exp:"Contrast refers to stimuli that stand out sharply from their background — whether visually (colour, shape), auditorily (tone, pitch), or behaviourally (unexpected actions). This contrast makes the stimulus more salient and likely to be noticed."},
+
+  {m:"Module 11", cs:false,
+   q:"A person who expects a colleague to be uncooperative interprets a neutral response as dismissive. This perceptual error is caused by which internal factor?",
+   opts:["Needs","Interests","Personality","Expectations"],
+   ans:3,
+   exp:"Expectations act as a 'perceptual set' — they cause individuals to interpret information in line with what they already anticipate. If someone expects uncooperative behaviour, they will perceive neutral stimuli as confirming that expectation, even if no negativity was intended."},
+
+  {m:"Module 11", cs:false,
+   q:"How does perception differ from sensation?",
+   opts:["Sensation is a psychological process; perception is a biological one",
+         "Sensation is objective and unfiltered; perception is subjective and interpretive, shaped by experience and beliefs",
+         "Sensation involves judgment and meaning; perception is purely about receiving data",
+         "They are the same process, simply described at different speeds"],
+   ans:1,
+   exp:"Sensation is the passive, biological detection of stimuli through sensory organs — objective and largely universal. Perception is the active, psychological process of organising and interpreting those stimuli — subjective and influenced by experience, emotions, beliefs, and expectations."},
+
+  /* ── MODULE 12: Motivation Theories – Part I ── */
+  {m:"Module 12", cs:false,
+   q:"Which of the following correctly identifies the THREE key elements of motivation?",
+   opts:["Planning, Organising, and Controlling",
+         "Direction, Intensity, and Persistence",
+         "Needs, Drives, and Incentives",
+         "Intrinsic, Extrinsic, and Amotivation"],
+   ans:1,
+   exp:"The three key elements of motivation are: Direction (what an individual chooses to do), Intensity (how much effort is exerted), and Persistence (how long the effort continues). These three together define the nature and strength of motivated behaviour."},
+
+  {m:"Module 12", cs:false,
+   q:"In Maslow's Hierarchy, 'Esteem Needs' are classified into two types. Which of the following is an example of EXTERNAL esteem?",
+   opts:["Self-confidence and independence",
+         "Sense of personal achievement",
+         "Recognition, status, and appreciation from others",
+         "Autonomy in decision-making"],
+   ans:2,
+   exp:"External esteem needs include recognition, status, titles, and appreciation from others — things that make a person feel valued in the eyes of their peers and the organisation. Internal esteem (confidence, independence, achievement) comes from within oneself."},
+
+  {m:"Module 12", cs:false,
+   q:"Which of the following is a CRITICISM of Maslow's Hierarchy of Needs?",
+   opts:["It overemphasises social comparison between employees",
+         "Its rigid hierarchy assumes lower needs must be fully satisfied before higher ones emerge, which is often not true in reality",
+         "It only applies to extrinsic motivation and ignores intrinsic needs",
+         "It fails to recognise physiological needs as foundational to human motivation"],
+   ans:1,
+   exp:"A key criticism of Maslow's theory is its rigid hierarchy assumption — that people must fully satisfy lower-level needs before pursuing higher ones. In reality, people often pursue multiple needs simultaneously (e.g., an artist may seek self-actualisation despite unmet physiological needs)."},
+
+  {m:"Module 12", cs:false,
+   q:"In Equity Theory, the 'Referent Other' is best described as:",
+   opts:["The organisation's HR manager who sets compensation policies",
+         "A peer, colleague, or comparison group against whom an employee evaluates the fairness of their own input-output ratio",
+         "The employee's direct supervisor who provides performance feedback",
+         "The ideal employee archetype described in the job description"],
+   ans:1,
+   exp:"The 'Referent Other' is the person or group to whom an employee compares their own input-output ratio. This comparison could be a colleague in the same role, a peer in another organisation, or even a past version of themselves. It is central to how equity or inequity is perceived."},
+
+  {m:"Module 12", cs:false,
+   q:"The 'overjustification effect' in motivation theory refers to:",
+   opts:["The situation where employees are given too many tasks beyond their capacity",
+         "When excessive external rewards reduce intrinsic motivation, causing employees to focus solely on the reward rather than the work itself",
+         "When a manager justifies poor performance by blaming external factors",
+         "The effect of over-praising employees, causing them to become complacent"],
+   ans:1,
+   exp:"The overjustification effect occurs when excessive or inappropriate extrinsic rewards undermine intrinsic motivation. When employees shift their focus from genuine interest in the work to the external reward, they may lose intrinsic motivation and stop caring about the work itself."},
+
+  {m:"Module 12", cs:true,
+   q:"CASE STUDY: An employee discovers that a colleague with the same job title, qualifications, and years of experience is earning 20% more salary. The employee begins coming in late, doing the minimum required, and considering resigning. Which theory BEST explains this behaviour?",
+   opts:["Maslow's Hierarchy — the employee's safety needs are not being met",
+         "Equity Theory — the employee perceives an unfair input-output ratio compared to their referent other, and is reducing inputs (effort) to restore balance",
+         "Trait Theory — the employee has a low-conscientiousness personality trait",
+         "Hersey-Blanchard — the employee is a D1 follower being managed incorrectly"],
+   ans:1,
+   exp:"This is a textbook case of Equity Theory (J. Stacy Adams). The employee has compared their input-output ratio (same qualifications and experience → lower salary) to a referent other (same-title colleague earning more) and perceived under-reward inequity. The response — reducing effort (coming in late, doing minimum) — is a classic equity-restoration strategy: changing inputs. Resignation is also mentioned as an extreme restoring-equity response."},
+
+  /* ── MODULE 13: Motivation Theories – Part II ── */
+  {m:"Module 13", cs:false,
+   q:"Theory X and Theory Y were introduced by Douglas McGregor in his 1960 book titled:",
+   opts:["The Human Factor in Enterprise","Motivation and Personality",
+         "The Human Side of Enterprise","Management of Organizational Behavior"],
+   ans:2,
+   exp:"Douglas McGregor introduced Theory X and Theory Y in his 1960 book 'The Human Side of Enterprise.' These two theories present contrasting managerial assumptions about employee motivation and behaviour."},
+
+  {m:"Module 13", cs:false,
+   q:"Which assumption is central to Theory X?",
+   opts:["Employees naturally find work as enjoyable as play or rest",
+         "People will exercise self-control if committed to organisational objectives",
+         "Employees are creative and their intellectual potential is largely untapped",
+         "Employees inherently dislike work, lack ambition, and need direction and control"],
+   ans:3,
+   exp:"Theory X's central assumption is that employees inherently dislike work and try to avoid it, lack ambition and responsibility, and must be directed, controlled, and sometimes coerced to perform. It supports an authoritarian, command-and-control management style."},
+
+  {m:"Module 13", cs:false,
+   q:"According to Herzberg's Two-Factor Theory, hygiene factors such as salary and job security:",
+   opts:["Directly motivate employees and increase job satisfaction when improved",
+         "Prevent dissatisfaction when present, but do not create genuine job satisfaction or motivation",
+         "Are irrelevant to employee performance and should be ignored",
+         "Are the primary drivers of creativity and innovation in the workplace"],
+   ans:1,
+   exp:"Hygiene factors (salary, job security, working conditions, etc.) are maintenance factors — their presence prevents dissatisfaction, but they don't create genuine motivation or satisfaction. Their absence causes significant discontent. True motivation comes from Herzberg's 'Motivators.'"},
+
+  {m:"Module 13", cs:false,
+   q:"Which of the following is classified as a MOTIVATOR (not a hygiene factor) in Herzberg's theory?",
+   opts:["Company policies and administration","Supervision quality",
+         "Working conditions","Achievement and recognition"],
+   ans:3,
+   exp:"Achievement and Recognition are Motivators — intrinsic elements related to the content of the job itself that lead to genuine satisfaction and higher performance. Company policies, supervision quality, and working conditions are all hygiene factors (extrinsic, job-environment factors)."},
+
+  {m:"Module 13", cs:false,
+   q:"'Job Enrichment' as a management application of Herzberg's theory involves:",
+   opts:["Increasing the salary and benefits package to improve employee satisfaction",
+         "Adding more hours to the working day to increase productivity",
+         "Adding more depth, responsibility, and autonomy to job roles to make work more meaningful",
+         "Rotating employees between departments to reduce monotony"],
+   ans:2,
+   exp:"Job Enrichment — a key application of Herzberg's Two-Factor Theory — involves redesigning roles to include more depth, responsibility, autonomy, and meaningful content. This activates motivators like achievement, recognition, and responsibility, increasing genuine job satisfaction and performance."},
+
+  {m:"Module 13", cs:true,
+   q:"CASE STUDY: A company improves its office workspace, installs a new cafeteria, and raises everyone's base salary by 10%. Despite these changes, employee productivity and engagement remain unchanged after six months. A consultant suggests the company needs to redesign job roles to include more responsibility and recognition opportunities. Which theory best supports the consultant's advice, and why?",
+   opts:["Maslow's Theory — the physiological needs level has been fulfilled but safety needs have not",
+         "Theory X — employees are lazy and need closer monitoring, not job redesign",
+         "Herzberg's Two-Factor Theory — the improvements are all hygiene factors that prevent dissatisfaction but do not motivate; adding motivators (responsibility, recognition) is needed for real motivation",
+         "Equity Theory — employees are comparing their salaries to other companies and feel underpaid despite the raise"],
+   ans:2,
+   exp:"This is a classic Herzberg scenario. The improvements (workspace, cafeteria, salary raise) are all hygiene factors — they prevent dissatisfaction but don't create genuine motivation. Herzberg's theory explains that eliminating dissatisfaction does not automatically lead to satisfaction. The consultant correctly identifies that motivators (responsibility, recognition, meaningful work — intrinsic factors) must be added to drive real engagement and productivity."},
+
+  /* ── MODULE 14: Stress Management ── */
+  {m:"Module 14", cs:false,
+   q:"The term 'Eustress' was coined by Hans Selye. It refers to:",
+   opts:["Severe, long-term stress that causes burnout and physical illness",
+         "A form of positive, short-term stress that is motivating, manageable, and enhances performance",
+         "The biological response to chronic workplace pressure",
+         "Stress caused exclusively by interpersonal conflicts at work"],
+   ans:1,
+   exp:"Eustress (from the Greek 'eu' = good) is a positive, short-term form of stress that feels motivating rather than overwhelming. It enhances focus, resilience, and performance, and is perceived as a manageable challenge — unlike distress, which is harmful and chronic."},
+
+  {m:"Module 14", cs:false,
+   q:"Which biological hormones are released during eustress that increase alertness, energy, and a sense of well-being?",
+   opts:["Cortisol and insulin","Serotonin and melatonin",
+         "Adrenaline, dopamine, and endorphins","Histamine and prostaglandins"],
+   ans:2,
+   exp:"During eustress, the sympathetic nervous system activates and releases: Adrenaline (increases alertness, energy, muscle readiness), Dopamine (enhances mood and motivation), and Endorphins (reduce pain perception and create well-being). These are distinct from the cortisol released in harmful chronic stress."},
+
+  {m:"Module 14", cs:false,
+   q:"'Role Ambiguity' as a cause of workplace stress refers to:",
+   opts:["Having too many tasks to complete within a short deadline",
+         "Employees receiving unclear job roles or conflicting expectations, leading to confusion and frustration",
+         "Fear of losing one's job due to company restructuring or automation",
+         "Tensions with coworkers or supervisors creating a hostile atmosphere"],
+   ans:1,
+   exp:"Role Ambiguity occurs when job roles are unclear or when employees face conflicting expectations (e.g., reporting to two supervisors with different demands). This confusion about responsibilities leads to frustration and significant workplace stress."},
+
+  {m:"Module 14", cs:false,
+   q:"Distress, unlike eustress, triggers prolonged activation of the hypothalamic-pituitary-adrenal (HPA) axis, leading to excessive release of which hormone associated with chronic harm?",
+   opts:["Dopamine","Serotonin","Endorphins","Cortisol"],
+   ans:3,
+   exp:"Distress causes prolonged activation of the HPA axis, leading to excessive cortisol and adrenaline release. Over time, this elevates heart rate and blood pressure, suppresses immune function, causes digestive disturbances, and increases risk of chronic diseases. Eustress, by contrast, does not produce lasting cortisol elevation."},
+
+  {m:"Module 14", cs:false,
+   q:"Acute stress differs from chronic distress primarily because acute stress:",
+   opts:["Is always more severe and damaging than chronic stress",
+         "Is a sudden, short-term reaction to a specific event that typically resolves quickly once the situation ends",
+         "Only occurs in senior management and leadership roles",
+         "Is caused exclusively by poor working conditions and interpersonal conflict"],
+   ans:1,
+   exp:"Acute stress is sudden, short-term (minutes to days), caused by a specific identifiable event, and typically resolves quickly once the situation ends. It is the most common form of stress. Chronic distress, by contrast, is long-term, ongoing, and causes lasting physical and psychological damage."},
+
+  {m:"Module 14", cs:true,
+   q:"CASE STUDY: A junior accountant, normally calm and organised, is given a new project with a two-week deadline in a domain they have limited experience in. They feel nervous but excited, work focused extra hours, and successfully complete the project, feeling proud and energised afterward. Which type of stress does this scenario BEST represent and why?",
+   opts:["Distress — because they worked extra hours and felt nervous",
+         "Acute stress progressing into distress — because the deadline was too tight",
+         "Eustress — because the stress was short-term, perceived as manageable, enhanced their performance, and resulted in growth and achievement",
+         "Role Ambiguity stress — because they had limited experience in the domain"],
+   ans:2,
+   exp:"This is eustress. Key indicators: it was short-term (two-week deadline), perceived as a challenge rather than a threat (nervous but excited), enhanced performance (focused extra hours, successful completion), and resulted in growth and positive emotion (pride, feeling energised). Eustress is characterised by exactly these outcomes — distinguishing it from distress, which overwhelms and harms, or acute stress that resolves without a growth outcome."}
+
+]; /* end of qs array */
+
+/* =========================================================
+   VALIDATION — runs once at load to catch any data errors
+   ========================================================= */
+(function validate() {
+  var errs = [];
+  for (var i = 0; i < qs.length; i++) {
+    var q = qs[i];
+    if (typeof q.ans !== 'number') errs.push('Q'+(i+1)+': ans is not a number');
+    if (q.ans < 0 || q.ans >= q.opts.length) errs.push('Q'+(i+1)+': ans='+q.ans+' is out of range (opts.length='+q.opts.length+')');
+    if (!q.q || q.q.trim() === '') errs.push('Q'+(i+1)+': question text is empty');
+    if (!q.exp || q.exp.trim() === '') errs.push('Q'+(i+1)+': explanation is empty');
+    if (q.opts.length < 3) errs.push('Q'+(i+1)+': fewer than 3 options');
+  }
+  if (errs.length > 0) {
+    document.addEventListener('DOMContentLoaded', function() {
+      document.body.innerHTML = '<div style="padding:24px;font-family:monospace;background:#FEE2E2;color:#7F1D1D;"><b>QUIZ DATA ERRORS:</b><br>' + errs.join('<br>') + '</div>';
+    });
+  }
+})();
+
+var cur = 0, score = 0, answered = false;
+
+function showSplash() {
+  var total = qs.length;
+  var cs = qs.filter(function(q){return q.cs;}).length;
+  var mods = {};
+  qs.forEach(function(q){mods[q.m]=1;});
+  var numMods = Object.keys(mods).length;
+  var html = '<div class="splash">';
+  html += '<div class="splash-icon">🧠</div>';
+  html += '<div class="splash-title">Leadership &amp; Org. Behaviour</div>';
+  html += '<div class="splash-sub">A comprehensive test across all 14 modules — from management foundations to stress management, motivation, and leadership theories.</div>';
+  html += '<div class="splash-stats">';
+  html += '<div class="splash-stat"><div class="splash-stat-v">'+total+'</div><div class="splash-stat-l">Questions</div></div>';
+  html += '<div class="splash-stat"><div class="splash-stat-v">'+numMods+'</div><div class="splash-stat-l">Modules</div></div>';
+  html += '<div class="splash-stat"><div class="splash-stat-v">'+cs+'</div><div class="splash-stat-l">Case Studies</div></div>';
+  html += '</div>';
+  html += '<button class="start-btn" onclick="startQuiz()">Start Quiz →</button>';
+  html += '</div>';
+  document.getElementById('area').innerHTML = html;
+  document.getElementById('prog').style.width = '0%';
+  document.getElementById('hbadge').textContent = qs.length + ' Questions';
+}
+
+function startQuiz() {
+  cur = 0; score = 0; answered = false;
+  render();
+}
+
+function render() {
+  if (cur >= qs.length) { showResult(); return; }
+  var q = qs[cur];
+  document.getElementById('prog').style.width = (cur / qs.length * 100) + '%';
+  document.getElementById('hbadge').textContent = 'Score: ' + score + '/' + cur;
+  var html = '';
+  html += '<div class="q-meta"><span class="q-counter">Q' + (cur+1) + ' of ' + qs.length + '</span></div>';
+  html += '<div class="q-unit-tag">📖 ' + q.m + '</div>';
+  if (q.cs) html += '<div class="case-badge">📋 Case Study</div>';
+  html += '<div class="q-card"><div class="q-text">' + q.q + '</div></div>';
+  html += '<div class="opts">';
+  for (var i = 0; i < q.opts.length; i++) {
+    html += '<button class="opt" onclick="choose(' + i + ')" id="o' + i + '"><span class="lbl">' + String.fromCharCode(65+i) + '</span><span>' + q.opts[i] + '</span></button>';
+  }
+  html += '</div>';
+  html += '<div class="fb" id="fb"><span class="fb-head" id="fbh"></span><span id="fbt"></span></div>';
+  html += '<div class="nxt-wrap" id="nw"><button class="nxt" onclick="next()">' + (cur < qs.length - 1 ? 'Next Question →' : 'See My Results →') + '</button></div>';
+  document.getElementById('area').innerHTML = html;
+}
+
+function choose(i) {
+  if (answered) return;
+  answered = true;
+  var q = qs[cur];
+  var btns = document.querySelectorAll('.opt');
+  for (var b = 0; b < btns.length; b++) btns[b].disabled = true;
+  var correct = (i === q.ans);
+  if (correct) { document.getElementById('o'+i).className = 'opt correct'; score++; }
+  else {
+    document.getElementById('o'+i).className = 'opt wrong';
+    document.getElementById('o'+q.ans).className = 'opt correct';
+  }
+  var fb = document.getElementById('fb');
+  fb.style.display = 'block';
+  fb.className = 'fb ' + (correct ? 'ok' : 'bad');
+  document.getElementById('fbh').textContent = correct ? '✓ Correct!' : '✗ Incorrect';
+  document.getElementById('fbt').textContent = q.exp;
+  document.getElementById('nw').style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function next() {
+  cur++; answered = false;
+  window.scrollTo({top:0, behavior:'smooth'});
+  render();
+}
+
+function showResult() {
+  document.getElementById('prog').style.width = '100%';
+  document.getElementById('hbadge').textContent = 'Complete!';
+  var total = qs.length;
+  var pct = Math.round(score / total * 100);
+  var wrong = total - score;
+  var grade, msg, emoji;
+  if (score >= 63) { grade = 'Outstanding!'; emoji = '🏆'; msg = 'Distinction-level. You have mastered Leadership &amp; Organisational Behaviour across all 14 modules.'; }
+  else if (score >= 56) { grade = 'Excellent!'; emoji = '🌟'; msg = 'Merit-level performance. Strong command of the subject from management foundations to stress management.'; }
+  else if (score >= 42) { grade = 'Good Pass'; emoji = '👍'; msg = 'Solid understanding. Revisit motivation theories, leadership models, and perception for higher scores.'; }
+  else if (score >= 28) { grade = 'Getting There'; emoji = '📖'; msg = 'Keep going! Focus on Hersey-Blanchard, Herzberg, Maslow, and change management models.'; }
+  else { grade = 'Keep Going'; emoji = '💪'; msg = 'Revisit all 14 modules and retake — consistency will get you there!'; }
+
+  var html = '<div class="result">';
+  html += '<div class="result-ring"><div class="result-big">'+score+'/'+total+'</div><div class="result-pct">'+pct+'%</div></div>';
+  html += '<div style="font-size:32px;margin-bottom:8px">'+emoji+'</div>';
+  html += '<div class="result-grade">'+grade+'</div>';
+  html += '<div class="result-msg">'+msg+'</div>';
+  html += '<div class="stats">';
+  html += '<div class="stat"><div class="stat-v" style="color:var(--green)">'+score+'</div><div class="stat-l">Correct</div></div>';
+  html += '<div class="stat"><div class="stat-v" style="color:var(--red)">'+wrong+'</div><div class="stat-l">Wrong</div></div>';
+  html += '<div class="stat"><div class="stat-v" style="color:var(--primary)">'+pct+'%</div><div class="stat-l">Score</div></div>';
+  html += '</div>';
+  html += '<button class="rst" onclick="restart()">🔄 Retake Quiz</button>';
+  html += '</div>';
+  document.getElementById('area').innerHTML = html;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function restart() { cur = 0; score = 0; answered = false; showSplash(); }
+
+showSplash();
+</script>
+</body>
+</html>
