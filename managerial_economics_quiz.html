@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Managerial Economics Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+  :root {
+    --primary: #0D6E4F;
+    --primary-light: #ECFDF5;
+    --green: #15803D;
+    --green-light: #DCFCE7;
+    --red: #B91C1C;
+    --red-light: #FEE2E2;
+    --gold: #B45309;
+    --gold-light: #FEF3C7;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --border: #E2E8F0;
+    --text: #0F172A;
+    --text2: #64748B;
+    --text3: #94A3B8;
+    --radius: 16px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  .header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 20px 12px; position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 8px rgba(0,0,0,0.05); }
+  .header-inner { max-width: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .header-title { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--text); line-height: 1.2; }
+  .header-badge { font-size: 11px; font-weight: 700; color: var(--primary); background: var(--primary-light); padding: 4px 11px; border-radius: 20px; white-space: nowrap; letter-spacing: 0.03em; }
+  .prog-track { height: 3px; background: var(--border); position: sticky; top: 57px; z-index: 9; }
+  .prog-fill { height: 3px; background: linear-gradient(90deg, var(--primary), #059669); transition: width 0.45s cubic-bezier(0.4,0,0.2,1); border-radius: 0 2px 2px 0; }
+  .container { max-width: 600px; margin: 0 auto; padding: 22px 16px 70px; }
+  .q-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .q-counter { font-size: 11px; font-weight: 700; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; }
+  .q-unit-tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; color: var(--primary); background: var(--primary-light); padding: 4px 10px; border-radius: 8px; margin-bottom: 10px; letter-spacing: 0.02em; }
+  .case-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; color: var(--gold); background: var(--gold-light); padding: 3px 9px; border-radius: 6px; margin-bottom: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .q-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; box-shadow: var(--shadow); }
+  .q-text { font-size: 16px; font-weight: 600; line-height: 1.55; color: var(--text); }
+  .opts { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .opt { display: flex; align-items: flex-start; gap: 12px; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; padding: 13px 15px; cursor: pointer; text-align: left; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text); transition: border-color 0.15s, background 0.15s, transform 0.1s; line-height: 1.45; box-shadow: 0 1px 3px rgba(0,0,0,0.04); -webkit-appearance: none; width: 100%; }
+  .opt:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-light); transform: translateY(-1px); }
+  .opt:active:not(:disabled) { transform: translateY(0); }
+  .opt .lbl { min-width: 26px; height: 26px; border-radius: 8px; background: var(--bg); border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--text2); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; margin-top: 1px; }
+  .opt.correct { border-color: var(--green); background: var(--green-light); }
+  .opt.correct .lbl { background: var(--green); border-color: var(--green); color: #fff; }
+  .opt.wrong { border-color: var(--red); background: var(--red-light); }
+  .opt.wrong .lbl { background: var(--red); border-color: var(--red); color: #fff; }
+  .fb { display: none; border-radius: 12px; padding: 14px 16px; font-size: 13.5px; line-height: 1.6; margin-bottom: 14px; border-left: 4px solid transparent; }
+  .fb.ok { background: var(--green-light); border-color: var(--green); color: #14532D; }
+  .fb.bad { background: var(--red-light); border-color: var(--red); color: #7F1D1D; }
+  .fb-head { font-weight: 700; font-size: 13px; margin-bottom: 4px; display: block; }
+  .nxt-wrap { display: none; }
+  .nxt { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--primary), #059669); color: #fff; border: none; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 0.02em; box-shadow: 0 4px 14px rgba(13,110,79,0.3); transition: opacity 0.15s, transform 0.1s; }
+  .nxt:hover { opacity: 0.92; transform: translateY(-1px); }
+  .nxt:active { transform: translateY(0); }
+  .splash { text-align: center; padding: 48px 24px; }
+  .splash-icon { font-size: 52px; margin-bottom: 16px; }
+  .splash-title { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text); margin-bottom: 10px; line-height: 1.3; }
+  .splash-sub { font-size: 14px; color: var(--text2); line-height: 1.6; max-width: 340px; margin: 0 auto 28px; }
+  .splash-stats { display: flex; justify-content: center; gap: 24px; margin-bottom: 28px; }
+  .splash-stat { text-align: center; }
+  .splash-stat-v { font-size: 22px; font-weight: 800; color: var(--primary); }
+  .splash-stat-l { font-size: 11px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+  .start-btn { width: 100%; max-width: 320px; padding: 16px; background: linear-gradient(135deg, var(--primary), #059669); color: #fff; border: none; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 20px rgba(13,110,79,0.3); letter-spacing: 0.02em; transition: opacity 0.15s, transform 0.1s; }
+  .start-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+  .result { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 24px; text-align: center; box-shadow: var(--shadow); }
+  .result-ring { width: 130px; height: 130px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #059669); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 8px 30px rgba(13,110,79,0.25); }
+  .result-big { font-size: 32px; font-weight: 800; color: #fff; line-height: 1; }
+  .result-pct { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.8); margin-top: 4px; }
+  .result-grade { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text); margin-bottom: 8px; }
+  .result-msg { font-size: 14px; color: var(--text2); max-width: 340px; margin: 0 auto 24px; line-height: 1.6; }
+  .stats { display: flex; justify-content: center; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+  .stat { flex: 1; padding: 14px 8px; border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: none; }
+  .stat-v { font-size: 22px; font-weight: 800; margin-bottom: 3px; }
+  .stat-l { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
+  .rst { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--primary), #059669); color: #fff; border: none; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(13,110,79,0.3); transition: opacity 0.15s; }
+  .rst:hover { opacity: 0.92; }
+  .err-banner { background: #FEE2E2; border: 2px solid #B91C1C; border-radius: 12px; padding: 16px 20px; color: #7F1D1D; font-size: 13px; line-height: 1.8; margin: 20px; }
+  .err-banner strong { display: block; margin-bottom: 6px; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-title">Managerial Economics</div>
+    <div class="header-badge" id="hbadge">50 Questions</div>
+  </div>
+</div>
+<div class="prog-track"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+<div class="container"><div id="area"></div></div>
+
+<script>
+/* ================================================================
+   QUIZ DATA — 50 questions across 14 units, 8 case studies
+   ans = 0-based index into opts[]
+   Validation fires automatically at page load.
+   ================================================================ */
+var qs = [
+
+  /* ── UNIT 1: Managerial Economics Basics ── */
+  {u:"Unit 1", cs:false,
+   q:"Managerial Economics is BEST described as:",
+   opts:[
+     "A branch of macroeconomics focused on studying national income and monetary policy",
+     "A specialised branch that applies microeconomic analysis to specific business decisions, bridging economic theory and managerial practice",
+     "A discipline exclusively concerned with financial accounting and budgeting",
+     "The study of how governments allocate national resources across sectors"
+   ],
+   ans:1,
+   exp:"Managerial Economics applies microeconomic analysis to specific business decision-making problems. It bridges the gap between economic theory and managerial practice by equipping managers with tools for pricing, resource allocation, output decisions, and investment planning."},
+
+  {u:"Unit 1", cs:false,
+   q:"Which of the following is listed as a key APPLICATION of managerial economics?",
+   opts:[
+     "Designing national monetary policy to control inflation",
+     "Investment analysis using techniques like NPV, IRR, and cost-benefit analysis",
+     "Conducting census data collection for population studies",
+     "Setting international trade tariffs and quotas"
+   ],
+   ans:1,
+   exp:"Investment analysis is a core application of managerial economics — evaluating long-term resource allocation using techniques like Net Present Value (NPV), Internal Rate of Return (IRR), and Cost-Benefit Analysis, while accounting for risk, uncertainty, and opportunity cost."},
+
+  {u:"Unit 1", cs:false,
+   q:"Which feature of managerial economics reflects its 'interdisciplinary approach'?",
+   opts:[
+     "It restricts itself to classical economic theory and avoids modern techniques",
+     "It draws upon finance, statistics, operations research, psychology, and management science to strengthen decision-making",
+     "It focuses only on macroeconomic indicators such as GDP and inflation",
+     "It applies only to manufacturing firms and not service industries"
+   ],
+   ans:1,
+   exp:"Managerial economics is interdisciplinary — it integrates principles from multiple fields: statistics for demand estimation, financial theories for capital budgeting, and behavioural sciences for consumer behaviour insights. This cross-functional integration enables holistic business decision-making."},
+
+  {u:"Unit 1", cs:true,
+   q:"CASE STUDY: A retail chain is deciding whether to open a new store in a competing city. The management team uses demand forecasting models, break-even analysis, and NPV calculations to evaluate the decision, while also assessing competitor pricing and local consumer income levels. Which characteristic of managerial economics does this scenario BEST illustrate?",
+   opts:[
+     "Managerial economics as a purely theoretical discipline unrelated to real decisions",
+     "Its decision-making focus and interdisciplinary application across forecasting, cost analysis, investment evaluation, and competitive strategy",
+     "Managerial economics as a branch of macroeconomics concerned with national output trends",
+     "Managerial economics confined to production decisions only"
+   ],
+   ans:1,
+   exp:"This scenario illustrates managerial economics' decision-making focus and interdisciplinary nature: demand forecasting (statistical tools), break-even and NPV analysis (investment analysis), competitor pricing (strategic planning), and consumer income (microeconomic analysis) — all combined to support one business decision."},
+
+  /* ── UNIT 2: Demand Analysis ── */
+  {u:"Unit 2", cs:false,
+   q:"Economic demand requires both the desire for a product AND:",
+   opts:[
+     "A government licence to purchase the good",
+     "The ability and willingness to pay for it at a given price",
+     "Physical availability of the product in the local market",
+     "Prior experience with the product from past purchases"
+   ],
+   ans:1,
+   exp:"Demand in economics is not mere desire. It requires both the ability to pay (financial capacity — income, credit access) and the willingness to pay (intent). A consumer who desires a luxury car but cannot afford it does not constitute effective economic demand."},
+
+  {u:"Unit 2", cs:false,
+   q:"'Joint demand' occurs when:",
+   opts:[
+     "A single product is demanded simultaneously by multiple market segments",
+     "Two or more goods are consumed together to satisfy a single need — demand for one complements demand for another",
+     "A consumer demands the same product from multiple sellers to get the best price",
+     "Several firms combine their demand for raw materials to negotiate bulk discounts"
+   ],
+   ans:1,
+   exp:"Joint demand (complementary demand) exists when two goods are used together — such as printers and ink cartridges, cars and fuel, or smartphones and data plans. A change in the price or availability of one directly affects the demand for the other. Relevant for bundling and cross-selling strategies."},
+
+  {u:"Unit 2", cs:false,
+   q:"The Law of Demand states that, all else equal:",
+   opts:[
+     "As income rises, demand for all goods increases proportionally",
+     "As the price of a good rises, quantity demanded falls, and vice versa — an inverse relationship",
+     "As supply increases, the price of a good automatically falls",
+     "As advertising expenditure rises, demand always increases proportionally"
+   ],
+   ans:1,
+   exp:"The Law of Demand describes an inverse relationship between price and quantity demanded — when price rises, consumers buy less (substitution effect, income effect); when price falls, they buy more. This is represented by the downward-sloping demand curve. All other factors are held constant (ceteris paribus)."},
+
+  {u:"Unit 2", cs:true,
+   q:"CASE STUDY: A coffee shop notices that whenever the price of tea rises sharply in the market, their own coffee sales increase significantly — even though they did not change their coffee price. Which demand concept BEST explains this observation?",
+   opts:[
+     "Joint demand — tea and coffee are complements consumed together",
+     "Composite demand — coffee is demanded for multiple uses simultaneously",
+     "Substitute demand — coffee and tea serve similar needs; a price rise in tea shifts consumers toward coffee",
+     "Derived demand — coffee demand is derived from the demand for caffeine"
+   ],
+   ans:2,
+   exp:"This illustrates substitute demand. Coffee and tea are substitutes — they fulfil a similar need (a hot beverage). When the price of tea rises, consumers shift to the relatively cheaper substitute (coffee), increasing coffee demand. This is distinct from joint demand (complements used together) or derived demand (demand derived from another product's production)."},
+
+  /* ── UNIT 3: Price Elasticity of Demand ── */
+  {u:"Unit 3", cs:false,
+   q:"The formula for Price Elasticity of Demand (PED) is:",
+   opts:[
+     "% Change in Price ÷ % Change in Quantity Demanded",
+     "% Change in Quantity Demanded ÷ % Change in Price",
+     "% Change in Income ÷ % Change in Quantity Demanded",
+     "% Change in Quantity Supplied ÷ % Change in Price"
+   ],
+   ans:1,
+   exp:"PED = (% Change in Quantity Demanded) ÷ (% Change in Price). It measures the responsiveness of quantity demanded to a price change. A result > 1 means elastic demand; < 1 means inelastic; = 1 means unitary elastic. The value is typically expressed in absolute terms as the demand-price relationship is inverse (negative)."},
+
+  {u:"Unit 3", cs:false,
+   q:"When demand is INELASTIC (PED < 1), a price INCREASE will:",
+   opts:[
+     "Decrease total revenue because quantity falls significantly",
+     "Leave total revenue unchanged since consumers are moderately sensitive",
+     "Increase total revenue because the revenue gained from the higher price outweighs the small fall in quantity",
+     "Cause consumers to immediately switch to substitutes, eliminating all demand"
+   ],
+   ans:2,
+   exp:"With inelastic demand, consumers are relatively unresponsive to price changes. A price increase leads to only a small fall in quantity demanded — so the revenue gained from the higher price exceeds the revenue lost from fewer units sold. Total revenue INCREASES. Example: essential medicines, petrol."},
+
+  {u:"Unit 3", cs:false,
+   q:"Which of the following goods would MOST likely have ELASTIC demand?",
+   opts:[
+     "Insulin for diabetic patients — a medical necessity with no substitutes",
+     "Table salt — a staple with no close alternatives",
+     "Luxury designer handbags — non-essential, expensive, with many alternatives",
+     "Basic electricity supply — essential for daily life and business"
+   ],
+   ans:2,
+   exp:"Luxury goods like designer handbags have elastic demand. They are non-essential, relatively expensive, and have many alternatives. A price rise leads to a significant drop in quantity demanded. Necessities (insulin, salt, electricity) have inelastic demand because consumers must buy them regardless of price changes."},
+
+  {u:"Unit 3", cs:false,
+   q:"Which determinant of price elasticity states that demand tends to be MORE elastic in the long run than the short run?",
+   opts:[
+     "Nature of the good (necessity vs luxury)",
+     "Availability of close substitutes",
+     "Time horizon — consumers have more time to adjust and find alternatives in the long run",
+     "Proportion of income spent on the good"
+   ],
+   ans:2,
+   exp:"Time horizon is a key determinant. In the short run, consumers may have no alternatives when prices rise and are forced to pay. Over time, they can find substitutes, change habits, or adopt new technologies — making demand more elastic. Example: petrol is inelastic short-term but elastic long-term as people switch to EVs."},
+
+  /* ── UNIT 4: Income & Cross Elasticity ── */
+  {u:"Unit 4", cs:false,
+   q:"A good with a NEGATIVE Income Elasticity of Demand (YED < 0) is classified as:",
+   opts:[
+     "A luxury good — demand rises sharply as income increases",
+     "A normal good — demand rises moderately with income",
+     "An inferior good — demand DECREASES as income rises, as consumers switch to better alternatives",
+     "A necessity — demand remains unchanged regardless of income"
+   ],
+   ans:2,
+   exp:"Negative YED identifies inferior goods. As consumer income rises, they replace inferior goods with more desirable alternatives. Examples include generic food brands replaced by premium ones, or public buses replaced by personal vehicles. These goods perform better during recessions (counter-cyclical opportunity)."},
+
+  {u:"Unit 4", cs:false,
+   q:"Cross Elasticity of Demand (XED) between two goods is POSITIVE. This means the goods are:",
+   opts:[
+     "Complements — used together; a rise in one's price reduces demand for the other",
+     "Substitutes — a rise in the price of Good A increases demand for Good B",
+     "Inferior goods — both goods decline in demand when income rises",
+     "Normal goods — both goods increase in demand when income rises"
+   ],
+   ans:1,
+   exp:"Positive XED indicates substitutes. When the price of Good A rises, consumers switch to Good B, increasing its demand. Example: butter and margarine, Coke and Pepsi. Negative XED indicates complements (e.g., cars and fuel — a rise in car prices reduces fuel demand). Zero XED means unrelated goods."},
+
+  {u:"Unit 4", cs:false,
+   q:"A firm producing organic food products observes that a 10% rise in consumer incomes leads to a 20% increase in demand for its products. The Income Elasticity of Demand (YED) is 2.0. How should the firm classify its product and what strategy does this suggest?",
+   opts:[
+     "Inferior good (YED = 2.0 is negative) — focus on recession-period promotions",
+     "Necessity (YED = 0) — maintain stable pricing regardless of economic conditions",
+     "Luxury or income-elastic normal good (YED > 1) — expand capacity and premium positioning to capitalise on economic growth",
+     "Inelastic normal good (0 < YED < 1) — pricing flexibility is limited; focus on volume"
+   ],
+   ans:2,
+   exp:"YED = 2.0 indicates a luxury or income-elastic good — demand rises more than proportionally with income. This signals strong income sensitivity. The firm should invest in capacity expansion, premium branding, and target high-income and growing-middle-class segments. Demand will be highly sensitive to economic cycles — strong in booms, weaker in downturns."},
+
+  /* ── UNIT 5: Utility Theory ── */
+  {u:"Unit 5", cs:false,
+   q:"The Law of Diminishing Marginal Utility states that:",
+   opts:[
+     "Total utility always decreases as more units of a good are consumed",
+     "As a consumer consumes additional units of a good, the extra satisfaction (marginal utility) derived from each successive unit eventually decreases",
+     "Marginal utility always equals total utility at the point of maximum consumption",
+     "As the price of a good rises, the utility derived from consuming it increases"
+   ],
+   ans:1,
+   exp:"The Law of Diminishing Marginal Utility holds that as a consumer consumes more units of a good (holding other goods constant), the additional satisfaction (MU) from each successive unit decreases. Total utility continues to rise as long as MU is positive, peaks when MU = 0, and falls when MU becomes negative."},
+
+  {u:"Unit 5", cs:false,
+   q:"An indifference curve is CONVEX to the origin because of:",
+   opts:[
+     "The law of supply and demand operating simultaneously",
+     "The Diminishing Marginal Rate of Substitution (DMRS) — as more of one good is consumed, consumers give up decreasing amounts of the other to stay equally satisfied",
+     "The consumer's budget constraint becoming tighter as consumption increases",
+     "Cardinal utility being measurable in absolute numeric units"
+   ],
+   ans:1,
+   exp:"Indifference curves are convex due to the Diminishing Marginal Rate of Substitution. As a consumer substitutes Good X for Good Y, the willingness to give up Y for each additional unit of X decreases — reflecting the reduced marginal value of X relative to Y. This diminishing trade-off creates the characteristic convex shape."},
+
+  {u:"Unit 5", cs:false,
+   q:"Which utility approach assumes that utility CAN be measured in absolute numerical units (called 'utils'), as advocated by Alfred Marshall?",
+   opts:[
+     "Ordinal utility theory — consumers rank preferences but cannot quantify them",
+     "Cardinal utility theory — utility is measurable and expressible as specific numbers",
+     "Indifference curve analysis — based on observable consumer choices",
+     "Revealed preference theory — deduced from observed purchasing behaviour"
+   ],
+   ans:1,
+   exp:"Cardinal utility theory (associated with Marshall) assumes utility is quantifiable — a consumer can state they derive 10 utils from one apple and 5 from an orange. This enables marginal utility calculations. Ordinal utility (Hicks and Allen) holds that consumers can only rank preferences (prefer A over B) without assigning numbers — forming the basis of indifference curve analysis."},
+
+  {u:"Unit 5", cs:true,
+   q:"CASE STUDY: A student eats slices of pizza one by one. After the 1st slice she feels very satisfied. The 2nd slice is enjoyable but less so. By the 5th slice she feels full and indifferent, and the 6th slice makes her feel uncomfortable. Which economic law BEST describes this experience, and what does it imply for pricing strategy?",
+   opts:[
+     "Law of Supply — as she consumes more, the market price of pizza should rise",
+     "Law of Diminishing Marginal Utility — each additional slice delivers less extra satisfaction. Firms can use this to justify bundled discounts for extra units, as consumers need price incentives to consume beyond the point of saturation",
+     "Law of Equi-Marginal Utility — the student should split her budget equally across food types",
+     "The Cardinal Utility Principle — her total utility can be precisely measured in utils"
+   ],
+   ans:1,
+   exp:"This is a textbook illustration of Diminishing Marginal Utility: MU is high for the 1st slice, falls with each successive slice, reaches zero at the 5th (saturation), and becomes negative at the 6th (disutility). Pricing implication: firms often use buy-more-pay-less discounts or bundle deals precisely because consumers need price incentives to consume beyond their natural saturation point."},
+
+  /* ── UNIT 6: Production Theory ── */
+  {u:"Unit 6", cs:false,
+   q:"The production function Q = f(L, K) expresses:",
+   opts:[
+     "The price at which a firm can sell its output given labour and capital costs",
+     "The technical relationship between quantities of inputs (labour L, capital K) used and the quantity of output Q produced",
+     "The profit function of a firm based on variable input levels",
+     "The demand function relating consumer income to product quantity"
+   ],
+   ans:1,
+   exp:"The production function Q = f(L, K) expresses the technical (not financial) relationship between inputs and output. It shows the maximum output achievable from given combinations of labour (L) and capital (K). In the expanded form Q = f(L, K, N, T), it also includes land (N) and technology (T)."},
+
+  {u:"Unit 6", cs:false,
+   q:"In the SHORT RUN, which of the following is TRUE about the Law of Variable Proportions?",
+   opts:[
+     "All inputs are variable, so firms can freely scale all factors simultaneously",
+     "At least one input is fixed; adding more of a variable input (e.g., labour) to a fixed input eventually leads to diminishing marginal returns",
+     "Firms experience only increasing returns in the short run due to specialisation benefits",
+     "The law applies only to the long run when economies of scale are possible"
+   ],
+   ans:1,
+   exp:"The Law of Variable Proportions applies in the short run, when at least one input (typically capital) is fixed. As more of a variable input (labour) is added to the fixed input, output initially rises at an increasing rate (increasing returns), then at a decreasing rate (diminishing returns), and may eventually fall (negative returns). This U-shape drives the MC curve."},
+
+  {u:"Unit 6", cs:false,
+   q:"Which factor of production earns 'profit' as its reward for risk-taking and coordinating the other three factors?",
+   opts:[
+     "Land — earns rent for the use of natural resources",
+     "Labour — earns wages for physical and mental effort",
+     "Capital — earns interest for providing man-made resources",
+     "Entrepreneurship — earns profit for organising, innovating, and bearing risk"
+   ],
+   ans:3,
+   exp:"Entrepreneurship is the fourth factor of production. Entrepreneurs organise land, labour, and capital, bear uncertainty and risk, and innovate. Their reward is profit. Land earns rent; labour earns wages; capital earns interest. This classification is fundamental to national income accounting and factor markets."},
+
+  /* ── UNIT 7: Isoquants & Producer Equilibrium ── */
+  {u:"Unit 7", cs:false,
+   q:"An isoquant curve represents:",
+   opts:[
+     "All price-output combinations at which a firm earns zero profit",
+     "All combinations of two inputs (labour and capital) that produce the SAME level of output",
+     "The consumer's indifference between two goods at a given income level",
+     "The firm's long-run average cost curve as output expands"
+   ],
+   ans:1,
+   exp:"An isoquant (equal quantity) curve shows all technically efficient combinations of two inputs (typically labour L and capital K) that yield the same level of output Q. A firm can move along an isoquant by substituting one input for another while keeping output constant. Higher isoquants represent greater output levels."},
+
+  {u:"Unit 7", cs:false,
+   q:"Why do isoquants NOT intersect?",
+   opts:[
+     "Because the firm can only use one combination of inputs at any given time",
+     "Because intersecting isoquants would imply a single input combination produces two different output levels — a logical contradiction",
+     "Because labour and capital are always perfect substitutes in production",
+     "Because intersecting isoquants would violate the law of diminishing returns"
+   ],
+   ans:1,
+   exp:"Isoquants cannot intersect because any point of intersection would represent the same combination of inputs producing two different levels of output — a logical impossibility in rational production. This non-intersection property ensures consistency and clarity in production analysis, just as indifference curves cannot intersect in consumer theory."},
+
+  {u:"Unit 7", cs:false,
+   q:"Economies of scale cause the Long-Run Average Cost (LRAC) curve to:",
+   opts:[
+     "Rise continuously as output increases due to resource scarcity",
+     "Remain perfectly flat, as all costs are variable in the long run",
+     "Fall as output increases — spreading fixed costs and gaining technical, purchasing, and managerial efficiencies",
+     "Mirror the short-run MC curve exactly due to production equivalence"
+   ],
+   ans:2,
+   exp:"Economies of scale cause the LRAC to fall as output expands. Sources include: technical efficiency (larger machinery used more fully), bulk buying discounts, managerial specialisation, and indivisibilities. Beyond the minimum efficient scale, diseconomies of scale set in (LRAC rises), giving the LRAC curve its characteristic U-shape in the long run."},
+
+  /* ── UNIT 8: Cost and Revenue Concepts ── */
+  {u:"Unit 8", cs:false,
+   q:"When Marginal Cost (MC) is BELOW Average Cost (AC), the effect on AC is:",
+   opts:[
+     "AC is rising — because the marginal unit costs more than the average",
+     "AC is falling — because adding a unit that costs less than the current average pulls the average down",
+     "AC remains unchanged — MC and AC are independent of each other",
+     "AC equals MC — they converge whenever both curves are downward sloping"
+   ],
+   ans:1,
+   exp:"The MC–AC relationship: when MC < AC, AC falls (the marginal unit costs less than average, pulling it down). When MC > AC, AC rises. When MC = AC, AC is at its minimum. Graphically, the MC curve intersects both AVC and ATC at their lowest points — guiding optimal output decisions."},
+
+  {u:"Unit 8", cs:false,
+   q:"Total Fixed Cost (TFC) behaves in which way as output increases?",
+   opts:[
+     "It rises proportionally with output — each extra unit adds to fixed costs",
+     "It falls as output increases — fixed costs are distributed over more units",
+     "It remains CONSTANT regardless of the level of output — even if output is zero",
+     "It initially rises, then falls as economies of scale kick in"
+   ],
+   ans:2,
+   exp:"Total Fixed Cost (TFC) is constant across all output levels — including zero output. It represents costs incurred regardless of production (rent, insurance, permanent salaries, depreciation). The TFC curve is a horizontal straight line. Average Fixed Cost (AFC), however, falls continuously as the fixed cost is spread over more units."},
+
+  {u:"Unit 8", cs:false,
+   q:"Average Revenue (AR) under perfect competition equals:",
+   opts:[
+     "Total Revenue divided by Marginal Cost",
+     "Marginal Revenue multiplied by output quantity",
+     "The market price — because each unit is sold at the same price in a perfectly competitive market",
+     "Total Cost divided by the number of units sold"
+   ],
+   ans:2,
+   exp:"Under perfect competition, every unit is sold at the same market price. Therefore AR = Total Revenue ÷ Quantity = Price. Additionally, MR = AR = Price in perfect competition, as the firm is a price taker and the demand curve is perfectly elastic (horizontal). In imperfect markets, AR = Price > MR."},
+
+  {u:"Unit 8", cs:true,
+   q:"CASE STUDY: A manufacturing company produces widgets. At its current output of 500 units, the ATC is ₹80 and the MC of producing the 501st unit is ₹60. The firm is considering whether to produce the 501st unit. What should it do based on cost analysis, and what will happen to ATC?",
+   opts:[
+     "Stop at 500 units — MC below ATC always signals unprofitability",
+     "Produce the 501st unit — since MC (₹60) < ATC (₹80), producing it pulls the average cost DOWN, improving cost efficiency",
+     "Produce the 501st unit only if the selling price exceeds ₹80 (current ATC)",
+     "The decision cannot be made without knowing the fixed cost component"
+   ],
+   ans:1,
+   exp:"Since MC (₹60) < ATC (₹80), the 501st unit costs less than the current average — producing it will pull ATC DOWN, improving cost efficiency. The firm should continue producing as long as MC < ATC (or more precisely, as long as price > MC for profit maximisation). This relationship — MC below AC causes AC to fall — is a core cost-curve principle in managerial economics."},
+
+  /* ── UNIT 9: Market Structures ── */
+  {u:"Unit 9", cs:false,
+   q:"Which market structure is characterised by: a SINGLE seller, NO close substitutes, HIGH entry barriers, and the firm acting as a PRICE MAKER?",
+   opts:[
+     "Perfect Competition",
+     "Monopolistic Competition",
+     "Oligopoly",
+     "Monopoly"
+   ],
+   ans:3,
+   exp:"Monopoly is characterised by: a single seller controlling the entire market; no close substitutes available to consumers; high barriers to entry (legal patents, natural cost advantages, exclusive technology); and the firm acting as a price maker with significant market power. Examples include local electricity boards and water supply utilities."},
+
+  {u:"Unit 9", cs:false,
+   q:"In PERFECT COMPETITION, individual firms are described as 'price takers' because:",
+   opts:[
+     "They have the power to set any price and other firms are forced to follow",
+     "Government regulations fix the price and firms simply accept it",
+     "Each firm is so small relative to the market that its output decisions do not affect the market price — they accept the price determined by supply and demand",
+     "They take the price from the highest-paying buyer in an auction"
+   ],
+   ans:2,
+   exp:"In perfect competition, the market has many sellers offering homogeneous products with perfect information. Each individual firm is so small that its output decisions have negligible impact on the market price. Firms therefore accept (take) the equilibrium price set by aggregate market supply and demand. The demand curve facing a perfectly competitive firm is perfectly elastic (horizontal)."},
+
+  {u:"Unit 9", cs:false,
+   q:"A key feature of MONOPOLISTIC COMPETITION (distinguishing it from perfect competition) is:",
+   opts:[
+     "There is only one seller with total market control",
+     "Products are homogeneous and perfectly substitutable",
+     "Sellers differentiate their products through branding, quality, or design, giving each some degree of pricing power",
+     "Entry and exit are completely blocked by high capital requirements"
+   ],
+   ans:2,
+   exp:"Monopolistic competition features many sellers (like perfect competition) but with differentiated products. Each firm's product is slightly different — through branding, quality, packaging, or location — giving it some pricing power over its loyal customers. Entry and exit are relatively free. Examples: shampoos, restaurants, clothing brands."},
+
+  {u:"Unit 9", cs:true,
+   q:"CASE STUDY: A small town is served by a single internet service provider (ISP). The ISP charges high prices for slow internet, and customers have no alternative. When the government threatens to license a competing ISP, the existing provider suddenly lowers prices and improves service quality. Which market structure did the town originally operate under, and what economic concept explains the provider's behaviour when competition threatened?",
+   opts:[
+     "Oligopoly — the threat of entry triggered a price war between multiple large players",
+     "Monopoly — the single provider had unchallenged pricing power; the threat of a competitor (contestable market concept) forced price and quality improvements to deter entry",
+     "Perfect competition — the ISP was a price taker and could not have maintained high prices for long",
+     "Monopolistic competition — the provider differentiated its product to justify premium pricing"
+   ],
+   ans:1,
+   exp:"The town had a monopoly market — single provider, no substitutes, high pricing power. The provider's response to the threat of entry illustrates the contestable markets concept: even a monopolist may improve service and cut prices when the threat of competition emerges, to deter new entrants. This shows that market power is constrained not just by actual competition but by the credible threat of it."},
+
+  /* ── UNIT 10: National Income ── */
+  {u:"Unit 10", cs:false,
+   q:"Gross National Product (GNP) differs from Gross Domestic Product (GDP) in that GNP:",
+   opts:[
+     "Excludes government spending and focuses only on private sector production",
+     "Subtracts depreciation from GDP to arrive at a net production measure",
+     "Adds net factor income from abroad (income earned by residents overseas minus income earned by foreigners domestically) to GDP",
+     "Measures only the income of households and excludes corporate earnings"
+   ],
+   ans:2,
+   exp:"GNP = GDP + Net Factor Income from Abroad (NFIA). NFIA = income earned by a country's residents from overseas investments/employment minus income earned by foreigners within the country. GNP reflects the total income of a nation's residents regardless of where they are located, while GDP measures production within geographic borders."},
+
+  {u:"Unit 10", cs:false,
+   q:"Which method of measuring national income sums up the wages, rent, interest, and profits earned by factors of production?",
+   opts:[
+     "Value Added Method — sums net value added at each production stage",
+     "Expenditure Method — sums consumption, investment, government spending, and net exports",
+     "Income Method — sums all factor incomes: wages + rent + interest + profit",
+     "Output Method — counts the total volume of goods and services produced"
+   ],
+   ans:2,
+   exp:"The Income Method calculates national income by summing all factor incomes generated in the economy: wages (labour), rent (land), interest (capital), and profit (entrepreneurship). All three methods — income, expenditure, and value added — yield the same national income figure, illuminating different aspects of economic activity."},
+
+  {u:"Unit 10", cs:false,
+   q:"'Double counting' is avoided in national income accounting by:",
+   opts:[
+     "Including all financial transactions and transfer payments in the GDP calculation",
+     "Including only FINAL goods and services — not intermediate goods used up in production",
+     "Counting each product twice: once at the producer level and once at the retail level",
+     "Subtracting personal taxes from household income before aggregating"
+   ],
+   ans:1,
+   exp:"Double counting is avoided by including only FINAL goods and services (those sold to end users) in national income — NOT intermediate goods (e.g., steel used to make a car). Including both would count the steel's value twice: once as an input and again within the car's price. The value added method achieves the same by summing only net value added at each stage."},
+
+  /* ── UNIT 11: Classical Theory of Employment ── */
+  {u:"Unit 11", cs:false,
+   q:"Say's Law — a cornerstone of Classical employment theory — states that:",
+   opts:[
+     "Demand creates its own supply — any level of consumer spending will be matched by firms' production",
+     "Supply creates its own demand — the act of producing output generates the income necessary to purchase that output, ruling out general overproduction",
+     "Government spending is necessary to create demand and maintain full employment",
+     "Interest rates automatically equalise savings and investment, ensuring zero unemployment"
+   ],
+   ans:1,
+   exp:"Say's Law, formulated by Jean-Baptiste Say (1767–1832), states that 'supply creates its own demand.' Producing goods generates the factor incomes (wages, rent, interest, profit) that are then spent to buy those goods. Therefore, general overproduction is impossible. This became a cornerstone of classical thought — later challenged by Keynes during the Great Depression."},
+
+  {u:"Unit 11", cs:false,
+   q:"Adam Smith's concept of the 'invisible hand' in classical economics suggests that:",
+   opts:[
+     "Government must actively direct resource allocation to achieve social welfare",
+     "Monopoly firms naturally develop an invisible control over markets",
+     "Individuals pursuing their own self-interest in free markets unintentionally promote the economic good of society",
+     "Supply chains are managed by hidden intermediaries who control prices"
+   ],
+   ans:2,
+   exp:"Adam Smith's 'invisible hand' (The Wealth of Nations, 1776) describes how individuals pursuing personal profit in competitive markets unintentionally benefit society — by producing goods consumers want, at competitive prices, and allocating resources efficiently. This principle underlies the classical case for laissez-faire (minimal government intervention) economics."},
+
+  {u:"Unit 11", cs:false,
+   q:"Classical theory predicts that unemployment is only TEMPORARY because:",
+   opts:[
+     "Governments automatically step in with fiscal stimulus when unemployment rises",
+     "Firms increase wages during recessions to attract more workers",
+     "Flexible wages and prices self-correct the labour market — excess labour supply drives wages down, making labour cheaper and encouraging firms to hire more",
+     "Say's Law guarantees that investment always equals savings at every output level"
+   ],
+   ans:2,
+   exp:"Classical theory relies on wage and price flexibility as the self-correcting mechanism. If unemployment arises (excess labour supply), wages fall, reducing labour costs and incentivising firms to hire more workers until full employment is restored. No government intervention is needed — markets equilibrate automatically. This assumption was later challenged by Keynes."},
+
+  /* ── UNIT 12: Keynesian Theory of Employment ── */
+  {u:"Unit 12", cs:false,
+   q:"Keynes published his revolutionary challenge to classical economics in which landmark work?",
+   opts:[
+     "The Wealth of Nations (1776)",
+     "Principles of Economics (1890)",
+     "The General Theory of Employment, Interest, and Money (1936)",
+     "Capital: A Critique of Political Economy (1867)"
+   ],
+   ans:2,
+   exp:"John Maynard Keynes published The General Theory of Employment, Interest, and Money in 1936, written in response to the Great Depression. It challenged classical theory by arguing that economies can settle at underemployment equilibrium, that aggregate demand determines output, and that government intervention through fiscal policy is necessary during downturns."},
+
+  {u:"Unit 12", cs:false,
+   q:"Keynesian theory argues that wages and prices are 'sticky downward' in recessions. This means:",
+   opts:[
+     "Wages and prices rise automatically during recessions to restore equilibrium",
+     "Wages and prices adjust instantaneously to clear markets, as classical economists assumed",
+     "Due to labour contracts, worker resistance, and price-setting behaviour, wages and prices do not fall freely — preventing the self-correcting mechanism classical theory relies on",
+     "Sticky wages only apply to government employees; private sector wages are always flexible"
+   ],
+   ans:2,
+   exp:"Keynesian theory identifies wage and price stickiness as a critical real-world departure from classical assumptions. Labour contracts, union resistance to nominal wage cuts, and oligopolistic price-setting prevent wages and prices from falling freely during downturns. This stickiness means the classical self-correction mechanism does not work, leaving the economy stuck at underemployment equilibrium without government intervention."},
+
+  {u:"Unit 12", cs:false,
+   q:"'Animal spirits' in Keynesian theory refers to:",
+   opts:[
+     "The biological drives of consumers that create irrational purchasing behaviour",
+     "Business confidence and expectations that drive investment decisions — even when interest rates are low, pessimistic expectations may suppress investment",
+     "The spontaneous instinct of competitive markets to reach equilibrium",
+     "The motivational factors that push workers to accept lower wages during recessions"
+   ],
+   ans:1,
+   exp:"Keynes introduced 'animal spirits' to describe the role of business psychology — confidence, expectations, and sentiment — in investment decisions. Classical theory held that investment is determined solely by the interest rate. Keynes argued that even at very low interest rates, investment may remain suppressed if businesses are pessimistic about future demand (as occurred during the Great Depression)."},
+
+  {u:"Unit 12", cs:true,
+   q:"CASE STUDY: During a severe recession, a government attempts to rely solely on the classical mechanism to restore employment — expecting that falling wages will encourage firms to hire more workers. However, unemployment remains persistently high for three years despite falling wages, as consumer spending collapses and firms have no incentive to expand production. Which economist's theory is being proven WRONG here, and what policy does this situation demand instead?",
+   opts:[
+     "Classical theory is proven wrong — Keynesian theory prescribes active fiscal policy (government spending or tax cuts) to boost aggregate demand and restore employment",
+     "Keynesian theory is proven wrong — the government should raise interest rates to attract foreign investment",
+     "Classical theory is correct but requires more time — wages need to fall further before firms hire",
+     "Monetarist theory is proven wrong — the government should increase the money supply alone to solve unemployment"
+   ],
+   ans:0,
+   exp:"This is exactly the scenario that discredited classical theory during the Great Depression. Falling wages did not restore employment because aggregate demand collapsed — consumers spent less (not more) as wages fell, reinforcing the recession. This validates Keynesian theory: the economy can settle at underemployment equilibrium. The Keynesian prescription is active fiscal policy — government spending or tax cuts to stimulate aggregate demand and break the recessionary cycle."},
+
+  /* ── UNIT 13: Effective Demand ── */
+  {u:"Unit 13", cs:false,
+   q:"Effective demand in Keynesian economics is defined as:",
+   opts:[
+     "The maximum potential demand in an economy if all resources were fully employed",
+     "The demand backed by purchasing power at which aggregate demand price equals aggregate supply price — determining actual employment and output",
+     "Consumer desire for goods regardless of their ability to afford them",
+     "The government's target level of aggregate spending set in the annual budget"
+   ],
+   ans:1,
+   exp:"Effective demand is the actual level of demand (backed by purchasing power and willingness to spend) at which the aggregate demand function (ADF) and aggregate supply function (ASF) intersect. At this point, producers are willing to supply and employ labour. It determines the actual equilibrium level of employment and output — which Keynes argued is often below full employment."},
+
+  {u:"Unit 13", cs:false,
+   q:"The Keynesian Multiplier effect states that:",
+   opts:[
+     "A rise in government spending reduces private investment by an equal amount (crowding out)",
+     "An increase in autonomous spending (e.g., government expenditure or investment) leads to a multiplied increase in national income and employment",
+     "Taxation multiplies the effect of monetary policy on interest rates",
+     "A fall in exports is automatically multiplied into a proportional rise in imports"
+   ],
+   ans:1,
+   exp:"The Keynesian Multiplier describes how an initial injection of autonomous spending (investment, government expenditure, exports) generates a chain reaction of increased income and consumption, resulting in a multiplied increase in total national income. Formula: Multiplier (k) = 1 / (1 - MPC), where MPC is the marginal propensity to consume."},
+
+  {u:"Unit 13", cs:false,
+   q:"When the Aggregate Demand Function (ADF) intersects the Aggregate Supply Function (ASF) BELOW the full employment level, the Keynesian conclusion is:",
+   opts:[
+     "The economy is at its optimal equilibrium; no policy is needed",
+     "Say's Law ensures that the economy will automatically move to full employment",
+     "The economy is in underemployment equilibrium — there is a deficiency of effective demand requiring government intervention to boost spending",
+     "The excess demand will cause inflation and the government should cut spending"
+   ],
+   ans:2,
+   exp:"A key Keynesian insight: the ADF–ASF intersection can occur below full employment — creating an underemployment equilibrium where labour is involuntarily unemployed. Unlike Say's Law (classical), there is no automatic mechanism to restore full employment. The Keynesian prescription is fiscal stimulus — increasing government spending or cutting taxes to shift the ADF upward until it intersects the ASF at the full employment level."},
+
+  /* ── UNIT 14: Inflation and Unemployment ── */
+  {u:"Unit 14", cs:false,
+   q:"Demand-Pull Inflation occurs when:",
+   opts:[
+     "Rising production costs (wages, raw materials) force firms to raise prices",
+     "Consumers build future inflation into wage demands, creating a self-reinforcing wage-price spiral",
+     "Aggregate demand exceeds aggregate supply at full employment — too much money chasing too few goods",
+     "The central bank reduces the money supply, causing interest rates to rise and prices to fall"
+   ],
+   ans:2,
+   exp:"Demand-Pull Inflation arises when aggregate demand exceeds aggregate supply at full employment. Excess spending — from consumers, firms, or government — 'pulls' prices up. Common during economic booms, expansionary fiscal policy, or credit-driven spending surges. Contrast with Cost-Push Inflation (supply-side) and Built-In Inflation (expectations-driven wage-price spiral)."},
+
+  {u:"Unit 14", cs:false,
+   q:"'Stagflation' is caused by which type of inflation?",
+   opts:[
+     "Demand-Pull Inflation — excess demand pushes both prices and output up simultaneously",
+     "Hyperinflation — extreme money printing collapses the currency and halts growth",
+     "Cost-Push Inflation — rising production costs reduce output while raising prices, creating simultaneous inflation and economic stagnation",
+     "Built-In Inflation — wage-price spirals occur only during economic expansion phases"
+   ],
+   ans:2,
+   exp:"Stagflation (stagnation + inflation) is associated with Cost-Push Inflation. When production costs rise sharply (e.g., oil price shocks), firms cut output while raising prices — resulting in higher inflation AND lower growth/rising unemployment simultaneously. This combination is particularly difficult to manage with standard policy tools, as fighting inflation (raising interest rates) worsens the stagnation."},
+
+  {u:"Unit 14", cs:false,
+   q:"Hyperinflation is MOST commonly driven by:",
+   opts:[
+     "A gradual rise in consumer incomes that slowly increases aggregate demand over decades",
+     "Excessive money printing to finance government deficits, severe loss of confidence in the currency, often following political instability or war",
+     "A mild and predictable rise in prices of 2–5% per year considered healthy for the economy",
+     "A temporary supply disruption that corrects itself within a few months"
+   ],
+   ans:1,
+   exp:"Hyperinflation (commonly defined as monthly price rises > 50%) is driven by: governments printing money to finance deficits (excessive money supply growth), which causes rapid currency devaluation and severe loss of confidence. It typically follows political collapse, war, or institutional breakdown (examples: Weimar Germany 1923, Zimbabwe 2008). It results in currency hoarding, barter economies, and collapse of normal economic activity."},
+
+  {u:"Unit 14", cs:true,
+   q:"CASE STUDY: A country experiences rapidly rising petrol prices due to a global supply shock. Manufacturing companies face sharply higher transport and production costs. Firms begin laying off workers while simultaneously raising prices of their goods. The central bank faces a dilemma: raising interest rates to fight inflation will worsen unemployment, while cutting rates to support employment will worsen inflation. Which type of inflation and which macroeconomic phenomenon does this BEST describe?",
+   opts:[
+     "Demand-Pull Inflation — excess consumer spending is raising all prices across the economy",
+     "Built-In Inflation — workers are demanding higher wages in anticipation of future price rises",
+     "Cost-Push Inflation causing Stagflation — rising supply-side costs are simultaneously increasing prices and reducing output and employment, creating a policy dilemma",
+     "Hyperinflation — the monthly price rise exceeds 50% and the currency is collapsing"
+   ],
+   ans:2,
+   exp:"This is Cost-Push Inflation leading to Stagflation. The oil price shock (global supply disruption) raises production costs → firms raise prices (inflation) AND cut employment (stagnation). The central bank's dilemma — tightening hurts growth, loosening worsens inflation — is the defining feature of stagflation. Standard demand-management tools are ineffective because the problem is on the supply side, not the demand side."}
+
+]; /* end of qs */
+
+/* ================================================================
+   RUNTIME VALIDATION — fires before quiz starts
+   Catches index-out-of-range, empty fields, and missing data
+   ================================================================ */
+(function validate() {
+  var errs = [];
+  if (!Array.isArray(qs) || qs.length === 0) {
+    errs.push("qs array is empty or undefined.");
+  } else {
+    for (var i = 0; i < qs.length; i++) {
+      var q = qs[i];
+      if (!q.u || q.u.trim() === '')         errs.push("Q"+(i+1)+": unit label (u) missing");
+      if (!q.q || q.q.trim() === '')         errs.push("Q"+(i+1)+": question text (q) empty");
+      if (!Array.isArray(q.opts) || q.opts.length < 2) errs.push("Q"+(i+1)+": opts must have >= 2 items");
+      if (typeof q.ans !== 'number')          errs.push("Q"+(i+1)+": ans must be a number");
+      if (!q.exp || q.exp.trim() === '')      errs.push("Q"+(i+1)+": explanation (exp) empty");
+      if (typeof q.ans === 'number' && Array.isArray(q.opts)) {
+        if (q.ans < 0 || q.ans >= q.opts.length)
+          errs.push("Q"+(i+1)+": ans="+q.ans+" OUT OF RANGE (opts length="+q.opts.length+", valid 0-"+(q.opts.length-1)+")");
+      }
+      if (Array.isArray(q.opts)) {
+        for (var j = 0; j < q.opts.length; j++) {
+          if (!q.opts[j] || q.opts[j].trim() === '')
+            errs.push("Q"+(i+1)+": option "+j+" is empty");
+        }
+      }
+    }
+  }
+  if (errs.length > 0) {
+    window.__quizHasErrors = true;
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('area').innerHTML =
+        '<div class="err-banner"><strong>⚠ Quiz Data Errors ('+errs.length+'):</strong>'+
+        errs.map(function(e){return '<br>• '+e;}).join('')+'</div>';
+    });
+  }
+})();
+
+/* ================================================================
+   QUIZ ENGINE
+   ================================================================ */
+var cur = 0, score = 0, answered = false;
+
+function showSplash() {
+  if (window.__quizHasErrors) return;
+  var total = qs.length;
+  var csCount = qs.filter(function(q){return q.cs;}).length;
+  var units = {};
+  qs.forEach(function(q){units[q.u]=1;});
+  var numUnits = Object.keys(units).length;
+  var html = '<div class="splash">';
+  html += '<div class="splash-icon">📊</div>';
+  html += '<div class="splash-title">Managerial Economics</div>';
+  html += '<div class="splash-sub">A comprehensive test across all 14 units — from demand analysis, elasticity, and production theory to market structures, national income, and inflation.</div>';
+  html += '<div class="splash-stats">';
+  html += '<div class="splash-stat"><div class="splash-stat-v">'+total+'</div><div class="splash-stat-l">Questions</div></div>';
+  html += '<div class="splash-stat"><div class="splash-stat-v">'+numUnits+'</div><div class="splash-stat-l">Units</div></div>';
+  html += '<div class="splash-stat"><div class="splash-stat-v">'+csCount+'</div><div class="splash-stat-l">Case Studies</div></div>';
+  html += '</div>';
+  html += '<button class="start-btn" onclick="startQuiz()">Start Quiz \u2192</button>';
+  html += '</div>';
+  document.getElementById('area').innerHTML = html;
+  document.getElementById('prog').style.width = '0%';
+  document.getElementById('hbadge').textContent = total + ' Questions';
+}
+
+function startQuiz() {
+  if (window.__quizHasErrors) return;
+  cur = 0; score = 0; answered = false;
+  render();
+}
+
+function render() {
+  if (cur >= qs.length) { showResult(); return; }
+  var q = qs[cur];
+  document.getElementById('prog').style.width = (cur / qs.length * 100) + '%';
+  document.getElementById('hbadge').textContent = 'Score: ' + score + '/' + cur;
+  var html = '';
+  html += '<div class="q-meta"><span class="q-counter">Q'+(cur+1)+' of '+qs.length+'</span></div>';
+  html += '<div class="q-unit-tag">\uD83D\uDCD6 '+q.u+'</div>';
+  if (q.cs) html += '<div class="case-badge">\uD83D\uDCCB Case Study</div>';
+  html += '<div class="q-card"><div class="q-text">'+q.q+'</div></div>';
+  html += '<div class="opts">';
+  for (var i = 0; i < q.opts.length; i++) {
+    html += '<button class="opt" onclick="choose('+i+')" id="o'+i+'">';
+    html += '<span class="lbl">'+String.fromCharCode(65+i)+'</span>';
+    html += '<span>'+q.opts[i]+'</span>';
+    html += '</button>';
+  }
+  html += '</div>';
+  html += '<div class="fb" id="fb"><span class="fb-head" id="fbh"></span><span id="fbt"></span></div>';
+  html += '<div class="nxt-wrap" id="nw"><button class="nxt" onclick="next()">'+(cur < qs.length-1 ? 'Next Question \u2192' : 'See My Results \u2192')+'</button></div>';
+  document.getElementById('area').innerHTML = html;
+}
+
+function choose(i) {
+  if (answered) return;
+  answered = true;
+  var q = qs[cur];
+  var btns = document.querySelectorAll('.opt');
+  for (var b = 0; b < btns.length; b++) btns[b].disabled = true;
+  var ok = (i === q.ans);
+  if (ok) { document.getElementById('o'+i).className = 'opt correct'; score++; }
+  else { document.getElementById('o'+i).className = 'opt wrong'; document.getElementById('o'+q.ans).className = 'opt correct'; }
+  var fb = document.getElementById('fb');
+  fb.style.display = 'block';
+  fb.className = 'fb '+(ok?'ok':'bad');
+  document.getElementById('fbh').textContent = ok ? '\u2713 Correct!' : '\u2717 Incorrect';
+  document.getElementById('fbt').textContent = q.exp;
+  document.getElementById('nw').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function next() {
+  cur++; answered = false;
+  window.scrollTo({top:0,behavior:'smooth'});
+  render();
+}
+
+function showResult() {
+  document.getElementById('prog').style.width = '100%';
+  document.getElementById('hbadge').textContent = 'Complete!';
+  var total = qs.length;
+  var pct = Math.round(score/total*100);
+  var wrong = total-score;
+  var grade,msg,emoji;
+  if (score>=45){grade='Outstanding!';emoji='\uD83C\uDFC6';msg='Distinction-level. You have mastered Managerial Economics across all 14 units.';}
+  else if (score>=40){grade='Excellent!';emoji='\uD83C\uDF1F';msg='Merit-level. Strong command from demand analysis to macroeconomic theory.';}
+  else if (score>=30){grade='Good Pass';emoji='\uD83D\uDC4D';msg='Solid understanding. Revisit elasticity, market structures, and Keynesian theory for higher scores.';}
+  else if (score>=20){grade='Getting There';emoji='\uD83D\uDCDA';msg='Keep going! Focus on Units 3–9: elasticity, utility, production, costs, and market structures.';}
+  else{grade='Keep Going';emoji='\uD83D\uDCAA';msg='Revisit all 14 units and retake. Consistency will get you there!';}
+  var html='<div class="result">';
+  html+='<div class="result-ring"><div class="result-big">'+score+'/'+total+'</div><div class="result-pct">'+pct+'%</div></div>';
+  html+='<div style="font-size:32px;margin-bottom:8px">'+emoji+'</div>';
+  html+='<div class="result-grade">'+grade+'</div>';
+  html+='<div class="result-msg">'+msg+'</div>';
+  html+='<div class="stats">';
+  html+='<div class="stat"><div class="stat-v" style="color:var(--green)">'+score+'</div><div class="stat-l">Correct</div></div>';
+  html+='<div class="stat"><div class="stat-v" style="color:var(--red)">'+wrong+'</div><div class="stat-l">Wrong</div></div>';
+  html+='<div class="stat"><div class="stat-v" style="color:var(--primary)">'+pct+'%</div><div class="stat-l">Score</div></div>';
+  html+='</div>';
+  html+='<button class="rst" onclick="restart()">\uD83D\uDD04 Retake Quiz</button>';
+  html+='</div>';
+  document.getElementById('area').innerHTML=html;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function restart(){cur=0;score=0;answered=false;showSplash();}
+showSplash();
+</script>
+</body>
+</html>
