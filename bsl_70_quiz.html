@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Business, Society &amp; Law Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+  :root{--primary:#7C3AED;--primary-light:#F5F3FF;--green:#15803D;--green-light:#DCFCE7;--red:#B91C1C;--red-light:#FEE2E2;--gold:#B45309;--gold-light:#FEF3C7;--bg:#F8FAFC;--card:#FFFFFF;--border:#E2E8F0;--text:#0F172A;--text2:#64748B;--text3:#94A3B8;--radius:16px;--shadow:0 1px 3px rgba(0,0,0,0.07),0 4px 16px rgba(0,0,0,0.05);}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+  .header{background:var(--card);border-bottom:1px solid var(--border);padding:14px 20px 12px;position:sticky;top:0;z-index:10;box-shadow:0 1px 8px rgba(0,0,0,0.05);}
+  .header-inner{max-width:600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .header-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);line-height:1.2;}
+  .header-badge{font-size:11px;font-weight:700;color:var(--primary);background:var(--primary-light);padding:4px 11px;border-radius:20px;white-space:nowrap;letter-spacing:0.03em;}
+  .prog-track{height:3px;background:var(--border);position:sticky;top:57px;z-index:9;}
+  .prog-fill{height:3px;background:linear-gradient(90deg,var(--primary),#A855F7);transition:width 0.45s cubic-bezier(0.4,0,0.2,1);border-radius:0 2px 2px 0;}
+  .container{max-width:600px;margin:0 auto;padding:22px 16px 70px;}
+  .q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .q-counter{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;}
+  .q-unit-tag{display:inline-flex;align-items:center;font-size:11px;font-weight:600;color:var(--primary);background:var(--primary-light);padding:4px 10px;border-radius:8px;margin-bottom:10px;letter-spacing:0.02em;}
+  .case-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--gold);background:var(--gold-light);padding:3px 9px;border-radius:6px;margin-bottom:10px;letter-spacing:0.06em;text-transform:uppercase;}
+  .q-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .q-text{font-size:16px;font-weight:600;line-height:1.55;color:var(--text);}
+  .opts{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+  .opt{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;cursor:pointer;text-align:left;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);transition:border-color 0.15s,background 0.15s,transform 0.1s;line-height:1.45;box-shadow:0 1px 3px rgba(0,0,0,0.04);-webkit-appearance:none;width:100%;}
+  .opt:hover:not(:disabled){border-color:var(--primary);background:var(--primary-light);transform:translateY(-1px);}
+  .opt:active:not(:disabled){transform:translateY(0);}
+  .opt .lbl{min-width:26px;height:26px;border-radius:8px;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--text2);flex-shrink:0;transition:background 0.15s,border-color 0.15s,color 0.15s;margin-top:1px;}
+  .opt.correct{border-color:var(--green);background:var(--green-light);}
+  .opt.correct .lbl{background:var(--green);border-color:var(--green);color:#fff;}
+  .opt.wrong{border-color:var(--red);background:var(--red-light);}
+  .opt.wrong .lbl{background:var(--red);border-color:var(--red);color:#fff;}
+  .fb{display:none;border-radius:12px;padding:14px 16px;font-size:13.5px;line-height:1.6;margin-bottom:14px;border-left:4px solid transparent;}
+  .fb.ok{background:var(--green-light);border-color:var(--green);color:#14532D;}
+  .fb.bad{background:var(--red-light);border-color:var(--red);color:#7F1D1D;}
+  .fb-head{font-weight:700;font-size:13px;margin-bottom:4px;display:block;}
+  .nxt-wrap{display:none;}
+  .nxt{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),#A855F7);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:0.02em;box-shadow:0 4px 14px rgba(124,58,237,0.3);transition:opacity 0.15s,transform 0.1s;}
+  .nxt:hover{opacity:0.92;transform:translateY(-1px);}
+  .splash{text-align:center;padding:48px 24px;}
+  .splash-icon{font-size:52px;margin-bottom:16px;}
+  .splash-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--text);margin-bottom:10px;line-height:1.3;}
+  .splash-sub{font-size:14px;color:var(--text2);line-height:1.6;max-width:340px;margin:0 auto 28px;}
+  .splash-stats{display:flex;justify-content:center;gap:24px;margin-bottom:28px;}
+  .splash-stat{text-align:center;}
+  .splash-stat-v{font-size:22px;font-weight:800;color:var(--primary);}
+  .splash-stat-l{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;}
+  .start-btn{width:100%;max-width:320px;padding:16px;background:linear-gradient(135deg,var(--primary),#A855F7);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(124,58,237,0.3);letter-spacing:0.02em;transition:opacity 0.15s,transform 0.1s;}
+  .start-btn:hover{opacity:0.92;transform:translateY(-1px);}
+  .result{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px 24px;text-align:center;box-shadow:var(--shadow);}
+  .result-ring{width:130px;height:130px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#A855F7);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 30px rgba(124,58,237,0.25);}
+  .result-big{font-size:32px;font-weight:800;color:#fff;line-height:1;}
+  .result-pct{font-size:14px;font-weight:600;color:rgba(255,255,255,0.8);margin-top:4px;}
+  .result-grade{font-family:'Playfair Display',serif;font-size:26px;color:var(--text);margin-bottom:8px;}
+  .result-msg{font-size:14px;color:var(--text2);max-width:340px;margin:0 auto 24px;line-height:1.6;}
+  .stats{display:flex;justify-content:center;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px;}
+  .stat{flex:1;padding:14px 8px;border-right:1px solid var(--border);}
+  .stat:last-child{border-right:none;}
+  .stat-v{font-size:22px;font-weight:800;margin-bottom:3px;}
+  .stat-l{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;}
+  .rst{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),#A855F7);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(124,58,237,0.3);transition:opacity 0.15s;}
+  .rst:hover{opacity:0.92;}
+  .err-banner{background:#FEE2E2;border:2px solid #B91C1C;border-radius:12px;padding:16px 20px;color:#7F1D1D;font-size:13px;line-height:1.8;margin:20px;}
+  .err-banner strong{display:block;margin-bottom:6px;font-size:14px;}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-inner">
+    <div class="header-title">Business, Society &amp; Law</div>
+    <div class="header-badge" id="hbadge">70 Questions</div>
+  </div>
+</div>
+<div class="prog-track"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+<div class="container"><div id="area"></div></div>
+<script>
+var qs=[
+
+/* ── UNIT 1: Introduction to Business Environment ── */
+{u:"Unit 1",cs:false,
+q:"The 'Dynamic Nature' of the business environment means:",
+opts:["The environment remains unchanged once a business is established","The environment constantly evolves due to technological, regulatory, and social shifts requiring agile decision-making","Environmental factors affect only large corporations, not SMEs","The internal and external environments are always in conflict with each other"],
+ans:1,
+exp:"Dynamic Nature refers to the business environment constantly evolving — driven by technological innovation, policy changes, social shifts, and economic cycles. Businesses must continuously monitor and adapt their strategies to remain competitive."},
+
+{u:"Unit 1",cs:false,
+q:"Which feature of the business environment refers to the fact that its many components — economic, legal, social, and global — are connected, so a change in one affects others?",
+opts:["Complexity","Uncertainty","Interrelation","Relativity"],
+ans:2,
+exp:"Interrelation means the components of the business environment are interdependent. For example, an economic downturn may trigger political pressure, which may lead to new legal changes in labour protection — one change cascades through multiple dimensions."},
+
+{u:"Unit 1",cs:false,
+q:"Which of the following belongs to the MICRO (external) environment of a business?",
+opts:["Inflation rates and GDP growth","Government trade policies and taxation","Suppliers, customers, competitors, and distributors","Cultural trends and demographic shifts"],
+ans:2,
+exp:"The micro environment comprises immediate external stakeholders that directly affect business operations: customers (preferences), suppliers (input costs), competitors (market positioning), distributors (reach), and financiers (capital access). These are distinct from the macro environment (PESTEL factors)."},
+
+{u:"Unit 1",cs:false,
+q:"PESTEL analysis is a tool used to analyse which level of the business environment?",
+opts:["Internal environment — organisational culture and leadership","Micro environment — suppliers, customers, and competitors","Macro environment — broad socio-economic forces beyond the firm's control","Operational environment — day-to-day business processes"],
+ans:2,
+exp:"PESTEL (Political, Economic, Social, Technological, Environmental, Legal) is a macro-environment analysis tool. It examines broad, largely uncontrollable forces that impact entire industries or economies, unlike micro-environment analysis which focuses on immediate stakeholders."},
+
+{u:"Unit 1",cs:false,
+q:"Which real-world example illustrates how a macro-economic policy can simultaneously impact both the retail and banking sectors?",
+opts:["A supplier's strike halting automobile production","Tesla producing electric vehicles in response to environmental concerns","India's demonetisation in 2016, affecting retail transactions and banking operations","Amazon leveraging technology trends for global expansion"],
+ans:2,
+exp:"Demonetisation (2016) is cited in the text as an example of a macro-economic policy that had multidimensional impact — disrupting retail cash transactions while simultaneously impacting banking operations and liquidity. This illustrates the Interrelation and Multidimensional features of the business environment."},
+
+{u:"Unit 1",cs:true,
+q:"CASE STUDY: A large e-commerce company expanding into rural India faces the following: government e-commerce policies being revised, rising fuel costs affecting last-mile delivery, rural internet infrastructure being upgraded, and changing consumer smartphone adoption patterns. Which framework should the company use to systematically analyse these factors, and how would you classify each?",
+opts:["SWOT — government policy = Strength, fuel costs = Weakness, internet = Opportunity, smartphone adoption = Threat","PESTEL — Political (e-commerce policy), Economic (fuel costs), Technological (internet infrastructure), Social (smartphone adoption)","Porter's Five Forces — all four factors relate to supplier power and buyer power","Internal environment analysis — all these factors are within the company's control"],
+ans:1,
+exp:"PESTEL is the correct framework for macro-environment analysis. Government e-commerce policy revision = Political; rising fuel costs = Economic; rural internet infrastructure upgrade = Technological; changing consumer smartphone patterns = Social/Technological. SWOT addresses internal Strengths/Weaknesses and external Opportunities/Threats, while Porter's Five Forces focuses on competitive industry dynamics."},
+
+/* ── UNIT 2: Environmental Analysis ── */
+{u:"Unit 2",cs:false,
+q:"Environmental scanning is best described as:",
+opts:["A one-time audit of a company's internal operations","The continuous process of collecting, analysing, and interpreting information about external and internal environments to identify opportunities and threats","A legal compliance review required annually by regulatory bodies","Benchmarking a company's performance against only its direct competitors"],
+ans:1,
+exp:"Environmental scanning is proactive and ongoing — not a one-time event. It involves structured detection of changes using both primary (interviews, surveys) and secondary (reports, databases) data sources to help businesses anticipate change, seize opportunities, and manage risks."},
+
+{u:"Unit 2",cs:false,
+q:"Benchmarking in environmental monitoring refers to:",
+opts:["Setting unrealistic growth targets to push employee performance","Comparing a company's performance against industry standards or leading competitors to identify best practices and performance gaps","Testing a new product in a controlled market before national launch","Reviewing government compliance requirements for environmental clearances"],
+ans:1,
+exp:"Benchmarking compares a firm's performance (using KPIs like customer acquisition cost, employee turnover, production downtime) against industry standards or leading competitors. It supports strategic goal-setting, identifies best practices, and reveals performance gaps that need addressing."},
+
+{u:"Unit 2",cs:false,
+q:"Which step in the environmental analysis process involves using algorithms and scenario modelling to build best-case, worst-case, and most-likely-case situations for strategic planning?",
+opts:["Scanning the environment — identifying internal and external factors","Monitoring trends — continuously tracking environmental variables","Forecasting future changes — using predictive analytics and scenario modelling","Assessing impact — identifying threats and opportunities for each business function"],
+ans:2,
+exp:"Forecasting uses historical and current data combined with predictive analytics (machine learning algorithms) and scenario modelling to project future conditions. Building multiple scenarios (best, worst, most likely) allows businesses to prepare contingency plans and make evidence-based strategic decisions."},
+
+{u:"Unit 2",cs:false,
+q:"In SWOT analysis, 'Opportunities' are:",
+opts:["Internal strengths the organisation can leverage for competitive advantage","External factors or trends the organisation can exploit for growth","Internal weaknesses that need to be addressed through training or investment","External threats that may harm the organisation's operations"],
+ans:1,
+exp:"In SWOT, Opportunities are external factors — such as emerging markets, favourable policy reforms, or new technology trends — that the organisation can leverage for growth. They are distinct from Strengths (internal positives) and Threats (external negatives that may harm the business)."},
+
+{u:"Unit 2",cs:false,
+q:"A limitation of environmental analysis cited in the text is:",
+opts:["It is only useful for large multinational corporations","It always produces accurate predictions that eliminate strategic uncertainty","Data overload, time consumption, and overdependence on forecasts that may not be accurate","It cannot be performed using secondary data sources like industry reports"],
+ans:2,
+exp:"Limitations of environmental analysis include: data overload (too much irrelevant information), being resource-intensive and time-consuming, and the risk of overdependence on forecasts — which are projections, not certainties. Unexpected disruptions (pandemics, geopolitical crises) can invalidate even the best forecasts."},
+
+/* ── UNIT 3: Indian Economic Systems ── */
+{u:"Unit 3",cs:false,
+q:"India's economy is best described as a Mixed Economy because:",
+opts:["The government owns all means of production and makes all economic decisions centrally","Private enterprise operates freely with zero government intervention or regulation","Both public and private sectors coexist — the state controls strategic industries while private enterprise operates in most other sectors","India follows pure capitalism with complete market freedom and no public sector"],
+ans:2,
+exp:"India is a mixed economy — it combines elements of capitalism (private enterprise, market competition) and socialism (state ownership of strategic industries, social welfare focus). The 1991 LPG reforms shifted the balance toward greater market orientation while retaining government roles in infrastructure, defence, and public services."},
+
+{u:"Unit 3",cs:false,
+q:"The '1991 Balance of Payments crisis' in India led to which major economic transformation?",
+opts:["India nationalised all private banks and industries to restore economic control","The Planning Commission was replaced by NITI Aayog in 1991","India adopted the LPG (Liberalisation, Privatisation, Globalisation) model, dismantling the licence raj and opening FDI","India introduced Five-Year Plans and the Green Revolution to boost agriculture"],
+ans:2,
+exp:"The 1991 crisis (dwindling forex reserves, high fiscal deficit) forced India to seek IMF assistance and implement the LPG reforms: Liberalisation (dismantling licence raj, reducing tariffs), Privatisation (reducing government role in industries), and Globalisation (opening FDI and global trade). This transformed India from a closed, regulated economy to a market-oriented one."},
+
+{u:"Unit 3",cs:false,
+q:"India's tertiary (services) sector is significant because:",
+opts:["It employs the largest share of India's workforce (over 60%)","It contributes over 50% to India's GDP and has shown the highest growth, positioning India as a global outsourcing hub","It includes only agriculture-related services like crop insurance and rural banking","It is the smallest sector by GDP contribution but creates the most employment"],
+ans:1,
+exp:"India's tertiary (services) sector currently contributes over 50% to GDP and has shown the highest growth rate. IT, BPO, financial services, e-commerce, healthcare, and digital payments are key drivers. India is positioned as a global outsourcing hub, especially in IT and business process management."},
+
+{u:"Unit 3",cs:false,
+q:"The 'Hindu rate of growth' refers to India's economic performance during:",
+opts:["The colonial period under British rule when India's wealth was drained","The post-independence planned economy period when India suffered slow growth due to inefficiencies and bureaucratic regulation","The period after 1991 when India grew rapidly due to LPG reforms","India's agricultural expansion during the Green Revolution"],
+ans:1,
+exp:"The 'Hindu rate of growth' (approximately 3.5% per year) refers to India's sluggish growth during the planned economy era (1950s–1980s) — characterised by inefficiencies, bureaucratic red tape, overregulated markets, and state-dominated industries. The term reflects the low ambition of growth targets compared to faster-growing Asian economies."},
+
+{u:"Unit 3",cs:true,
+q:"CASE STUDY: A country operates with private ownership of most industries, free market competition determining prices, and a profit motive driving decisions. However, the government owns electricity grids, maintains defence forces, and runs public hospitals and schools. Which economic system BEST describes this country?",
+opts:["Pure Capitalism — private ownership and free markets with no government role","Pure Socialism — collective ownership with central planning","Mixed Economy — private enterprise in most areas with state ownership of strategic sectors and public services","Command Economy — government controls all production and distribution"],
+ans:2,
+exp:"This is a Mixed Economy — it combines private ownership and free market mechanisms (capitalism) with state ownership of strategic sectors (electricity, defence) and public service provision (hospitals, schools) typical of socialism. India operates similarly — private enterprise dominates trade and services while the government retains control over essential national infrastructure."},
+
+/* ── UNIT 4: Economic Policies ── */
+{u:"Unit 4",cs:false,
+q:"The Cash Reserve Ratio (CRR) is:",
+opts:["The interest rate at which RBI lends long-term funds to commercial banks","The minimum percentage of a bank's total deposits that must be maintained as cash reserves with the RBI","The minimum percentage of net demand and time liabilities held in liquid assets like gold or government securities","The rate at which RBI borrows funds from commercial banks by selling securities"],
+ans:1,
+exp:"CRR is the percentage of a bank's total deposits mandatorily maintained as cash reserves with the RBI. A higher CRR reduces the funds banks have available for lending (reducing money supply and controlling inflation). A lower CRR increases liquidity and encourages lending. Unlike SLR, CRR must be held as cash, not in securities."},
+
+{u:"Unit 4",cs:false,
+q:"The Statutory Liquidity Ratio (SLR) differs from CRR because SLR:",
+opts:["Must be held entirely as cash with the RBI","Is set by commercial banks independently, not the RBI","Is the minimum percentage of net demand and time liabilities held in liquid assets such as gold, cash, or government securities — not limited to cash","Is used only to control long-term investment decisions by banks"],
+ans:2,
+exp:"SLR requires banks to maintain a minimum percentage of their net demand and time liabilities in liquid assets — which can include gold, cash, or government securities. This is broader than CRR (which is only cash). SLR controls credit expansion, ensures bank solvency, and serves as both a monetary and fiscal instrument."},
+
+{u:"Unit 4",cs:false,
+q:"When the RBI increases the Repo Rate, the MOST LIKELY effect on business is:",
+opts:["Borrowing becomes cheaper, encouraging investment and expansion","Banks can create more credit, increasing money supply in the economy","Borrowing becomes costlier, potentially slowing business investment and expansion","The government's tax revenue automatically increases to reduce the fiscal deficit"],
+ans:2,
+exp:"Repo Rate is the rate at which RBI lends short-term funds to commercial banks. When increased, banks pay more to borrow from RBI, raising their lending rates. This makes credit costlier for businesses — reducing borrowing, slowing investment, and helping control inflation. This is contractionary monetary policy."},
+
+{u:"Unit 4",cs:false,
+q:"'Moral Suasion' as an instrument of monetary policy means the RBI:",
+opts:["Legally mandates banks to comply with specific credit ceilings","Uses persuasion and communication — circulars, meetings, public statements — to voluntarily influence bank behaviour","Sets the statutory minimum reserve ratio that all banks must maintain","Opens and closes market operations by buying and selling government securities"],
+ans:1,
+exp:"Moral Suasion is a qualitative (non-mandatory) tool where the RBI uses persuasion rather than legal directives to influence bank behaviour. This includes issuing circulars, conducting meetings with bank heads, and public statements by the RBI Governor encouraging or discouraging certain lending practices."},
+
+{u:"Unit 4",cs:false,
+q:"Fiscal deficit arises when:",
+opts:["The government's total tax revenue exceeds its total expenditure","A country's exports exceed its imports, creating a trade surplus","The government's total expenditure exceeds its total receipts excluding borrowings","The RBI increases interest rates beyond the government's target inflation level"],
+ans:2,
+exp:"Fiscal deficit = Total Government Expenditure minus Total Receipts (excluding borrowings). It reflects the extent to which the government spends beyond its means and must borrow. It is managed through the Fiscal Responsibility and Budget Management (FRBM) Act, which sets fiscal discipline targets."},
+
+{u:"Unit 4",cs:true,
+q:"CASE STUDY: During an inflationary period, the RBI successively increases the Repo Rate by 100 basis points. Banks respond by raising their lending rates by a similar margin. A manufacturing firm that was planning to take a ₹10 crore loan for factory expansion now faces significantly higher EMIs. The firm postpones its expansion. Which monetary policy transmission mechanism does this scenario illustrate?",
+opts:["The RBI used Open Market Operations (OMO) to reduce money supply directly","Credit rationing — the RBI capped the firm's borrowing limit under sector-specific norms","The interest rate channel of monetary policy transmission — higher repo rate → higher lending rates → costlier credit → reduced investment and demand → inflation control","Moral suasion — the RBI persuaded banks not to lend to manufacturing firms"],
+ans:2,
+exp:"This illustrates the interest rate channel of monetary policy transmission. The RBI raises the Repo Rate (monetary policy tool) → commercial banks raise lending rates → credit becomes costlier → businesses reduce borrowing and postpone investment → aggregate demand falls → inflationary pressure eases. This is the classic contractionary monetary policy mechanism."},
+
+/* ── UNIT 5: Global Trends and Foreign Capital ── */
+{u:"Unit 5",cs:false,
+q:"Foreign Direct Investment (FDI) differs from Foreign Institutional Investment (FII) primarily because:",
+opts:["FDI is a short-term portfolio investment in stocks and bonds; FII involves long-term ownership","FDI involves long-term investment with ownership or management control; FII is portfolio investment in financial markets without operational control","FDI is regulated by SEBI; FII is regulated by RBI","FDI is available only to government entities; FII is open to private investors"],
+ans:1,
+exp:"FDI involves long-term investment where the foreign entity acquires ownership, management control, or significant influence in a business (e.g., manufacturing plants, subsidiaries). FII (Foreign Portfolio Investment) involves investment in stocks and bonds driven by returns, without operational control. FII is more volatile and prone to sudden capital outflows."},
+
+{u:"Unit 5",cs:false,
+q:"A Joint Venture between a foreign and Indian company is BEST described as:",
+opts:["A non-equity partnership where both parties share distribution networks without ownership transfer","An equity partnership where both parties establish a new business entity, sharing capital, risks, returns, and management","A purely financial arrangement where a foreign bank lends to an Indian company","A technical licensing agreement where technology is transferred without equity involvement"],
+ans:1,
+exp:"A Joint Venture is an equity-based partnership — a new business entity is formed where both parties contribute capital and share risks, returns, and management responsibilities. It offers the foreign partner local market knowledge while giving the domestic firm access to advanced technology or capital."},
+
+{u:"Unit 5",cs:false,
+q:"Which global business trend involves using Scrum and Kanban frameworks for dynamic project management, widely adopted post-COVID for remote and hybrid teams?",
+opts:["Sustainable business models with circular economy focus","Agile management frameworks for iterative, adaptive project handling","Data-driven decision-making using business intelligence dashboards","Cross-border leadership through virtual team collaboration tools"],
+ans:1,
+exp:"Agile management frameworks (Scrum, Kanban) are adopted for dynamic project handling. Post-COVID, their use expanded alongside remote work tools (Zoom, Teams, Slack). Agile emphasises iterative development, cross-functional teams, and adaptability — contrasted with traditional waterfall project management."},
+
+{u:"Unit 5",cs:false,
+q:"Under India's FDI policy, the 'Automatic Route' means:",
+opts:["FDI requires prior government approval from the concerned ministry before investment begins","Only domestic Indian companies can use this route for domestic expansion","Foreign investors can invest without prior government approval — only post-facto intimation to the RBI is needed","Investment is automatically rejected if it exceeds the sectoral FDI cap"],
+ans:2,
+exp:"Under the Automatic Route, foreign investment does not require prior government approval. The investor only needs to notify the RBI after the investment. This simplifies the investment process and is available for most manufacturing, services, renewable energy, and single-brand retail sectors. Sensitive sectors (defence, media) require the Government Route with prior ministerial approval."},
+
+/* ── UNIT 6: Political Environment and Business ── */
+{u:"Unit 6",cs:false,
+q:"'Lobbying' by businesses in the political environment refers to:",
+opts:["Paying bribes to government officials to obtain contracts illegally","Businesses legally attempting to influence government decisions, legislation, and policies in their favour through campaign contributions, industry associations, or direct advocacy","Businesses colluding to fix prices and eliminate competitors from the market","Government bodies regulating business pricing and product standards"],
+ans:1,
+exp:"Lobbying is the legal and organised effort by businesses to influence government policies in their favour. It includes direct lobbying (meeting legislators), industry associations like CII/FICCI advocating collective interests, and campaign contributions. Sectors like pharmaceuticals, telecom, and energy are prominent lobbyers in India."},
+
+{u:"Unit 6",cs:false,
+q:"Article 301 of the Indian Constitution states that:",
+opts:["Parliament may impose any restriction on inter-state trade in the national interest","States may impose discriminatory taxes on goods from other states to protect local industry","Trade, commerce, and intercourse throughout India shall be FREE, acting as a constitutional guarantee against internal trade barriers","The Central Government alone controls all forms of trade and commerce in India"],
+ans:2,
+exp:"Article 301 declares that trade, commerce, and intercourse throughout the territory of India shall be free — creating a constitutional guarantee for a unified national market. This prevents states from creating internal trade barriers. However, this freedom is not absolute and is subject to limitations under Articles 302–307 (public interest restrictions)."},
+
+{u:"Unit 6",cs:false,
+q:"Political instability DIRECTLY affects business by:",
+opts:["Reducing consumer confidence in luxury goods while increasing agricultural sector resilience","Disrupting supply chains, causing investor withdrawal, depreciation of currency, and postponement of business expansion","Encouraging businesses to increase their domestic investments to compensate for external uncertainty","Triggering automatic monetary policy adjustments by the central bank"],
+ans:1,
+exp:"Political instability directly disrupts business through: supply chain disruptions (riots, transport halts), investor withdrawal (risk aversion), currency depreciation (market uncertainty), and postponement of expansion plans. Businesses use political risk analysis and insurance to mitigate exposure in volatile environments."},
+
+{u:"Unit 6",cs:false,
+q:"Industry associations like CII (Confederation of Indian Industry) and FICCI (Federation of Indian Chambers of Commerce and Industry) play which role in the political environment?",
+opts:["They regulate competition and impose penalties on anti-competitive businesses","They represent collective business interests before the government through policy advocacy, impact assessments, and negotiating reforms","They are government bodies responsible for implementing industrial policy","They conduct environmental audits and issue clearances for new industrial projects"],
+ans:1,
+exp:"CII and FICCI are industry associations that act as collective voices of the business community before the government. They draft policy recommendations, conduct impact assessments of proposed regulations, negotiate industry-friendly reforms, and represent sectoral interests in parliamentary and ministerial consultations."},
+
+{u:"Unit 6",cs:true,
+q:"CASE STUDY: A state government imposes a new entry tax exclusively on goods manufactured outside the state, but not on locally produced goods, claiming it promotes local industry. Businesses importing goods from other Indian states challenge this in court. Which constitutional provision would they invoke, and what is the legal basis of their challenge?",
+opts:["Article 19 — Right to Freedom of Profession; the tax violates fundamental rights to trade freely","Article 301 read with Article 304 — the tax discriminates between goods from different states, violating the constitutional guarantee of free trade across India","Article 302 — Parliament may impose restrictions; states have no right to challenge parliamentary decisions","Article 19(1)(g) — Only private businesses, not government entities, are subject to trade restrictions"],
+ans:1,
+exp:"The businesses would invoke Article 301 (freedom of trade and commerce throughout India) along with Article 304, which explicitly prohibits states from imposing discriminatory taxes on goods from other states. A state may impose reasonable restrictions on trade under Article 304, but only if non-discriminatory. A tax that applies only to out-of-state goods while exempting local goods is unconstitutional discrimination, violating the principle of a unified national market."},
+
+/* ── UNIT 7: Business Regulation and Industrial Policy ── */
+{u:"Unit 7",cs:false,
+q:"The MRTP Act, 1969 was enacted primarily to:",
+opts:["Promote free competition and attract foreign direct investment into India","Prevent concentration of economic power and control monopolistic, restrictive, and unfair trade practices","Regulate banking and financial institutions through the Reserve Bank of India","Establish consumer redressal forums at district, state, and national levels"],
+ans:1,
+exp:"The MRTP (Monopolies and Restrictive Trade Practices) Act, 1969 was enacted to: prevent wealth concentration in the hands of a few large industrial houses; control monopolistic trade practices (market manipulation), restrictive trade practices (price fixing, tying), and unfair trade practices (false advertising); and promote equitable distribution of wealth through decentralised ownership."},
+
+{u:"Unit 7",cs:false,
+q:"The MRTP Act was repealed and replaced by the Competition Act, 2002 primarily because:",
+opts:["Consumer protection was separated into a different legislation and the MRTP Act became redundant","The MRTP Act focused on controlling monopolies per se, lacked financial penalties, and could not handle complex modern practices like cartels, predatory pricing, and global mergers","The MRTP Commission was expanded and renamed the Competition Commission of India","India's WTO obligations required replacing the MRTP Act with a GATT-compliant framework"],
+ans:1,
+exp:"The MRTP Act was ineffective in modern markets: it could not penalise with financial deterrents, lacked investigative capacity, could not handle global mergers or predatory pricing, and its preventive approach conflicted with the post-1991 liberal economy. The Competition Act, 2002 introduced proactive competition advocacy, financial penalties, and CCI with broader enforcement powers."},
+
+{u:"Unit 7",cs:false,
+q:"The Competition Commission of India (CCI) under the Competition Act, 2002 governs which THREE main areas?",
+opts:["Environmental standards, labour laws, and consumer protection","Anti-competitive agreements, abuse of dominant position, and regulation of combinations (mergers and acquisitions)","Intellectual property licensing, export control, and foreign exchange management","Banking regulation, securities trading, and insurance supervision"],
+ans:1,
+exp:"The Competition Act, 2002 governs: (1) Anti-competitive agreements — horizontal (cartels, price-fixing) and vertical restraints; (2) Abuse of dominant position — predatory pricing, exclusive dealings; and (3) Regulation of combinations — mergers and acquisitions above threshold values that may harm competition. CCI replaced the MRTP Commission with broader proactive powers."},
+
+{u:"Unit 7",cs:false,
+q:"The 1991 Industrial Policy reforms (LPG) included which of the following changes?",
+opts:["Nationalisation of all private industries and expansion of the public sector","Expansion of the Licence Raj and increased tariff barriers to protect domestic industry","Dismantling of the Licence Raj, reduction of import tariffs, opening of FDI in several sectors, and market-oriented deregulation","Introduction of mandatory Five-Year Plans for the private sector"],
+ans:2,
+exp:"The 1991 Industrial Policy (LPG) brought: Liberalisation (removing licensing requirements, reducing tariffs), Privatisation (reducing government ownership in non-strategic industries), and Globalisation (opening FDI across sectors, integrating into global trade). This shifted India from a state-controlled, closed economy to a market-oriented, globally integrated economy."},
+
+{u:"Unit 7",cs:true,
+q:"CASE STUDY: Two leading cement manufacturers in India secretly agree to maintain a minimum price of ₹400 per bag across all their distribution channels and divide regional markets geographically. A third competitor discovers this and reports it to the Competition Commission of India (CCI). Under the Competition Act, 2002, how would the CCI classify this and what powers would it exercise?",
+opts:["This is a permissible strategic alliance under Indian corporate law; the CCI cannot intervene","This is an abuse of dominant position — both companies are dominant and cannot collaborate","This is a horizontal anti-competitive agreement (cartel) — price-fixing and market allocation are per se violations of the Competition Act; CCI can investigate, impose penalties up to three times profits or 10% turnover, and issue cease orders","This falls under MRTP Act provisions since it involves large industrial houses"],
+ans:2,
+exp:"This is a horizontal anti-competitive agreement (cartel) — competitors at the same market level colluding to fix prices and allocate markets. Under the Competition Act, 2002, such agreements are presumed anti-competitive (per se violations). CCI can: investigate suo moto or on complaint, impose penalties up to three times the profits or 10% of average turnover for each year of violation, and issue cease and desist orders. The MRTP Act was repealed and is no longer applicable."},
+
+/* ── UNIT 8: Consumer and Environmental Laws ── */
+{u:"Unit 8",cs:false,
+q:"Under the Consumer Protection Act, 1986, the National Consumer Disputes Redressal Commission (NCDRC) has jurisdiction over:",
+opts:["Cases where the value of goods or services does not exceed ₹1 crore","Cases between ₹1 crore and ₹10 crores, and appeals against District Commission orders","Cases exceeding ₹10 crores, or appeals against State Commission orders; headed by a current or former Supreme Court Judge","All consumer cases regardless of monetary value, without any financial threshold"],
+ans:2,
+exp:"The three-tier redressal structure under CPA 1986: District Commission handles cases up to ₹1 crore; State Commission handles ₹1 crore to ₹10 crores (also appellate over District); NCDRC handles cases exceeding ₹10 crores and appeals against State Commission orders, headed by a current or former Supreme Court Judge."},
+
+{u:"Unit 8",cs:false,
+q:"The Environment Protection Act, 1986 was enacted primarily in response to:",
+opts:["India's obligations under the WTO Agreement on Trade and Environment","The Supreme Court's directive to establish State Pollution Control Boards","The Bhopal Gas Tragedy of 1984 and growing national and international awareness of the need for comprehensive environmental protection","India's membership requirements in the World Bank for infrastructure financing"],
+ans:2,
+exp:"The Environment Protection Act, 1986 was enacted primarily in the aftermath of the Bhopal Gas Tragedy (December 1984), India's worst industrial disaster. It also coincided with growing international environmental awareness. The Act provides the Central Government with umbrella powers to regulate pollutants, manage hazardous substances, and enforce environmental standards."},
+
+{u:"Unit 8",cs:false,
+q:"Under the Consumer Protection Act, the 'Right to Information' means consumers are entitled to:",
+opts:["Free access to all proprietary business data and internal company records","Access to classified government policies on product pricing and subsidies","Be informed about a product's quantity, quality, potency, purity, standard, and price before purchase","File information requests under the RTI Act about any consumer product"],
+ans:2,
+exp:"The Right to Information under the Consumer Protection Act, 1986 ensures that consumers receive complete and accurate disclosure about a product's quantity, quality, potency, purity, standard, and price. Mislabelling or omission of crucial information constitutes an unfair trade practice subject to legal action under the Act."},
+
+{u:"Unit 8",cs:false,
+q:"Under Section 5 of the Environment Protection Act, 1986, which power does the Central Government have?",
+opts:["To set personal income tax rates for environmental violations by individual citizens","To issue written directions to any person, officer, or authority — including ordering closure, prohibition, or regulation of any industry contributing to environmental degradation","To override all State Pollution Control Board decisions and centralise all enforcement","To directly negotiate with industries on pollution targets without legal backing"],
+ans:1,
+exp:"Section 5 of the Environment Protection Act, 1986 empowers the Central Government to issue written directions to any person, officer, or authority regarding compliance with environmental standards. This includes ordering the closure, prohibition, or regulation of any industry, operation, or process found to be contributing to environmental degradation. Emergency actions including sealing facilities are also permitted."},
+
+{u:"Unit 8",cs:true,
+q:"CASE STUDY: A consumer purchases a washing machine that stops functioning after 15 days. The manufacturer refuses to repair or replace it, claiming the damage is 'user error.' The consumer wants to file a formal complaint. The purchase value was ₹45,000. At which level of the consumer redressal mechanism should the complaint be filed, and what relief can be sought?",
+opts:["NCDRC — only the apex body has jurisdiction over product defect complaints","State Commission — because manufacturing defects are always a state-level matter","District Consumer Disputes Redressal Commission — the case value (₹45,000) falls well within the ₹1 crore threshold for district jurisdiction; the consumer can seek replacement, refund, or compensation","The matter must first go to civil court before any consumer forum can hear it"],
+ans:2,
+exp:"The case value (₹45,000) falls within the District Consumer Disputes Redressal Commission's jurisdiction (up to ₹1 crore). The consumer can file within 2 years of the cause of action. Reliefs available include: replacement of the defective washing machine, full refund of ₹45,000, or compensation for inconvenience and any consequential loss. Proceedings are designed for speedy disposal (3–5 months)."},
+
+/* ── UNIT 9: Indian Financial Markets ── */
+{u:"Unit 9",cs:false,
+q:"Treasury Bills (T-Bills) issued by the Government of India are characterised by:",
+opts:["Long-term maturities of 5–30 years and interest-bearing coupon payments","Being issued only to retail investors through commercial banks at face value","Short-term maturities (91, 182, or 364 days), issued at a discount, and redeemed at face value — the return is the discount","Requiring collateral from investors and offering variable interest rates based on inflation"],
+ans:2,
+exp:"Treasury Bills are short-term government debt instruments with maturities of 91, 182, or 364 days. They are non-interest-bearing — issued at a discount to face value and redeemed at full face value. The return (yield) is the difference between issue price and redemption value. They are key instruments in India's money market for short-term government liquidity management."},
+
+{u:"Unit 9",cs:false,
+q:"SEBI (Securities and Exchange Board of India) was established to primarily:",
+opts:["Regulate monetary policy and control India's money supply","Manage India's foreign exchange reserves and balance of payments","Regulate India's capital markets — ensuring transparency, investor protection, and prevention of malpractices in securities trading","Set interest rates and govern commercial banks' credit creation"],
+ans:2,
+exp:"SEBI, constituted in 1988 and granted statutory powers through the SEBI Act 1992, regulates India's capital markets. Its roles include: regulating IPOs and secondary market trading; protecting investor interests through disclosure norms and SCORES (Complaints Redress System); preventing malpractices like insider trading; and developing market infrastructure through reforms like dematerialisation and T+1 settlement."},
+
+{u:"Unit 9",cs:false,
+q:"The PRIMARY MARKET in India's capital market structure refers to:",
+opts:["The secondary market where already-issued shares are traded on BSE and NSE","The over-the-counter (OTC) market for derivatives and commodity futures","The platform where new securities are issued for the FIRST TIME — enabling companies to raise fresh capital through IPOs, providing capital formation and funding for expansion","The money market where short-term government securities (T-Bills) are issued and traded"],
+ans:2,
+exp:"The Primary Market is where new securities are issued for the first time. Companies raise fresh capital by offering equity (IPOs) or debt instruments to investors. This involves underwriters, merchant bankers, and SEBI regulation. It is distinct from the Secondary Market (BSE/NSE) where already-issued securities are traded between investors."},
+
+{u:"Unit 9",cs:false,
+q:"Commercial banks contribute to money supply management through:",
+opts:["Directly issuing currency notes on behalf of the Reserve Bank of India","Credit creation — when a bank gives a loan, it credits the borrower's account, creating new money and amplifying the money supply through a multiplier effect","Selling government securities to the public on behalf of the Finance Ministry","Setting the repo rate and managing short-term interest rates in the economy"],
+ans:1,
+exp:"Commercial banks create credit through the fractional reserve banking system. When a bank gives a loan, it credits the borrower's account (creating new deposits), which can be re-lent, amplifying the money supply through a credit multiplier. The RBI controls this through CRR and SLR requirements. Issuing currency is exclusively the RBI's function."},
+
+/* ── UNIT 10: Regulatory Bodies and Foreign Investment ── */
+{u:"Unit 10",cs:false,
+q:"SEBI's SCORES system refers to:",
+opts:["Securities Capital Operations and Regulatory Exchange System for institutional investors","SEBI Compliance and Oversight Regulatory Enforcement System for listed companies","SEBI Complaints Redress System — an online platform where investors can file and track grievances against listed companies and intermediaries","Securities Clearing and Online Risk Evaluation System for stock exchanges"],
+ans:2,
+exp:"SCORES (SEBI Complaints Redress System) is an online platform where retail and institutional investors can file complaints against listed companies and market intermediaries. It enables SEBI to monitor grievance resolution and ensures companies respond within prescribed timelines. This is part of SEBI's investor protection mandate."},
+
+{u:"Unit 10",cs:false,
+q:"Under India's FDI framework, which nodal body is responsible for FDI policy formulation and oversight under the Ministry of Commerce and Industry?",
+opts:["Reserve Bank of India (RBI) under the Foreign Exchange Management Act","Securities and Exchange Board of India (SEBI) under the SEBI Act 1992","Department for Promotion of Industry and Internal Trade (DPIIT) — the nodal body for FDI policy","Insurance Regulatory and Development Authority of India (IRDAI) for cross-border investments"],
+ans:2,
+exp:"DPIIT (Department for Promotion of Industry and Internal Trade) under the Ministry of Commerce and Industry is the nodal body for FDI policy in India. It issues the Consolidated FDI Policy document. RBI regulates FDI inflows under FEMA (Foreign Exchange Management Act). The Foreign Investment Facilitation Portal (FIFP) handles government-route approvals."},
+
+{u:"Unit 10",cs:false,
+q:"'Greenfield FDI' refers to:",
+opts:["Investment in environmentally sustainable projects and renewable energy sectors only","Acquiring or merging with an already existing foreign company in the host country","A foreign investor establishing entirely new operations from the ground up — new plants, offices, or subsidiaries — in the host country","Portfolio investment in publicly traded green bonds and sustainability-linked securities"],
+ans:2,
+exp:"Greenfield FDI involves a foreign entity establishing brand-new operations from scratch — building new manufacturing plants, offices, or wholly-owned subsidiaries. This contrasts with Brownfield FDI (acquiring or merging with an existing company). Greenfield FDI typically involves more substantial technology transfer, employment creation, and long-term commitment to the host economy."},
+
+{u:"Unit 10",cs:true,
+q:"CASE STUDY: A global electric vehicle manufacturer wants to set up a 100% wholly-owned manufacturing facility in India. It plans to invest ₹8,000 crore, hire 5,000 local employees, and transfer advanced battery technology. According to India's FDI policy framework, which route would this investment most likely take, and who are the key regulatory authorities involved?",
+opts:["Government Route requiring ministerial approval; regulated by SEBI and IRDAI","Automatic Route (manufacturing sector allows 100% FDI automatically); DPIIT for policy oversight and RBI for FEMA compliance and post-facto intimation","Only Indian companies can own 100% of manufacturing assets; FDI is capped at 49%","Emergency Route requiring Cabinet Committee on Economic Affairs approval for every individual investment above ₹1,000 crore"],
+ans:1,
+exp:"Manufacturing in India is permitted 100% FDI under the Automatic Route — no prior government approval is needed. The investor only needs post-facto intimation to the RBI under FEMA. DPIIT oversees the FDI policy framework. This is a Greenfield FDI investment — new facility from scratch — providing capital formation, technology transfer (battery technology), and employment generation (5,000 local jobs)."},
+
+/* ── UNIT 11: WTO and MNCs ── */
+{u:"Unit 11",cs:false,
+q:"The WTO was established in 1995 to replace GATT primarily because GATT:",
+opts:["Was too powerful and imposed unfair conditions on developing countries","Covered only goods — excluding services and intellectual property — lacked a permanent institutional base, and had no effective binding dispute enforcement mechanism","Was a permanent institution but lacked sufficient funding to operate effectively","Was dominated by developing nations who used it to impose tariffs on developed countries"],
+ans:1,
+exp:"GATT's limitations that led to WTO's creation: (1) Covered only trade in goods — not services (GATS) or intellectual property (TRIPS); (2) Was provisional and temporary — lacking a permanent secretariat; (3) Had no effective binding dispute settlement mechanism. The WTO, created through the Uruguay Round (1986–1994), addressed all three by adding GATS, TRIPS, and a binding Dispute Settlement Mechanism."},
+
+{u:"Unit 11",cs:false,
+q:"The Most Favoured Nation (MFN) principle of the WTO requires that:",
+opts:["Developed nations must provide more favourable trade terms to least-developed countries","A WTO member must grant the most favourable trade conditions it extends to any single country to ALL other WTO members equally","Multinational corporations from member countries receive preferential treatment in host-country markets","Members should prioritise trade with friendly nations over those with geopolitical tensions"],
+ans:1,
+exp:"The MFN principle is a cornerstone of WTO non-discrimination. If a WTO member grants a special trade advantage (e.g., lower tariff) to one country, it must automatically extend the same treatment to all WTO members. This prevents preferential bilateral arrangements and ensures equal treatment in global trade — building trust and reducing discrimination."},
+
+{u:"Unit 11",cs:false,
+q:"The WTO's Dispute Settlement Mechanism (DSM) works through which sequential process?",
+opts:["Immediate financial penalties imposed on the violating country without any consultation","Countries impose unilateral trade sanctions first, then seek WTO endorsement afterward","Bilateral consultation first; if unresolved, a panel is appointed; parties can appeal to the Appellate Body; ruling is binding; non-compliance allows trade sanctions by the affected member","Countries submit disputes directly to the UN Security Council, which refers them to the WTO"],
+ans:2,
+exp:"WTO Dispute Settlement: (1) Mandatory bilateral consultation between disputing parties; (2) If unresolved, a WTO expert panel is appointed to hear the case; (3) Either party can appeal to the Appellate Body (legal review); (4) Final ruling is binding on both parties; (5) Non-compliance allows the affected party to impose trade sanctions as enforcement. This system replaces unilateral action with a rules-based framework."},
+
+{u:"Unit 11",cs:false,
+q:"Multinational Corporations (MNCs) contribute to host countries primarily through:",
+opts:["Repatriating all profits to home countries and avoiding local tax obligations","Controlling host-country governments through political lobbying and policy capture","Capital investment, technology transfer, employment generation, improved skill development, and integration into global supply chains","Eliminating domestic competition entirely by using predatory pricing strategies"],
+ans:2,
+exp:"MNCs benefit host countries through: capital injection supporting infrastructure and industrial expansion; technology transfer (advanced production techniques, R&D, patents); employment generation at multiple levels; skill development through corporate training; foreign exchange inflows; and integration of domestic industries into global supply chains and standards."},
+
+/* ── UNIT 12: International Financial Institutions ── */
+{u:"Unit 12",cs:false,
+q:"The World Bank was formally established through which agreement, alongside the IMF?",
+opts:["The Treaty of Westphalia (1648) establishing the modern international state system","The GATT Agreement (1947) focused on reducing post-war trade barriers","The Bretton Woods Conference (1944) — a United Nations Monetary and Financial Conference to reshape the post-war international economic order","The Washington Consensus (1989) — a set of economic policy prescriptions for developing nations"],
+ans:2,
+exp:"The World Bank (formally: International Bank for Reconstruction and Development — IBRD) was established at the Bretton Woods Conference in July 1944, alongside the IMF. The conference brought together 44 allied nations to create a new post-WWII international economic order, prevent recurrence of the Great Depression, and fund reconstruction of war-devastated economies."},
+
+{u:"Unit 12",cs:false,
+q:"IDA (International Development Association) within the World Bank Group differs from IBRD because IDA:",
+opts:["Provides loans at market-based rates to middle-income countries for infrastructure projects","Offers political risk insurance to encourage FDI into developing countries","Provides interest-free loans (credits) and grants specifically to the world's POOREST countries that cannot borrow on commercial terms","Focuses exclusively on private sector investment by offering equity financing to developing-country enterprises"],
+ans:2,
+exp:"IDA (established 1960) provides highly concessional loans (credits) and grants to the world's poorest countries — those that cannot afford to borrow on commercial terms. Loans are interest-free (or near-zero interest) with long repayment periods. IDA focuses on human development, education, health, and infrastructure for poverty reduction. IBRD serves middle-income countries at near-market rates."},
+
+{u:"Unit 12",cs:false,
+q:"The IMF's primary mandate includes:",
+opts:["Funding long-term infrastructure projects and poverty reduction programmes in developing countries","Providing political risk insurance and investment guarantees to multinational corporations","Promoting international monetary cooperation, exchange rate stability, and providing financial assistance to countries facing balance of payments difficulties","Setting global trade rules and resolving trade disputes between member nations"],
+ans:2,
+exp:"The IMF's mandate is monetary and financial stability: (1) Promote international monetary cooperation; (2) Ensure exchange rate stability; (3) Facilitate balanced growth of international trade; (4) Provide financial resources to members facing balance of payments problems. This contrasts with the World Bank (development and poverty reduction) and WTO (trade rules and disputes)."},
+
+{u:"Unit 12",cs:false,
+q:"A 'Trading Bloc' in international economics refers to:",
+opts:["A group of countries that collectively impose trade sanctions on non-member nations","An alliance of countries that agree to reduce or eliminate trade barriers among themselves, creating preferential trading arrangements within the group","A collection of multinational corporations that coordinate pricing across international markets","A WTO committee that oversees trade policy reviews of member nations"],
+ans:1,
+exp:"A Trading Bloc is a regional group of countries that agree to reduce or eliminate trade barriers (tariffs, quotas) among themselves, creating preferential trade arrangements. Examples include the EU, ASEAN, NAFTA/USMCA, and SAARC. They promote regional trade integration but may divert trade away from non-member countries, raising WTO compatibility questions."},
+
+{u:"Unit 12",cs:true,
+q:"CASE STUDY: A low-income South Asian country is facing a severe balance of payments crisis with foreign exchange reserves sufficient for only three weeks of imports, rising inflation, and mounting debt. It approaches two international institutions simultaneously: one for emergency liquidity support and stabilisation of its currency; another for long-term funding to rebuild road infrastructure and improve primary healthcare. Which institution addresses which need?",
+opts:["IMF handles infrastructure; World Bank handles currency stabilisation","Both the IMF and World Bank provide identical support — they are interchangeable","IMF — provides emergency balance of payments assistance and stabilisation support; World Bank (IDA for a low-income country) — provides concessional long-term loans/grants for infrastructure and healthcare","WTO provides emergency trade financing; World Bank provides currency support"],
+ans:2,
+exp:"Clear institutional distinction: IMF addresses monetary and balance of payments crises — it provides emergency liquidity, stabilisation programmes (often with conditionalities like fiscal reform), and exchange rate support. World Bank (specifically IDA for low-income countries) provides long-term concessional development financing for infrastructure, health, education, and poverty reduction. They are complementary but distinct in mandate and function."},
+
+/* ── UNIT 13: Economic Development and Ecology ── */
+{u:"Unit 13",cs:false,
+q:"The concept of 'Sustainable Development' is defined as:",
+opts:["Maximising GDP growth regardless of environmental consequences to accelerate poverty reduction","Development that meets the needs of the present without compromising the ability of future generations to meet their own needs","Economic development achieved exclusively through foreign investment and technology transfer","Development focused only on industrial growth and urbanisation with no consideration for rural areas"],
+ans:1,
+exp:"Sustainable Development (Brundtland Commission, 1987) is defined as development that meets present needs without compromising future generations' ability to meet their own needs. It rests on three pillars: Environmental sustainability (responsible resource management), Economic sustainability (stable growth without depleting natural capital), and Social sustainability (equity, well-being, inclusion)."},
+
+{u:"Unit 13",cs:false,
+q:"The 'Polluter Pays Principle' in sustainable development means:",
+opts:["Consumers who purchase polluting products should pay higher taxes","Governments in polluting nations should compensate other countries through carbon credits","Businesses and entities that cause environmental harm are financially responsible for remediation and prevention costs","Developing countries must bear the full cost of global pollution even if caused by developed economies"],
+ans:2,
+exp:"The Polluter Pays Principle holds that those whose activities cause environmental damage — industries discharging effluents, factories emitting pollutants — bear the financial cost of remediation, pollution prevention, and compliance. This principle internalises environmental externalities into business costs, incentivising cleaner production and reducing the burden on taxpayers and communities."},
+
+{u:"Unit 13",cs:false,
+q:"The 4 Ps of Green Marketing refer to:",
+opts:["Price, Placement, Promotion, and Packaging — with all four redesigned for mass market appeal","Green Product, Green Price, Green Place, and Green Promotion — adapting the traditional marketing mix to incorporate environmental sustainability","Profit, Planet, People, and Partnership — the four pillars of corporate ESG strategy","Planning, Procurement, Production, and Post-sales — the green supply chain management framework"],
+ans:1,
+exp:"The 4 Ps of Green Marketing adapt the traditional marketing mix: Green Product (eco-friendly design, sustainable materials, minimal waste); Green Price (premium or competitive pricing reflecting environmental value); Green Place (sustainable distribution, eco-friendly logistics, green retail channels); Green Promotion (communicating genuine environmental benefits, avoiding greenwashing through evidence-backed claims)."},
+
+{u:"Unit 13",cs:false,
+q:"Economic degradation of the environment imposes direct economic costs through:",
+opts:["Increased GDP growth due to higher spending on healthcare and reconstruction after environmental disasters","Rising profits in chemical and mining industries that benefit from unregulated extraction","Healthcare expenditures, loss of agricultural productivity, natural disaster costs, and lower labour efficiency due to disease or displacement","Reduced import tariffs as global trade becomes easier without environmental restrictions"],
+ans:2,
+exp:"Environmental degradation creates real economic costs: healthcare spending from pollution-related diseases; agricultural productivity loss (soil degradation, water contamination); natural disaster costs from deforestation and climate change; lower labour efficiency from illness and displacement. These costs are often 'externalised' from business calculations but fall on governments, communities, and future generations."},
+
+{u:"Unit 13",cs:true,
+q:"CASE STUDY: A pharmaceutical company plans to build a large manufacturing plant near a wetland ecosystem. Local communities depend on the wetland for fishing and freshwater. The company argues the plant will create 2,000 jobs and contribute ₹500 crore annually to the local economy. Environmentalists warn of irreversible ecosystem damage. Which principle of sustainable development MOST directly applies, and what regulatory process MUST the company undergo?",
+opts:["The Profit Maximisation Principle applies — economic benefits outweigh ecological costs; no regulatory process is needed","The Intergenerational Equity Principle and Precautionary Principle apply; the company must undergo a mandatory Environmental Impact Assessment (EIA) before project approval to evaluate ecological consequences and propose mitigation measures","ESG reporting is sufficient; the company may self-certify its environmental compliance","The Polluter Pays Principle applies retrospectively — the company builds first and compensates the community if damage occurs after operations begin"],
+ans:1,
+exp:"Two sustainable development principles apply: (1) Intergenerational Equity — the wetland's ecosystem services (fishing, freshwater) must be preserved for future generations; (2) Precautionary Principle — take preventive action in the face of potential irreversible environmental risk. Regulatory requirement: the company must undergo a mandatory Environmental Impact Assessment (EIA) under the Environment Protection Act and MoEFCC guidelines, including public consultation with affected communities, before any project approval or commencement."},
+
+/* ── UNIT 14: Sustainability and Technology ── */
+{u:"Unit 14",cs:false,
+q:"'Smart Grids' in environmental technology are best described as:",
+opts:["Power plants that use smart materials to reduce construction costs","Modern energy distribution systems using sensors, automation, and data to optimise electricity supply and demand, supporting decentralised renewable energy sources","A network of electric vehicle charging stations connected to a central government monitoring system","Financial instruments used to raise capital for renewable energy infrastructure projects"],
+ans:1,
+exp:"Smart Grids are modern electricity distribution systems integrating sensors, automation, and real-time data analytics to optimise supply and demand. They support decentralised energy sources (rooftop solar, wind farms), enhance grid reliability, reduce waste, and enable dynamic pricing. They represent a key environmental technology for the clean energy transition."},
+
+{u:"Unit 14",cs:false,
+q:"A major NEGATIVE ecological implication of rapid technology advancement is:",
+opts:["Reduction of carbon footprint through energy-efficient manufacturing","Conservation of biodiversity through satellite monitoring and GPS wildlife tracking","Electronic (e-waste) accumulation — discarded smartphones, laptops, and batteries contain toxic substances like lead, mercury, and cadmium that contaminate soil and water","Promotion of resource efficiency through AI-optimised supply chains and logistics"],
+ans:2,
+exp:"Electronic waste (e-waste) is a major negative ecological implication of rapid technology advancement. Frequent replacement of consumer electronics generates massive volumes of e-waste globally. Improper disposal in developing countries exposes workers to toxic substances (lead, mercury, cadmium). Lack of effective take-back programmes and global e-waste treaties exacerbates the problem."},
+
+{u:"Unit 14",cs:false,
+q:"LEED certification in the context of environmental technology refers to:",
+opts:["A legal certification required by the Environment Protection Act for industrial emissions compliance","Leadership in Energy and Environmental Design — a green building certification encouraging eco-friendly construction practices with energy-efficient materials and systems","London Environmental and Ecological Development — a UK government scheme for urban sustainability","Low Emission Energy Directive — an EU regulation capping industrial carbon output"],
+ans:1,
+exp:"LEED (Leadership in Energy and Environmental Design) is an internationally recognised green building certification system. It encourages eco-friendly construction through standards for energy efficiency (LED lighting, thermal insulation, automated ventilation), water conservation, materials sustainability, and indoor environmental quality. Green buildings certified under LEED use fewer resources and minimise environmental impact throughout their lifecycle."},
+
+{u:"Unit 14",cs:false,
+q:"Which of the following correctly describes a POSITIVE ecological implication of technology?",
+opts:["Mass production of electronics leading to rapid depletion of rare earth metals and freshwater","Construction of dams and power plants disrupting animal migration routes and habitats","Overproduction creating a culture of disposability where products are replaced rather than repaired","Carbon Capture and Storage (CCS) technologies removing CO2 from the atmosphere, alongside satellite imaging conserving biodiversity by monitoring wildlife and habitat changes"],
+ans:3,
+exp:"Positive ecological implications of technology include: Carbon Capture and Storage (CCS) removing CO2; satellite imaging, drones, and GPS tracking enabling wildlife monitoring and habitat conservation; vertical farming reducing agricultural land pressure; AI optimising resource use and logistics; and recycling technologies converting waste into new materials. These contrast with negative impacts like e-waste and ecosystem disruption from infrastructure."},
+
+{u:"Unit 14",cs:true,
+q:"CASE STUDY: A city government is planning a new urban development initiative. They propose: solar panels on all public buildings, a smart traffic management system to reduce idling emissions, electric bus fleet for public transport, and a greywater recycling system for parks and public toilets. Which category of environmental technologies are being deployed, and what ecological and economic benefits would you expect?",
+opts:["These are purely financial investments with no measurable ecological benefit until 10 years of operation","Only waste management technologies are involved; renewable energy and transport are irrelevant","A combination of renewable energy (solar), smart urban infrastructure (traffic management), green transportation (electric buses), and water conservation (greywater recycling) technologies — expected benefits include reduced carbon emissions, lower energy costs, improved air quality, water conservation, and reduced urban heat island effect","These technologies would increase the city's environmental footprint due to manufacturing and installation energy requirements"],
+ans:2,
+exp:"This initiative deploys multiple environmental technology categories: (1) Renewable energy — solar panels reduce carbon emissions and energy costs; (2) Smart urban infrastructure — smart traffic management reduces vehicle idle emissions and congestion; (3) Green transportation — electric buses lower particulate matter and greenhouse gas emissions; (4) Water conservation — greywater recycling reduces potable water demand. Combined ecological benefits: reduced carbon footprint, improved air and water quality, lower municipal energy costs, and enhanced urban sustainability aligned with smart city principles."}
+
+,
+
+{u:"Unit 9",cs:false,
+q:"'Non-Performing Assets (NPAs)' in the context of commercial banking refers to:",
+opts:["Government securities held by banks that have not yet matured","Bank branches in rural areas that are not generating adequate revenue","Loans or advances where the borrower has stopped making interest or principal payments for a specified period, signalling credit risk in the bank's portfolio","Physical assets like machinery and office equipment that have been fully depreciated"],
+ans:2,
+exp:"NPAs (Non-Performing Assets) are loans or credit facilities where the borrower has defaulted on repayments for 90 days or more. They signal deteriorating credit quality in the bank's portfolio. High NPAs reduce bank profitability, constrain credit creation, and require provisioning. Banks manage NPAs through credit risk assessment, the Insolvency and Bankruptcy Code (IBC), and RBI's asset quality review mechanisms."},
+
+{u:"Unit 11",cs:false,
+q:"The WTO's Trade Policy Review Mechanism (TPRM) serves to:",
+opts:["Impose financial penalties on countries that violate WTO agreements","Allow member countries to unilaterally exempt themselves from WTO obligations for strategic industries","Periodically examine each member country's trade policies and practices to promote transparency and identify any inconsistencies with agreed WTO rules","Negotiate new bilateral trade agreements outside the WTO framework"]
+,ans:2,
+exp:"The Trade Policy Review Mechanism (TPRM) requires WTO members to periodically share information about their trade regulations — tariffs, subsidies, and import/export rules — for public review. It promotes transparency, identifies protectionist measures, allows countries to explain and justify policies, and helps developing countries learn from each other's approaches. It does not impose penalties but creates accountability and builds confidence among trading partners."}
+
+]; /* end of qs */
+
+/* ================================================================
+   RUNTIME VALIDATION — fires before quiz starts
+   ================================================================ */
+(function validate(){
+  var errs=[];
+  if(!Array.isArray(qs)||qs.length===0){errs.push("qs array is empty or undefined.");}
+  else{
+    for(var i=0;i<qs.length;i++){
+      var q=qs[i];
+      if(!q.u||q.u.trim()==='') errs.push("Q"+(i+1)+": unit label missing");
+      if(!q.q||q.q.trim()==='') errs.push("Q"+(i+1)+": question text empty");
+      if(!Array.isArray(q.opts)||q.opts.length<2) errs.push("Q"+(i+1)+": opts must have >=2 items");
+      if(typeof q.ans!=='number') errs.push("Q"+(i+1)+": ans must be a number");
+      if(!q.exp||q.exp.trim()==='') errs.push("Q"+(i+1)+": explanation empty");
+      if(typeof q.ans==='number'&&Array.isArray(q.opts)){
+        if(q.ans<0||q.ans>=q.opts.length)
+          errs.push("Q"+(i+1)+": ans="+q.ans+" OUT OF RANGE (opts="+q.opts.length+", valid 0–"+(q.opts.length-1)+")");
+      }
+      if(Array.isArray(q.opts)){
+        for(var j=0;j<q.opts.length;j++){
+          if(!q.opts[j]||q.opts[j].trim()==='') errs.push("Q"+(i+1)+": option "+j+" empty");
+        }
+      }
+    }
+  }
+  if(errs.length>0){
+    window.__quizHasErrors=true;
+    document.addEventListener('DOMContentLoaded',function(){
+      document.getElementById('area').innerHTML=
+        '<div class="err-banner"><strong>\u26A0 Quiz Data Errors ('+errs.length+'):</strong>'+
+        errs.map(function(e){return '<br>\u2022 '+e;}).join('')+'</div>';
+    });
+  }
+})();
+
+/* ── QUIZ ENGINE ── */
+var cur=0,score=0,answered=false;
+
+function showSplash(){
+  if(window.__quizHasErrors)return;
+  var total=qs.length;
+  var csCount=qs.filter(function(q){return q.cs;}).length;
+  var units={};qs.forEach(function(q){units[q.u]=1;});
+  var numUnits=Object.keys(units).length;
+  var html='<div class="splash">';
+  html+='<div class="splash-icon">\u2696\uFE0F</div>';
+  html+='<div class="splash-title">Business, Society &amp; Law</div>';
+  html+='<div class="splash-sub">A comprehensive test across all 14 units \u2014 from business environment and economic policies to WTO, consumer laws, financial markets, and sustainability.</div>';
+  html+='<div class="splash-stats">';
+  html+='<div class="splash-stat"><div class="splash-stat-v">'+total+'</div><div class="splash-stat-l">Questions</div></div>';
+  html+='<div class="splash-stat"><div class="splash-stat-v">'+numUnits+'</div><div class="splash-stat-l">Units</div></div>';
+  html+='<div class="splash-stat"><div class="splash-stat-v">'+csCount+'</div><div class="splash-stat-l">Case Studies</div></div>';
+  html+='</div>';
+  html+='<button class="start-btn" onclick="startQuiz()">Start Quiz \u2192</button>';
+  html+='</div>';
+  document.getElementById('area').innerHTML=html;
+  document.getElementById('prog').style.width='0%';
+  document.getElementById('hbadge').textContent=total+' Questions';
+}
+
+function startQuiz(){
+  if(window.__quizHasErrors)return;
+  cur=0;score=0;answered=false;render();
+}
+
+function render(){
+  if(cur>=qs.length){showResult();return;}
+  var q=qs[cur];
+  document.getElementById('prog').style.width=(cur/qs.length*100)+'%';
+  document.getElementById('hbadge').textContent='Score: '+score+'/'+cur;
+  var html='';
+  html+='<div class="q-meta"><span class="q-counter">Q'+(cur+1)+' of '+qs.length+'</span></div>';
+  html+='<div class="q-unit-tag">\uD83D\uDCD6 '+q.u+'</div>';
+  if(q.cs) html+='<div class="case-badge">\uD83D\uDCCB Case Study</div>';
+  html+='<div class="q-card"><div class="q-text">'+q.q+'</div></div>';
+  html+='<div class="opts">';
+  for(var i=0;i<q.opts.length;i++){
+    html+='<button class="opt" onclick="choose('+i+')" id="o'+i+'">';
+    html+='<span class="lbl">'+String.fromCharCode(65+i)+'</span>';
+    html+='<span>'+q.opts[i]+'</span>';
+    html+='</button>';
+  }
+  html+='</div>';
+  html+='<div class="fb" id="fb"><span class="fb-head" id="fbh"></span><span id="fbt"></span></div>';
+  html+='<div class="nxt-wrap" id="nw"><button class="nxt" onclick="next()">'+(cur<qs.length-1?'Next Question \u2192':'See My Results \u2192')+'</button></div>';
+  document.getElementById('area').innerHTML=html;
+}
+
+function choose(i){
+  if(answered)return;
+  answered=true;
+  var q=qs[cur];
+  var btns=document.querySelectorAll('.opt');
+  for(var b=0;b<btns.length;b++) btns[b].disabled=true;
+  var ok=(i===q.ans);
+  if(ok){document.getElementById('o'+i).className='opt correct';score++;}
+  else{document.getElementById('o'+i).className='opt wrong';document.getElementById('o'+q.ans).className='opt correct';}
+  var fb=document.getElementById('fb');
+  fb.style.display='block';
+  fb.className='fb '+(ok?'ok':'bad');
+  document.getElementById('fbh').textContent=ok?'\u2713 Correct!':'\u2717 Incorrect';
+  document.getElementById('fbt').textContent=q.exp;
+  document.getElementById('nw').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function next(){cur++;answered=false;window.scrollTo({top:0,behavior:'smooth'});render();}
+
+function showResult(){
+  document.getElementById('prog').style.width='100%';
+  document.getElementById('hbadge').textContent='Complete!';
+  var total=qs.length,pct=Math.round(score/total*100),wrong=total-score;
+  var grade,msg,emoji;
+  if(score>=63){grade='Outstanding!';emoji='\uD83C\uDFC6';msg='Distinction-level. You have mastered Business, Society &amp; Law across all 14 units.';}
+  else if(score>=56){grade='Excellent!';emoji='\uD83C\uDF1F';msg='Merit-level. Strong command from business environment to international institutions and sustainability.';}
+  else if(score>=42){grade='Good Pass';emoji='\uD83D\uDC4D';msg='Solid understanding. Revisit Units 7, 11, and 12 for competition law, WTO, and international finance.';}
+  else if(score>=28){grade='Getting There';emoji='\uD83D\uDCDA';msg='Keep going! Focus on monetary policy instruments, consumer laws, SEBI, and FDI frameworks.';}
+  else{grade='Keep Going';emoji='\uD83D\uDCAA';msg='Revisit all 14 units and retake. Consistency will get you there!';}
+  var html='<div class="result">';
+  html+='<div class="result-ring"><div class="result-big">'+score+'/'+total+'</div><div class="result-pct">'+pct+'%</div></div>';
+  html+='<div style="font-size:32px;margin-bottom:8px">'+emoji+'</div>';
+  html+='<div class="result-grade">'+grade+'</div>';
+  html+='<div class="result-msg">'+msg+'</div>';
+  html+='<div class="stats">';
+  html+='<div class="stat"><div class="stat-v" style="color:var(--green)">'+score+'</div><div class="stat-l">Correct</div></div>';
+  html+='<div class="stat"><div class="stat-v" style="color:var(--red)">'+wrong+'</div><div class="stat-l">Wrong</div></div>';
+  html+='<div class="stat"><div class="stat-v" style="color:var(--primary)">'+pct+'%</div><div class="stat-l">Score</div></div>';
+  html+='</div>';
+  html+='<button class="rst" onclick="restart()">\uD83D\uDD04 Retake Quiz</button>';
+  html+='</div>';
+  document.getElementById('area').innerHTML=html;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function restart(){cur=0;score=0;answered=false;showSplash();}
+showSplash();
+</script>
+</body>
+</html>
