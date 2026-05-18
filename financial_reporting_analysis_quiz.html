@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Financial Reporting &amp; Analysis Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+  :root{--primary:#0E7490;--primary-light:#ECFEFF;--green:#15803D;--green-light:#DCFCE7;--red:#B91C1C;--red-light:#FEE2E2;--gold:#B45309;--gold-light:#FEF3C7;--bg:#F8FAFC;--card:#FFFFFF;--border:#E2E8F0;--text:#0F172A;--text2:#64748B;--text3:#94A3B8;--radius:16px;--shadow:0 1px 3px rgba(0,0,0,0.07),0 4px 16px rgba(0,0,0,0.05);}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+  .header{background:var(--card);border-bottom:1px solid var(--border);padding:14px 20px 12px;position:sticky;top:0;z-index:10;box-shadow:0 1px 8px rgba(0,0,0,0.05);}
+  .header-inner{max-width:600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .header-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);line-height:1.2;}
+  .header-badge{font-size:11px;font-weight:700;color:var(--primary);background:var(--primary-light);padding:4px 11px;border-radius:20px;white-space:nowrap;letter-spacing:0.03em;}
+  .prog-track{height:3px;background:var(--border);position:sticky;top:57px;z-index:9;}
+  .prog-fill{height:3px;background:linear-gradient(90deg,var(--primary),#06B6D4);transition:width 0.45s cubic-bezier(0.4,0,0.2,1);border-radius:0 2px 2px 0;}
+  .container{max-width:600px;margin:0 auto;padding:22px 16px 70px;}
+  .q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .q-counter{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;}
+  .q-unit-tag{display:inline-flex;align-items:center;font-size:11px;font-weight:600;color:var(--primary);background:var(--primary-light);padding:4px 10px;border-radius:8px;margin-bottom:10px;}
+  .case-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--gold);background:var(--gold-light);padding:3px 9px;border-radius:6px;margin-bottom:10px;letter-spacing:0.06em;text-transform:uppercase;}
+  .q-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .q-text{font-size:16px;font-weight:600;line-height:1.55;color:var(--text);}
+  .opts{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+  .opt{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;cursor:pointer;text-align:left;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);transition:border-color 0.15s,background 0.15s,transform 0.1s;line-height:1.45;box-shadow:0 1px 3px rgba(0,0,0,0.04);-webkit-appearance:none;width:100%;}
+  .opt:hover:not(:disabled){border-color:var(--primary);background:var(--primary-light);transform:translateY(-1px);}
+  .opt:active:not(:disabled){transform:translateY(0);}
+  .opt .lbl{min-width:26px;height:26px;border-radius:8px;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--text2);flex-shrink:0;transition:background 0.15s,border-color 0.15s,color 0.15s;margin-top:1px;}
+  .opt.correct{border-color:var(--green);background:var(--green-light);}
+  .opt.correct .lbl{background:var(--green);border-color:var(--green);color:#fff;}
+  .opt.wrong{border-color:var(--red);background:var(--red-light);}
+  .opt.wrong .lbl{background:var(--red);border-color:var(--red);color:#fff;}
+  .fb{display:none;border-radius:12px;padding:14px 16px;font-size:13.5px;line-height:1.6;margin-bottom:14px;border-left:4px solid transparent;}
+  .fb.ok{background:var(--green-light);border-color:var(--green);color:#14532D;}
+  .fb.bad{background:var(--red-light);border-color:var(--red);color:#7F1D1D;}
+  .fb-head{font-weight:700;font-size:13px;margin-bottom:4px;display:block;}
+  .nxt-wrap{display:none;}
+  .nxt{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),#06B6D4);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:0.02em;box-shadow:0 4px 14px rgba(14,116,144,0.3);transition:opacity 0.15s,transform 0.1s;}
+  .nxt:hover{opacity:0.92;transform:translateY(-1px);}
+  .splash{text-align:center;padding:48px 24px;}
+  .splash-icon{font-size:52px;margin-bottom:16px;}
+  .splash-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--text);margin-bottom:10px;line-height:1.3;}
+  .splash-sub{font-size:14px;color:var(--text2);line-height:1.6;max-width:340px;margin:0 auto 28px;}
+  .splash-stats{display:flex;justify-content:center;gap:24px;margin-bottom:28px;}
+  .splash-stat{text-align:center;}
+  .splash-stat-v{font-size:22px;font-weight:800;color:var(--primary);}
+  .splash-stat-l{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;}
+  .start-btn{width:100%;max-width:320px;padding:16px;background:linear-gradient(135deg,var(--primary),#06B6D4);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(14,116,144,0.3);letter-spacing:0.02em;transition:opacity 0.15s,transform 0.1s;}
+  .start-btn:hover{opacity:0.92;transform:translateY(-1px);}
+  .result{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px 24px;text-align:center;box-shadow:var(--shadow);}
+  .result-ring{width:130px;height:130px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#06B6D4);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 30px rgba(14,116,144,0.25);}
+  .result-big{font-size:32px;font-weight:800;color:#fff;line-height:1;}
+  .result-pct{font-size:14px;font-weight:600;color:rgba(255,255,255,0.8);margin-top:4px;}
+  .result-grade{font-family:'Playfair Display',serif;font-size:26px;color:var(--text);margin-bottom:8px;}
+  .result-msg{font-size:14px;color:var(--text2);max-width:340px;margin:0 auto 24px;line-height:1.6;}
+  .stats{display:flex;justify-content:center;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px;}
+  .stat{flex:1;padding:14px 8px;border-right:1px solid var(--border);}
+  .stat:last-child{border-right:none;}
+  .stat-v{font-size:22px;font-weight:800;margin-bottom:3px;}
+  .stat-l{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;}
+  .rst{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),#06B6D4);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(14,116,144,0.3);transition:opacity 0.15s;}
+  .rst:hover{opacity:0.92;}
+  .err-banner{background:#FEE2E2;border:2px solid #B91C1C;border-radius:12px;padding:16px 20px;color:#7F1D1D;font-size:13px;line-height:1.8;margin:20px;}
+  .err-banner strong{display:block;margin-bottom:6px;font-size:14px;}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-inner">
+    <div class="header-title">Financial Reporting &amp; Analysis</div>
+    <div class="header-badge" id="hbadge">70 Questions</div>
+  </div>
+</div>
+<div class="prog-track"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+<div class="container"><div id="area"></div></div>
+<script>
+var qs=[
+
+/* ── UNIT 1: Introduction to Financial Statements ── */
+{u:"Unit 1",cs:false,
+q:"Financial statements are best described as:",
+opts:["Internal documents prepared solely for tax compliance and filed with the Income Tax Department","Formal, standardised presentations of a company's financial position, performance, cash flows, and equity changes over a specific period","Informal summaries prepared quarterly by the finance team for internal use only","Legal contracts between the company and its shareholders specifying dividend commitments"],
+ans:1,
+exp:"Financial statements are formal, standardised records that present a company's financial position (balance sheet), performance (income statement), cash flows, and equity changes. They are prepared following accounting principles (Ind AS, IFRS) to ensure consistency and reliability for all stakeholders — investors, lenders, regulators, and management."},
+
+{u:"Unit 1",cs:false,
+q:"The qualitative characteristic of 'Faithful Representation' in financial statements means:",
+opts:["Information must be available to users before the end of the reporting period","All financial data must be audited by a Big 4 accounting firm before publication","The statements must represent economic phenomena truthfully — completely, neutrally, and free from material error","Financial reports must use the same format as the previous year to ensure consistency"],
+ans:2,
+exp:"Faithful Representation (one of the two fundamental qualitative characteristics along with Relevance) requires that financial statements represent economic reality truthfully: they must be complete (no omissions), neutral (free from bias), and free from material error. It ensures the information depicts what it purports to depict."},
+
+{u:"Unit 1",cs:false,
+q:"Which group of stakeholders uses financial statements primarily to decide on buying, holding, or selling equity shares?",
+opts:["Regulators and tax authorities — to assess taxable income and compliance","Creditors and lenders — to evaluate creditworthiness and repayment capacity","Investors and shareholders — to assess profitability, stability, and growth potential","Management — to perform variance analysis and evaluate operational performance"],
+ans:2,
+exp:"Investors and shareholders analyse financial statements to assess profitability trends (income statement), solvency and capital structure (balance sheet), and liquidity (cash flow statement), making decisions about purchasing, retaining, or divesting shares. They also use ratio analysis to compare investment options across industries."},
+
+{u:"Unit 1",cs:false,
+q:"Schedule III of the Companies Act, 2013 prescribes:",
+opts:["The tax depreciation rates applicable to different classes of assets","The mandatory format and content for balance sheets, profit and loss accounts, and notes to accounts for Indian companies","The rules for determining transfer pricing between related parties","The interest rates applicable to loans between group companies"],
+ans:1,
+exp:"Schedule III to the Companies Act, 2013 prescribes the statutory form and content of balance sheets, profit and loss accounts, and notes to accounts. It ensures uniformity and comparability among companies filing in India. All companies must prepare financial statements in this prescribed format."},
+
+{u:"Unit 1",cs:true,
+q:"CASE STUDY: A startup has just completed its first year of operations. Its CEO argues that preparing financial statements is an unnecessary burden since the company has only three investors who know the business well. A chartered accountant disagrees, citing multiple purposes. Which of the following BEST captures why financial statements serve purposes BEYOND just informing existing investors?",
+opts:["Financial statements are only legally required for listed companies; startups are exempt","Statements help regulators assess taxable income, support loan applications from banks, enable statutory audits, help attract future investors, and ensure the CEO can make evidence-based strategic decisions — they serve ALL stakeholders simultaneously","Financial statements only benefit external parties; management decisions are based on budgets, not statements","The only benefit of financial statements is investor transparency; legal compliance can be managed separately"],
+ans:1,
+exp:"Financial statements serve multiple simultaneous purposes: regulatory compliance (Companies Act, Income Tax Act), creditworthiness assessment (banks and lenders), statutory audit requirements, attracting future investors through transparency, and internal management decision-making (budgeting, cost control, forecasting). Even in a startup with few investors, skipping formal statements creates legal, operational, and strategic risks."},
+
+/* ── UNIT 2: Assets, Liabilities & Depreciation ── */
+{u:"Unit 2",cs:false,
+q:"Current assets are defined as assets expected to be realised, sold, or consumed:",
+opts:["Within 5 years from the balance sheet date, or within the long-term operating cycle","Within the normal operating cycle or within 12 months from the reporting date, whichever is LONGER","Only within 12 months from the reporting date, regardless of the operating cycle","Only when the company decides to liquidate or wind down operations"],
+ans:1,
+exp:"Current assets are those expected to be realised, sold, or consumed within the normal operating cycle OR within 12 months from the reporting date — whichever is longer. This 'whichever is longer' clause is important for industries with long operating cycles (e.g., construction, shipbuilding)."},
+
+{u:"Unit 2",cs:false,
+q:"Intangible assets differ from Property, Plant and Equipment (PPE) primarily because intangible assets:",
+opts:["Are always more valuable than tangible assets on the balance sheet","Cannot be legally owned or controlled by the company","Lack physical substance but provide future economic benefits — they are amortised, not depreciated","Are always fully written off in the year of purchase as capital expenditure"],
+ans:2,
+exp:"Intangible assets (patents, copyrights, trademarks, goodwill, software) lack physical substance but generate future economic benefits. They are amortised (not depreciated) over their estimated useful life. Recognition requires: the asset is identifiable, the company controls it, and it will provide future economic benefits."},
+
+{u:"Unit 2",cs:false,
+q:"Under the Straight-Line Method (SLM) of depreciation, if an asset costs ₹6,00,000 with a residual value of ₹60,000 and a useful life of 6 years, the annual depreciation is:",
+opts:["₹1,00,000","₹90,000","₹1,10,000","₹60,000"],
+ans:1,
+exp:"SLM: Annual Depreciation = (Cost − Residual Value) ÷ Useful Life = (₹6,00,000 − ₹60,000) ÷ 6 = ₹5,40,000 ÷ 6 = ₹90,000 per year. The same amount is charged every year over the asset's useful life, making it the simplest and most consistent depreciation method."},
+
+{u:"Unit 2",cs:false,
+q:"The Written Down Value (WDV) method of depreciation results in:",
+opts:["Equal depreciation each year, making tax planning simple and predictable","Higher depreciation in earlier years and lower amounts in later years — it never fully depreciates to zero unless adjusted","Equal depreciation per unit of output produced by the asset each period","The same total depreciation as SLM but spread differently over 3 years only"],
+ans:1,
+exp:"WDV (diminishing balance method) charges depreciation as a fixed percentage of the opening book value each year. This produces higher expense in early years (when the asset is more productive) and declining amounts later. It never mathematically reaches zero. It is the default method under India's Income Tax Act and preferred for technology-driven or machinery-intensive assets."},
+
+{u:"Unit 2",cs:false,
+q:"Trade receivables are presented on the balance sheet NET of:",
+opts:["Advance payments received from customers","The provision for doubtful debts, reflecting only the realisable portion","The goods and services tax (GST) element included in the invoice","Outstanding purchase returns that reduce gross sales"],
+ans:1,
+exp:"Trade receivables (amounts owed by customers) are presented net of the provision for doubtful debts. This provision estimates the portion unlikely to be collected. Presenting the net realisable amount ensures the balance sheet reflects a realistic (not optimistic) view of what will actually be collected."},
+
+{u:"Unit 2",cs:true,
+q:"CASE STUDY: A manufacturing company purchases a machine for ₹1,00,000. It estimates the machine will produce 1,00,000 units over its life, with a residual value of ₹10,000. In Year 1, it produces 25,000 units; in Year 2, 15,000 units; in Year 3 (due to a slowdown), only 5,000 units. Using the Units of Production method, what is the depreciation in Year 3?",
+opts:["₹22,500 — same as the weighted average of all three years","₹9,000 — calculated as 5,000 × ₹0.90 per unit","₹4,500 — calculated as 5,000 × (₹1,00,000 − ₹10,000) ÷ 1,00,000","₹15,000 — based on straight-line allocation regardless of actual units"],
+ans:2,
+exp:"Units of Production: Per unit depreciation = (Cost − Residual Value) ÷ Total estimated units = (₹1,00,000 − ₹10,000) ÷ 1,00,000 = ₹0.90 per unit. Year 3: 5,000 × ₹0.90 = ₹4,500. This method reflects actual usage — lower production means lower depreciation, which is especially important when assets sit idle during slowdowns."},
+
+/* ── UNIT 3: Depreciation Methods & Inventory Systems ── */
+{u:"Unit 3",cs:false,
+q:"The Straight-Line Method (SLM) of depreciation is MOST suitable for:",
+opts:["Vehicles and computers, where efficiency declines sharply with age","Plant and machinery in industries where output is directly linked to machine hours","Assets generating uniform benefits over time, such as buildings and leasehold improvements","All assets equally, since it is mandated by the Income Tax Act as the default method"],
+ans:2,
+exp:"SLM is most suitable for assets that generate uniform economic benefits throughout their useful life — typically buildings, leasehold improvements, and office furniture. These assets provide consistent value regardless of usage intensity. WDV better suits assets with declining efficiency (vehicles, machinery), and Units of Production suits assets where wear is usage-based."},
+
+{u:"Unit 3",cs:false,
+q:"The Units of Production depreciation method has which key distinctive feature?",
+opts:["It charges the same depreciation amount in every accounting period regardless of output","It applies a fixed percentage to the opening book value each year","Depreciation STOPS if the asset is idle, as it is linked to actual output produced — not time elapsed","It results in the highest depreciation in the first year of asset use"],
+ans:2,
+exp:"The Units of Production method links depreciation to actual output (units produced or hours operated). If the asset is idle in any period, depreciation for that period is zero — it only arises when the asset is actually used. This makes it the most accurate reflection of asset wear for production-intensive assets like mining equipment or industrial machinery."},
+
+{u:"Unit 3",cs:false,
+q:"Under a Perpetual Inventory System (as opposed to a Periodic system), inventory records are updated:",
+opts:["Once at the end of each fiscal year during the annual physical count","Quarterly, coinciding with financial reporting periods","After every purchase and sale transaction in real time","Only when a physical stocktake confirms discrepancies from the book balance"],
+ans:2,
+exp:"Under a Perpetual Inventory System, inventory and COGS records are updated continuously after every transaction — purchases and sales — in real time. This provides an up-to-date inventory balance at all times. The Periodic system, by contrast, updates records only at the end of the accounting period after a physical count."},
+
+{u:"Unit 3",cs:false,
+q:"A key advantage of the Written Down Value (WDV) method for capital-intensive businesses is:",
+opts:["It produces lower depreciation in the early years, boosting reported profits during asset-heavy periods","It exactly matches depreciation to the useful life established by accounting standards","It enables accelerated depreciation and early tax benefits by charging higher expenses when assets are newest and most productive","It is simpler to calculate than SLM and requires no residual value estimate"],
+ans:2,
+exp:"WDV provides accelerated depreciation — higher charges in early years when the asset is newest. This benefits capital-intensive businesses by: reducing taxable income earlier (tax deferral benefit), matching higher early maintenance costs with lower depreciation in later years (balancing the total cost), and better reflecting the declining utility of technology-driven assets like computers and machinery."},
+
+/* ── UNIT 4: Inventory Valuation ── */
+{u:"Unit 4",cs:false,
+q:"The FIFO (First-In, First-Out) inventory method assumes:",
+opts:["The most recently purchased inventory is sold first, leaving older stock on the balance sheet","All inventory units are valued at the same average cost regardless of purchase date","The oldest inventory purchased is sold first; ending inventory consists of the most recently purchased units","Inventory is valued at its net realisable value regardless of actual purchase cost"],
+ans:2,
+exp:"FIFO assumes that the first (oldest) units acquired are the first units sold. Therefore, Cost of Goods Sold (COGS) uses older, typically lower-cost inventory, while ending inventory consists of the most recently purchased (and typically higher-cost) units. This method is permitted under both IFRS and Indian Ind AS 2."},
+
+{u:"Unit 4",cs:false,
+q:"During a period of RISING prices, the FIFO method results in (compared to LIFO):",
+opts:["Higher COGS, lower gross profit, and lower ending inventory on the balance sheet","Lower COGS, higher gross profit, higher net income — but potentially higher tax liability","Equal COGS to LIFO since total purchase costs are identical over the period","Zero impact on profit because the total cost of all inventory purchased remains the same"],
+ans:1,
+exp:"Under rising prices, FIFO uses older (cheaper) inventory for COGS → lower COGS → higher gross profit → higher net income. Ending inventory reflects recent (higher) costs, making the balance sheet more realistic. The tradeoff: higher reported profits mean higher tax liability. LIFO (not permitted under IFRS) produces the opposite effect — higher COGS, lower profit, lower taxes."},
+
+{u:"Unit 4",cs:false,
+q:"LIFO (Last-In, First-Out) is NOT permitted under which accounting framework?",
+opts:["US GAAP — LIFO is banned in all American jurisdictions","Indian GAAP (AS 2) only — LIFO was always banned in India","IFRS (International Financial Reporting Standards) — LIFO is prohibited to ensure consistent and realistic inventory valuation","Both IFRS and Ind AS — neither framework permits LIFO under any circumstances"],
+ans:2,
+exp:"LIFO is explicitly prohibited under IFRS (and therefore Ind AS, which converges with IFRS). The reason: LIFO can result in understated inventory on the balance sheet (reflecting old, lower costs) and distorted income measurement. It is still permitted under US GAAP, making US GAAP-IFRS convergence discussions on this topic ongoing."},
+
+{u:"Unit 4",cs:true,
+q:"CASE STUDY: A retail company has the following inventory data: Opening stock — 100 units @ ₹10 each; Purchase — 200 units @ ₹12 each; Units sold — 150 units. Using the FIFO method under the periodic inventory system, what is the COGS and ending inventory value?",
+opts:["COGS = ₹1,800; Ending Inventory = ₹1,600","COGS = ₹1,600; Ending Inventory = ₹1,800","COGS = ₹1,500; Ending Inventory = ₹1,900","COGS = ₹1,200; Ending Inventory = ₹2,200"],
+ans:1,
+exp:"FIFO — oldest units sold first. 150 units sold = all 100 units from opening stock (@ ₹10) + 50 units from the purchase batch (@ ₹12). COGS = (100 × ₹10) + (50 × ₹12) = ₹1,000 + ₹600 = ₹1,600. Ending inventory = remaining 150 units @ ₹12 = ₹1,800. This matches the textbook example directly."},
+
+/* ── UNIT 5: COGS and Expenses ── */
+{u:"Unit 5",cs:false,
+q:"Cost of Goods Sold (COGS) includes which of the following?",
+opts:["Advertising expenses, sales commissions, and distribution costs for marketing the product","Administrative salaries, office rent, and IT infrastructure costs","Direct raw material costs, direct labour, and other direct production costs attributable to goods sold","All operating expenses including both manufacturing and selling, general and administrative costs"],
+ans:2,
+exp:"COGS includes ONLY the direct costs of producing or procuring goods that were actually sold: raw materials, direct labour, and other directly attributable production costs. It explicitly excludes indirect costs such as selling expenses, administrative costs, or distribution costs — those are operating expenses reported separately below gross profit."},
+
+{u:"Unit 5",cs:false,
+q:"The 'Matching Principle' in accounting, as applied to COGS, requires that:",
+opts:["Revenue must always exceed costs in every reporting period to maintain profitability","All costs incurred in a year must be reported as expenses in that same year regardless of when goods are sold","COGS is recognised as an expense only when the corresponding goods are sold — matching cost to the period of revenue recognition","Depreciation must be matched with the period when the asset was purchased"],
+ans:2,
+exp:"The Matching Principle (under accrual accounting) requires that expenses are recognised in the same period as the related revenues. For inventory: if goods are purchased in January but sold in March, the COGS is recognised in March (when revenue is earned), not in January (when purchased). This ensures accurate period-by-period profit measurement."},
+
+{u:"Unit 5",cs:false,
+q:"Operating expenses in the income statement are distinguished from COGS primarily because operating expenses:",
+opts:["Are always larger than COGS and thus dominate the income statement structure","Include only salaries and wages paid to all employees across the business","Are indirect costs incurred in running the business (selling, administrative, distribution) and are NOT directly attributable to the production of goods sold","Represent the cost of financing the business through interest payments and loan repayments"],
+ans:2,
+exp:"Operating expenses (selling expenses, administrative costs, distribution costs, R&D) are indirect — not directly linked to production. COGS is direct (raw materials, direct labour). The income statement structure: Revenue − COGS = Gross Profit → then deducting Operating Expenses = Operating Income (EBIT). Non-operating items (interest, taxes) come below operating income."},
+
+{u:"Unit 5",cs:false,
+q:"Which of the following is correctly classified as a NON-OPERATING expense?",
+opts:["Wages paid to factory workers directly involved in production","Raw materials purchased and consumed in manufacturing finished goods","Interest paid on a long-term bank loan used to finance business operations","Depreciation on machinery used in the core manufacturing process"],
+ans:2,
+exp:"Interest expense on loans is a non-operating (financial) expense — it arises from financing decisions, not core business operations. It appears below Operating Income (EBIT). Factory wages and raw materials are COGS; depreciation on manufacturing machinery is an operating expense. Non-operating items also include gains/losses on asset sales and investment income."},
+
+{u:"Unit 5",cs:true,
+q:"CASE STUDY: A manufacturing company reports: Revenue = ₹50,00,000; Raw materials consumed = ₹18,00,000; Direct labour = ₹7,00,000; Factory overhead = ₹5,00,000; Sales salaries = ₹4,00,000; Admin salaries = ₹3,00,000; Interest on loan = ₹2,00,000. What is the Gross Profit?",
+opts:["₹50,00,000 − ₹39,00,000 = ₹11,00,000","₹50,00,000 − ₹30,00,000 = ₹20,00,000","₹50,00,000 − ₹37,00,000 = ₹13,00,000","₹50,00,000 − ₹32,00,000 = ₹18,00,000"],
+ans:1,
+exp:"COGS = Raw materials (₹18,00,000) + Direct labour (₹7,00,000) + Factory overhead (₹5,00,000) = ₹30,00,000. Gross Profit = Revenue − COGS = ₹50,00,000 − ₹30,00,000 = ₹20,00,000. Sales salaries (₹4L), admin salaries (₹3L), and interest (₹2L) are operating/non-operating expenses deducted BELOW gross profit, not included in COGS."},
+
+/* ── UNIT 6: Revenue Recognition & Notes ── */
+{u:"Unit 6",cs:false,
+q:"Under Ind AS 115 (IFRS 15), revenue is recognised when:",
+opts:["Cash is received from the customer, regardless of when goods or services were delivered","The invoice is raised and sent to the customer, regardless of delivery status","Control of goods or services is transferred to the customer and performance obligations are satisfied","The board of directors approves the revenue figure at the end of the reporting period"],
+ans:2,
+exp:"Under Ind AS 115 / IFRS 15, revenue is recognised when (and as) performance obligations are satisfied — i.e., when control of the good or service transfers to the customer. This is the core principle. The five-step model: (1) Identify contract, (2) Identify performance obligations, (3) Determine transaction price, (4) Allocate price, (5) Recognise when obligations are satisfied."},
+
+{u:"Unit 6",cs:false,
+q:"The difference between 'Accrual Basis' and 'Cash Basis' of revenue recognition is:",
+opts:["Accrual basis records revenue when cash is physically received; cash basis records it when earned","There is no difference — both produce identical revenue figures for the same period","Accrual basis records revenue when earned (performance completed), even if cash hasn't been received; cash basis records only when cash is actually received","Accrual basis applies only to service companies; cash basis applies only to product companies"],
+ans:2,
+exp:"Accrual basis recognises revenue when it is earned (performance obligations met), regardless of cash receipt — mandated by Ind AS, IFRS, and most accounting standards. Cash basis recognises revenue only when cash is received, regardless of when the service was rendered or goods delivered. Example: March service billed in March but paid in April → Accrual: March revenue; Cash: April revenue."},
+
+{u:"Unit 6",cs:false,
+q:"Under the five-step Ind AS 115 revenue recognition model, if a software company sells a licence, provides installation, and offers 1-year technical support as a bundled contract, the correct treatment is:",
+opts:["Recognise 100% of the contract revenue upfront when the licence is delivered","Recognise revenue only when all three deliverables are fully completed — none can be recognised separately","Identify three separate performance obligations; allocate the transaction price proportionally and recognise each when that specific obligation is satisfied","Defer all revenue until cash is received from the customer for the entire contract"],
+ans:2,
+exp:"Ind AS 115 requires identifying each distinct performance obligation separately. In this case: licence delivery, installation, and ongoing support are three separate obligations. The transaction price is allocated proportionally to each based on standalone selling prices. Revenue for each is recognised when control transfers: licence = on delivery, installation = on completion, support = over the 12-month period."},
+
+{u:"Unit 6",cs:false,
+q:"'Notes on Accounts' (Notes to Financial Statements) serve which primary purpose?",
+opts:["To replace the main financial statements with a more detailed narrative version","To provide additional context, explanations, accounting policy disclosures, and details for line items in the main financial statements","To summarise only the significant transactions that occurred during the year in a condensed format","To present the auditor's opinion on the truth and fairness of the financial statements"],
+ans:1,
+exp:"Notes to Financial Statements provide additional context, explanations, and disclosures for line items in the balance sheet, income statement, and cash flow statement. They include: significant accounting policies, basis of preparation, detailed breakdowns of key figures, contingent liabilities, related party transactions, and other material disclosures required by accounting standards and the Companies Act."},
+
+/* ── UNIT 7: Analysis Tools ── */
+{u:"Unit 7",cs:false,
+q:"Horizontal analysis of financial statements involves:",
+opts:["Expressing each line item as a percentage of a base item (e.g., sales) within a single period","Comparing the company against industry benchmarks using standardised ratios","Comparing line items across two or more accounting periods — showing absolute and percentage changes over time","Analysing the internal composition of the balance sheet by examining the ratio of each asset to total assets"],
+ans:2,
+exp:"Horizontal analysis (also called trend analysis) compares financial data across multiple periods — showing both absolute change (₹ increase/decrease) and percentage change [(current − previous) ÷ previous × 100]. It identifies growth patterns, revenue trends, cost escalation, and profitability fluctuations over time. It is distinct from vertical analysis (single-period percentage-of-base composition)."},
+
+{u:"Unit 7",cs:false,
+q:"In a vertical (common-size) analysis of the income statement, the base item used is:",
+opts:["Total assets — to show what proportion of assets each expense consumes","Net profit — to show how each item relates to the bottom line","Net sales (100%) — each other line item is expressed as a percentage of net sales","Total equity — to relate all income statement items to shareholder value"],
+ans:2,
+exp:"In vertical (common-size) income statement analysis, Net Sales = 100%. Every other line item (COGS, gross profit, operating expenses, net profit) is expressed as a percentage of net sales. This reveals profit margins, expense ratios, and cost control effectiveness regardless of the company's size. For the balance sheet, Total Assets = 100%."},
+
+{u:"Unit 7",cs:false,
+q:"Common-size (vertical) analysis is particularly useful for:",
+opts:["Identifying year-on-year growth rates in absolute monetary terms","Comparing companies of different sizes within the same industry on a like-for-like basis","Calculating individual financial ratios like the current ratio and debt-to-equity ratio","Preparing cash flow forecasts for the next 12 months"],
+ans:1,
+exp:"Common-size analysis standardises financial statements by expressing each item as a percentage of a base figure — eliminating size differences between companies. This allows meaningful comparison between a ₹100-crore company and a ₹1,000-crore company in the same industry by focusing on structural proportions (e.g., COGS as % of sales, debt as % of total assets) rather than absolute values."},
+
+{u:"Unit 7",cs:true,
+q:"CASE STUDY: Company A reports Revenue of ₹10,00,000 and Net Profit of ₹1,50,000. Company B reports Revenue of ₹40,00,000 and Net Profit of ₹4,80,000. An investor wants to compare profitability between the two. Which analytical approach should be used, and which company is MORE profitable on this basis?",
+opts:["Horizontal analysis; Company B is more profitable because its absolute profit is higher","Ratio/Vertical analysis; Company A is more profitable — Net Profit Margin = 15% vs Company B = 12%","Trend analysis; both companies are equally profitable since profits are growing each year","Comparative analysis; Company B is better because larger companies always generate higher returns"],
+ans:1,
+exp:"Vertical/common-size analysis and margin ratios are needed to compare companies of different sizes. Net Profit Margin = Net Profit ÷ Revenue × 100. Company A: ₹1,50,000 ÷ ₹10,00,000 = 15%. Company B: ₹4,80,000 ÷ ₹40,00,000 = 12%. Despite Company B's higher absolute profit (₹4,80,000 vs ₹1,50,000), Company A is MORE PROFITABLE in percentage terms — it converts a higher share of revenue into profit."},
+
+/* ── UNIT 8: Comparative Analysis ── */
+{u:"Unit 8",cs:false,
+q:"Comparative statement analysis presents financial data of two or more periods side-by-side to show:",
+opts:["Only the current year's figures in a standardised format for regulatory compliance","Both absolute change (₹ difference) and percentage change [(Current − Previous) ÷ Previous × 100] for each line item","Only the percentage composition of each item within the current period","The company's position relative to its best-performing peer in the same industry"],
+ans:1,
+exp:"Comparative statements present financial data across periods with: (1) Current period amount, (2) Previous period amount, (3) Absolute change = Current − Previous, (4) Percentage change = (Absolute Change ÷ Previous Year) × 100. This dual presentation helps detect performance trends, cost patterns, and whether growth in sales is outpacing growth in expenses."},
+
+{u:"Unit 8",cs:false,
+q:"In a comparative income statement, if Revenue grew by 20% but COGS grew by 25%, this suggests:",
+opts:["The company improved its cost efficiency and gross profit margin expanded","Cost escalation is outpacing revenue growth, meaning gross profit margin is being compressed — a negative signal","Revenue and COGS growth rates are similar enough that no concern exists","The company is investing in future growth through increased production capacity"],
+ans:1,
+exp:"If COGS grows faster than revenue (25% vs 20%), gross profit margin is being compressed — each rupee of revenue retains less after covering direct production costs. This signals: potential input cost inflation, pricing pressure, or operational inefficiency. Analysts and management would investigate whether supplier costs, wages, or material prices are rising disproportionately."},
+
+{u:"Unit 8",cs:false,
+q:"Year-on-Year (YoY) comparison in financial analysis is used to:",
+opts:["Compare a company's financial results with a competitor's results in the same period","Evaluate the same company's performance across two or more time periods to identify growth, decline, or stagnation","Compare two different companies of similar size to assess relative market positioning","Calculate the weighted average cost of capital for investment decisions"],
+ans:1,
+exp:"YoY comparison evaluates the same company's performance across consecutive periods — identifying whether it is growing, declining, or stagnating. It highlights seasonal patterns, business cycle impacts, and operational continuity. Useful for management performance review, shareholder trend assessment, and regulatory monitoring."},
+
+{u:"Unit 8",cs:false,
+q:"Significance of financial statement analysis for CREDITORS AND LENDERS is primarily to:",
+opts:["Assess the management team's strategic vision and leadership capability","Evaluate share price trends to determine the right time to buy company bonds","Assess liquidity, solvency, and repayment capacity — using ratios like current ratio, debt-equity ratio, and interest coverage ratio","Monitor social responsibility and ESG commitments of the company"],
+ans:2,
+exp:"Creditors and lenders primarily use financial statements to assess: Liquidity (current ratio, quick ratio) — can the company meet short-term obligations? Solvency (debt-equity ratio) — is the capital structure sustainable? Debt service capacity (interest coverage ratio) — can it service interest and principal? These determine loan approval, credit limits, interest rates, and repayment terms."},
+
+/* ── UNIT 9: Liquidity and Solvency Ratios ── */
+{u:"Unit 9",cs:false,
+q:"The Current Ratio is calculated as:",
+opts:["(Current Assets − Inventory) ÷ Current Liabilities","Current Assets ÷ Current Liabilities","Total Assets ÷ Total Liabilities","Net Working Capital ÷ Total Assets"],
+ans:1,
+exp:"Current Ratio = Current Assets ÷ Current Liabilities. It measures the company's ability to meet short-term obligations using short-term assets. A ratio above 1 indicates sufficient liquidity (more current assets than current liabilities). The ideal benchmark varies: 1.5–2.5 is common for manufacturing/trading; service firms may sustain lower ratios due to minimal inventory."},
+
+{u:"Unit 9",cs:false,
+q:"The Quick Ratio (Acid-Test Ratio) is more conservative than the Current Ratio because it:",
+opts:["Includes only long-term assets and long-term liabilities","Uses total revenue instead of current assets as the numerator","Excludes inventory and prepaid expenses from current assets, retaining only the most liquid assets","Includes only trade receivables and ignores cash and marketable securities"],
+ans:2,
+exp:"Quick Ratio = (Current Assets − Inventory − Prepaid Expenses) ÷ Current Liabilities. Inventory and prepaid expenses are excluded because: inventory may not be quickly convertible to cash without a price discount; prepaid expenses cannot be used to pay liabilities. The quick ratio provides a stricter, more realistic test of immediate liquidity — especially relevant in cash crises."},
+
+{u:"Unit 9",cs:false,
+q:"The Debt-to-Equity Ratio is used primarily to assess:",
+opts:["The company's ability to collect receivables within the credit period","How many days it takes the company to sell its entire inventory","The proportion of external debt relative to shareholders' equity — measuring financial leverage and long-term solvency risk","The efficiency of asset utilisation in generating revenue"],
+ans:2,
+exp:"Debt-to-Equity Ratio = Total Debt ÷ Shareholders' Equity. It measures financial leverage — how much of the company's assets are financed through borrowing versus owner's funds. A high ratio signals greater reliance on debt (higher financial risk, interest burden). A low ratio signals conservative financing. Capital-intensive industries typically have higher acceptable ratios than service firms."},
+
+{u:"Unit 9",cs:false,
+q:"The Interest Coverage Ratio measures:",
+opts:["The proportion of interest expense to total revenue over the reporting period","The number of times a company can pay its interest obligations from its operating income (EBIT)","The company's ability to repay the full principal of its debt from current cash flows","The ratio of fixed assets to total interest-bearing liabilities on the balance sheet"],
+ans:1,
+exp:"Interest Coverage Ratio = EBIT (Earnings Before Interest and Tax) ÷ Interest Expense. It shows how many times the company can cover its interest payments from operating income. A higher ratio (e.g., 5x) indicates comfortable debt servicing; a ratio below 1.5x may signal financial distress risk. Lenders use this to assess creditworthiness and set loan covenants."},
+
+{u:"Unit 9",cs:true,
+q:"CASE STUDY: A company reports: Current Assets = ₹10,00,000; Inventory = ₹2,50,000; Prepaid Expenses = ₹50,000; Current Liabilities = ₹5,00,000; EBIT = ₹8,00,000; Interest Expense = ₹2,00,000. Calculate the Current Ratio, Quick Ratio, and Interest Coverage Ratio.",
+opts:["Current Ratio = 2.0; Quick Ratio = 1.4; Interest Coverage = 4x","Current Ratio = 1.5; Quick Ratio = 1.4; Interest Coverage = 4x","Current Ratio = 2.0; Quick Ratio = 1.2; Interest Coverage = 4x","Current Ratio = 2.0; Quick Ratio = 1.4; Interest Coverage = 3x"],
+ans:0,
+exp:"Current Ratio = ₹10,00,000 ÷ ₹5,00,000 = 2.0. Quick Assets = ₹10,00,000 − ₹2,50,000 − ₹50,000 = ₹7,00,000. Quick Ratio = ₹7,00,000 ÷ ₹5,00,000 = 1.4. Interest Coverage = ₹8,00,000 ÷ ₹2,00,000 = 4x. All three indicate healthy liquidity (CR=2.0), conservative quick liquidity (QR=1.4), and comfortable debt service capacity (ICR=4x)."},
+
+/* ── UNIT 10: Du-Pont Analysis ── */
+{u:"Unit 10",cs:false,
+q:"The traditional Du-Pont formula decomposes Return on Equity (ROE) into:",
+opts:["Net Profit Margin × Debt-to-Equity Ratio × Asset Turnover","Net Profit Margin × Asset Turnover × Equity Multiplier","Gross Profit Margin × Current Ratio × Interest Coverage Ratio","Operating Profit Margin × Revenue Growth Rate × Return on Assets"],
+ans:1,
+exp:"The traditional Du-Pont formula: ROE = Net Profit Margin × Asset Turnover × Equity Multiplier. Where: Net Profit Margin = Net Income ÷ Sales (profitability); Asset Turnover = Sales ÷ Total Assets (efficiency); Equity Multiplier = Total Assets ÷ Shareholders' Equity (leverage). This decomposition reveals whether ROE is driven by profitability, operational efficiency, or financial leverage."},
+
+{u:"Unit 10",cs:false,
+q:"In Du-Pont analysis, the 'Asset Turnover Ratio' specifically measures:",
+opts:["The proportion of assets financed by equity versus debt","The percentage of each sales rupee retained as net profit after all expenses","How efficiently the company uses its total assets to generate revenue — Sales ÷ Total Assets","The total return delivered to shareholders including dividends and capital appreciation"],
+ans:2,
+exp:"Asset Turnover = Sales ÷ Total Assets. It measures operational efficiency — how effectively the company converts its asset base into revenue. A higher ratio indicates better asset utilisation. A company with low profit margins (like a retailer) might still achieve strong ROE through high asset turnover. It is particularly important in capital-intensive industries."},
+
+{u:"Unit 10",cs:false,
+q:"The 'Equity Multiplier' in Du-Pont analysis represents:",
+opts:["The ratio of net profit to shareholders' equity, showing return on owner's investment","The ratio of total assets to shareholders' equity — reflecting financial leverage (degree of debt financing)","The ratio of operating profit to revenue, indicating core business profitability","The ratio of dividends paid to total equity, showing the payout efficiency"],
+ans:1,
+exp:"Equity Multiplier = Total Assets ÷ Shareholders' Equity. A higher value means greater leverage (more assets financed by debt relative to equity). It amplifies ROE when returns exceed the cost of debt. However, high leverage also increases financial risk. Du-Pont reveals: a company with weak margins and turnover can still show high ROE if it uses significant financial leverage."},
+
+{u:"Unit 10",cs:false,
+q:"The EXPANDED Du-Pont model breaks ROE into FIVE components. Which additional factors does it isolate beyond the traditional three?",
+opts:["Dividend yield and price-to-earnings ratio — for market-based performance evaluation","Tax Burden (Net Income ÷ EBT) and Interest Burden (EBT ÷ EBIT) — isolating the effects of taxation and interest on ROE","Working capital efficiency and inventory turnover — for operational analysis","Cash conversion cycle and free cash flow — for liquidity-focused assessment"],
+ans:1,
+exp:"Expanded Du-Pont: ROE = Tax Burden × Interest Burden × Operating Margin × Asset Turnover × Equity Multiplier. Tax Burden = Net Income ÷ EBT (retained after taxes); Interest Burden = EBT ÷ EBIT (impact of interest expense). Adding these allows isolating the effect of tax planning, debt financing costs, and operating efficiency on ROE — providing deeper diagnostic insight than the traditional 3-factor model."},
+
+{u:"Unit 10",cs:true,
+q:"CASE STUDY: Company X has: Net Income = ₹5,00,000; Sales = ₹50,00,000; Total Assets = ₹25,00,000; Shareholders' Equity = ₹10,00,000. Calculate ROE using Du-Pont and identify the PRIMARY driver of ROE.",
+opts:["ROE = 50%; driven primarily by high profit margin (10% NPM)","ROE = 50%; driven primarily by high financial leverage (Equity Multiplier = 2.5)","ROE = 25%; driven by balanced contribution of all three components","ROE = 50%; equally driven by all three — each contributes 50%"],
+ans:1,
+exp:"NPM = ₹5,00,000 ÷ ₹50,00,000 = 10%. Asset Turnover = ₹50,00,000 ÷ ₹25,00,000 = 2.0. Equity Multiplier = ₹25,00,000 ÷ ₹10,00,000 = 2.5. ROE = 10% × 2.0 × 2.5 = 50%. The Equity Multiplier (2.5) amplifies the effect of the other two components significantly — indicating financial leverage is a primary ROE driver. Without leverage, ROE = NPM × AT = 10% × 2.0 = 20%."},
+
+/* ── UNIT 11: Cash Flow Statement ── */
+{u:"Unit 11",cs:false,
+q:"The Cash Flow Statement differs from the Income Statement primarily because:",
+opts:["The cash flow statement includes depreciation as an expense; the income statement does not","The income statement includes all cash and non-cash items; the cash flow statement records ONLY actual cash inflows and outflows","The cash flow statement shows total assets; the income statement shows only profit","Both statements are identical in content but differ only in regulatory format requirements"],
+ans:1,
+exp:"The Cash Flow Statement records ONLY actual cash movements — it excludes non-cash items like depreciation, amortisation, and unrealised gains/losses. The Income Statement includes non-cash items (accrued revenues, depreciation, provisions). A profitable company can have negative operating cash flow (if profits are tied up in receivables), which the cash flow statement reveals but the income statement conceals."},
+
+{u:"Unit 11",cs:false,
+q:"Under the Cash Flow Statement, OPERATING activities include:",
+opts:["Proceeds from sale of fixed assets and investments in subsidiaries","Issuance of equity shares, repayment of bank loans, and payment of dividends to shareholders","Cash receipts from customers, payments to suppliers and employees, and taxes paid — the core revenue-generating activities","Purchase of new machinery and acquisition of long-term investments"],
+ans:2,
+exp:"Operating Activities = cash flows from core business operations: cash received from customers (sales collections), payments to suppliers, payments to employees (salaries, wages), taxes paid, and other operating cash receipts/payments. Positive cash flow from operations (CFO) is the most important indicator of a business's ability to sustain itself without external funding."},
+
+{u:"Unit 11",cs:false,
+q:"'Investing Activities' in the cash flow statement include:",
+opts:["Cash payments to employees and suppliers for day-to-day operations","Receipts from customers and payments of operating expenses","Purchase or sale of long-term assets (PPE, investments in securities) and capital expenditures","Issuance of shares, redemption of debentures, and payment of dividends"],
+ans:2,
+exp:"Investing Activities reflect cash flows from buying/selling long-term assets and investments: purchase of PPE (cash outflow), proceeds from sale of property (cash inflow), purchase of investments in subsidiaries or securities, and proceeds from their disposal. Cash outflows in this section often reflect business expansion (capital expenditure), while inflows reflect asset monetisation or portfolio harvesting."},
+
+{u:"Unit 11",cs:false,
+q:"A company reports a high net profit but significant NEGATIVE operating cash flow. This most likely indicates:",
+opts:["The company is in excellent financial health — profits are being reinvested for future growth","Profits are overstated due to high depreciation charges being added back to income","Profits may be real but are being absorbed into working capital — high receivables, excess inventory, or delayed collections mean cash hasn't been received despite revenue being recognised","The company has issued significant equity in the period, diluting cash flows from operations"],
+ans:2,
+exp:"High profit + negative operating cash flow is a red flag signalling: (1) Revenue recognised under accrual basis hasn't been collected (high receivables), (2) Excess inventory build-up tying up cash, or (3) Suppliers being paid faster than customers are paying. This combination can lead to a cash crunch even while the income statement looks healthy — a common pattern in growing companies or those with weak receivables management."},
+
+{u:"Unit 11",cs:true,
+q:"CASE STUDY: A logistics company shows the following for FY 2024: Net Profit = ₹80,00,000; Operating Cash Flow = ₹1,20,00,000; Cash used in Investing Activities = ₹(90,00,000); Cash from Financing Activities = ₹(20,00,000). What is the net change in cash, and what does the operating vs. profit comparison suggest?",
+opts:["Net change = ₹(30,00,000); operating cash is lower than profit suggesting poor collections","Net change = ₹10,00,000; operating cash exceeds profit — suggesting quality earnings with real cash generation","Net change = ₹10,00,000; operating cash equals profit — no analysis is needed","Net change = ₹(10,00,000); the company is loss-making despite apparent operating cash flows"],
+ans:1,
+exp:"Net change in cash = ₹1,20,00,000 − ₹90,00,000 − ₹20,00,000 = ₹10,00,000 (positive). Operating Cash Flow (₹1,20L) > Net Profit (₹80L) = HIGH QUALITY earnings. This suggests: actual cash collected exceeds accrual-based profits — receivables are being collected efficiently, there are non-cash charges (depreciation) being added back, and the business is genuinely cash-generative. This is a positive sign for creditors and investors."},
+
+/* ── UNIT 12: Quality of Financial Reporting ── */
+{u:"Unit 12",cs:false,
+q:"Financial reporting quality refers to:",
+opts:["The visual attractiveness and professional presentation of the annual report","Whether financial statements are filed on time with the registrar of companies","The faithfulness with which financial statements represent economic substance — accurate, complete, neutral, consistent, and free from bias","Whether the company uses all permissible accounting options to maximise reported profits"],
+ans:2,
+exp:"Financial reporting quality is about the faithfulness and reliability of financial information: (1) Accurate — reflects actual transactions; (2) Complete — no material omissions; (3) Neutral — free from bias or manipulation; (4) Consistent — comparable across periods. High-quality reporting builds investor confidence, supports efficient capital allocation, and ensures regulatory compliance."},
+
+{u:"Unit 12",cs:false,
+q:"The Auditors' Report included in an Annual Report serves to:",
+opts:["Summarise the company's business strategy and key product launches during the year","Certify that the company will achieve its projected earnings in the following year","Provide the external auditor's independent opinion on whether the financial statements present a true and fair view of the company's financial position","Describe the board's recommendations for future capital expenditure and dividend policy"],
+ans:2,
+exp:"The Auditors' Report is an independent opinion by external auditors (Chartered Accountants) on whether the financial statements present a 'true and fair view' of the company's financial position and performance, in compliance with accounting standards and the Companies Act. A 'qualified' or 'adverse' opinion signals material misstatements or disagreements with management."},
+
+{u:"Unit 12",cs:false,
+q:"Historical accounting scandals like Enron and Satyam are cited as consequences of poor financial reporting quality because they demonstrate:",
+opts:["The dangers of high executive compensation linked to short-term financial targets","That all large corporations are inherently prone to fraud regardless of governance structures","How falsified or manipulated reporting — when exposed — leads to company collapse, investor losses, regulatory penalties, and destruction of market trust","That auditing standards were too strict and prevented honest companies from raising capital"],
+ans:2,
+exp:"Enron (US, 2001) and Satyam (India, 2009) are landmark cases of financial fraud — both used sophisticated manipulation (off-balance-sheet vehicles, inflated revenues/assets, falsified accounts) to deceive investors and auditors for years. When exposed, consequences included: company collapse, criminal prosecution of executives, billions in investor losses, tighter regulatory frameworks (Sarbanes-Oxley Act in the US, stricter MCA oversight in India), and lasting damage to auditor credibility."},
+
+{u:"Unit 12",cs:false,
+q:"'Ind AS' (Indian Accounting Standards) is best described as:",
+opts:["A completely independent set of rules developed uniquely for Indian conditions with no international alignment","The Indian version of US GAAP, mandating historical cost accounting for all assets","A converged version of IFRS adopted in India, mandated for listed and large unlisted companies, harmonising Indian reporting with global practices","A voluntary framework that companies may adopt if they choose to attract foreign investors"],
+ans:2,
+exp:"Ind AS is India's converged version of IFRS (International Financial Reporting Standards) issued by the IASB. It is mandated by the Ministry of Corporate Affairs (MCA) for listed companies and large unlisted companies (net worth above ₹250 crore). It balances IFRS principles with Indian legal and regulatory requirements, harmonising India's financial reporting with global practices."},
+
+/* ── UNIT 13: Window Dressing & Manipulation ── */
+{u:"Unit 13",cs:false,
+q:"'Window dressing' in financial reporting refers to:",
+opts:["The practice of presenting financial statements using attractive visual formatting and professional design","Deliberate manipulation or favourable presentation of financial statements to create a more positive impression of a company's financial health — particularly around reporting dates","A legitimate technique of presenting both current and prior year data for comparison","The process of adjusting internal management accounts to match the statutory financial statements"],
+ans:1,
+exp:"Window dressing involves deliberately manipulating or favourably presenting financial statements — often just before reporting period ends — to create a misleadingly positive impression. Examples: accelerating revenue recognition, delaying expense recording, reclassifying liabilities. While not always illegal, it often borders on ethical gray areas and can mislead stakeholders about true financial health."},
+
+{u:"Unit 13",cs:false,
+q:"'Channel stuffing' is a form of financial statement manipulation that involves:",
+opts:["Overstating inventory levels by recording goods received before the purchase order is placed","Pushing excessive quantities of products to distributors or retailers to artificially inflate current-period sales revenue — even if goods will be returned later","Delaying payment to suppliers to reduce reported current liabilities at period-end","Booking depreciation prematurely to reduce taxable income in the current period"],
+ans:1,
+exp:"Channel stuffing involves pushing excess products into the distribution channel (to distributors or retailers) with or without proper demand, recording these as sales even though goods are likely to be returned in future periods. This artificially inflates current period revenue and profit. When returns materialise, revenues must be reversed, causing future-period profit collapses. It is a manipulation of revenue recognition timing."},
+
+{u:"Unit 13",cs:false,
+q:"Reclassifying current liabilities as non-current liabilities (without genuine restructuring) is used to:",
+opts:["Reduce interest expense in the income statement by converting short-term debt to long-term debt","Artificially improve liquidity ratios (current ratio, quick ratio) by reducing the current liabilities denominator","Increase total equity by moving debt off the balance sheet entirely","Improve asset turnover ratios by reducing total assets on the balance sheet"],
+ans:1,
+exp:"By shifting short-term obligations to non-current (beyond 12 months), the company reduces its current liabilities, artificially improving liquidity ratios: Current Ratio = Current Assets ÷ Current Liabilities (denominator falls → ratio improves). This misleads lenders and analysts into believing the company has better short-term financial health than it does. Genuine reclassification requires a legally binding restructuring agreement."},
+
+{u:"Unit 13",cs:false,
+q:"'Cookie jar reserves' as a window dressing technique involves:",
+opts:["Creating fictitious inventory entries to inflate asset values on the balance sheet","Accelerating revenue from future periods into the current period to boost short-term profits","Creating excess provisions (reserves) in profitable years and releasing them in poor years to smooth reported income and meet analyst expectations","Deferring capital expenditure to inflate free cash flow in the current period"],
+ans:2,
+exp:"'Cookie jar reserves' involve deliberately over-providing (creating excess provisions/reserves) in profitable years — reducing reported profits then — and subsequently releasing those reserves in weaker periods to boost income artificially. This earnings smoothing technique creates a misleading impression of consistent profitability. It violates the matching principle and faithful representation, misleading analysts who rely on consistent earnings trends."},
+
+{u:"Unit 13",cs:true,
+q:"CASE STUDY: A retailer bills customers in December (year-end) for goods that will only be shipped in January. It records these as December revenues to meet its annual earnings target. It also delays recording December utility bills until January. Which manipulation methods are being used, and what is the combined effect on December's financial statements?",
+opts:["Only revenue manipulation — the expense delay has no impact on the income statement","Accelerating revenue recognition + delaying expense recognition — December profit is artificially inflated, receivables are overstated, and December payables are understated","Classification manipulation — both adjustments reclassify items between current and non-current categories","Window dressing of the balance sheet only — the income statement is not affected"],
+ans:1,
+exp:"Two timing manipulations are combined: (1) Premature revenue recognition (goods not yet shipped = performance obligation not met; Ind AS 115 violation) — inflates December sales and receivables; (2) Delaying expense recording (utility bills belong to December but deferred to January) — understates December expenses and payables. Combined effect: December net profit is artificially overstated, receivables are inflated, and current liabilities are understated — creating a false picture of both profitability and liquidity."},
+
+/* ── UNIT 14: Ethics & Regulatory Guidelines ── */
+{u:"Unit 14",cs:false,
+q:"'Integrity' as an ethical principle in financial reporting requires finance professionals to:",
+opts:["Maintain the highest level of technical skill and stay updated on all new accounting standards","Refrain from sharing confidential client information without authorisation","Be honest and straightforward in professional relationships — avoiding misleading statements, false data, and concealment of material facts, including whistleblowing when necessary","Apply uniform accounting policies across all group entities for consistency"],
+ans:2,
+exp:"Integrity requires honesty and straightforwardness: no misleading statements, no false financial data, no concealment of material facts. Finance professionals must resist pressure to manipulate figures even from senior management. Integrity also extends to whistleblowing — reporting non-compliance or fraud when discovered. It is the foundational ethical principle alongside objectivity, competence, confidentiality, and professional behaviour."},
+
+{u:"Unit 14",cs:false,
+q:"The ICAI (Institute of Chartered Accountants of India) Code of Ethics prohibits:",
+opts:["Providing tax advisory services in addition to statutory audit services to different clients","Serving clients in industries outside the CA's area of specialisation","Involvement in fraudulent reporting or concealment, fee sharing with non-members, advertising services, and requires maintaining independence in audit assignments","Using digital tools like ERP systems for audit work without prior board approval"],
+ans:2,
+exp:"ICAI's Code of Ethics (aligned with IFAC/IESBA) prohibits: involvement in fraudulent reporting or concealment of material facts; fee sharing with non-members; advertising or solicitation; and requires maintaining strict independence in audit assignments. Its Disciplinary Committee investigates complaints and can remove members. It covers Part A (all members), Part B (public practice), and Part C (members in service)."},
+
+{u:"Unit 14",cs:false,
+q:"The IFAC (International Federation of Accountants) identifies five categories of threats to ethical principles. Which of the following is a 'Self-Interest Threat'?",
+opts:["An auditor reviewing their own firm's previously issued report for errors","An auditor promoting a client's securities offering publicly on social media","An auditor holding a significant financial interest in a client company, creating pressure to issue a favourable report","An auditor being pressured by a client's management to issue a specific audit opinion"],
+ans:2,
+exp:"Self-Interest Threat arises when a professional's financial or personal interests conflict with their professional judgment. Example: an auditor holding significant shares in a client company has a financial incentive to issue a favourable audit report, compromising objectivity. Other IFAC threats: Self-review (reviewing own work), Advocacy (promoting client's position), Familiarity (close personal relationships), Intimidation (pressure from management or client)."},
+
+{u:"Unit 14",cs:false,
+q:"Regulatory guidelines for e-commerce businesses under accounting standards require which specific considerations?",
+opts:["E-commerce companies are fully exempt from revenue recognition standards since all transactions are online","E-commerce businesses must apply Ind AS 115 for revenue recognition — distinguishing whether they act as a principal (record gross revenue) or an agent (record only commission/net revenue), and accurately measuring variable consideration like returns and discounts","E-commerce companies must recognise all platform income on a cash basis to match payment gateway settlement cycles","Digital businesses can defer all revenue recognition until the product return window has fully expired"],
+ans:1,
+exp:"E-commerce accounting under Ind AS 115 requires careful determination of: (1) Principal vs. Agent — if the company controls goods before transferring to customer = principal (gross revenue); if it only facilitates = agent (net commission). (2) Variable consideration — returns policies, loyalty points, discounts must be estimated and deducted from transaction price. (3) Multiple performance obligations — products, delivery, warranties must be accounted for separately."},
+
+{u:"Unit 14",cs:true,
+q:"CASE STUDY: A listed company's CFO is pressured by the board to avoid disclosing a significant pending litigation that, if lost, would result in a ₹50 crore liability — material relative to the company's ₹200 crore net worth. The CFO considers omitting it from the notes to accounts to avoid a negative market reaction. Which ethical principle is violated, which accounting requirement applies, and what are the likely consequences if the omission is discovered?",
+opts:["Only professional competence is at stake — litigation accounting is complex and the CFO may simply be unaware of the requirement","No ethical violation exists — material disclosures are voluntary and at management's discretion","Integrity and faithful representation are violated; Ind AS 37 (Provisions, Contingent Liabilities) requires disclosure of material contingent liabilities in notes; discovery could result in SEBI investigation, MCA penalties, restatement of accounts, delisting risk, and civil liability for misleading investors","Only the auditor is responsible for contingent liability disclosures; management has no obligation to disclose"],
+ans:2,
+exp:"Multiple violations occur simultaneously: (1) Ethical: Integrity (concealment of material fact) and Objectivity (yielding to board pressure) are breached. (2) Accounting: Ind AS 37 mandates disclosure of material contingent liabilities (a ₹50 crore exposure against ₹200 crore net worth is clearly material). (3) Legal: Non-disclosure violates SEBI LODR regulations and Companies Act Section 448 (false statements). Consequences if discovered: SEBI investigation and penalties, MCA inquiry, financial statement restatement, potential delisting, civil liability to investors who suffered losses due to misinformation, and damage to auditor's credibility."}
+
+,
+
+{u:"Unit 2",cs:false,
+q:"Which of the following is correctly classified as a NON-CURRENT liability?",
+opts:["Trade payables due to suppliers within the next 30 days","Short-term bank overdraft repayable on demand","Debentures with a maturity of 7 years from the balance sheet date","Accrued employee salaries payable within the current month"],
+ans:2,
+exp:"Non-current liabilities are obligations expected to be settled BEYOND 12 months from the reporting date. Long-term debentures (7-year maturity) are non-current. Trade payables, bank overdrafts, and accrued salaries are all current liabilities — due within the operating cycle or 12 months."},
+
+{u:"Unit 4",cs:false,
+q:"The Weighted Average Cost (WAC) method of inventory valuation:",
+opts:["Values all inventory at the most recent purchase price only","Assumes the oldest units are always sold first, similar to FIFO","Calculates a new average cost per unit after each purchase (perpetual) or at period-end (periodic), and applies this average to all units sold and in ending inventory","Only applies to manufacturing firms where goods are produced rather than purchased"],
+ans:2,
+exp:"WAC calculates a weighted average cost per unit — total cost of goods available for sale divided by total units available. Under the periodic system this is computed once at period end; under perpetual, it is recalculated after each purchase. WAC smooths out price fluctuations, producing results between FIFO (lower COGS in rising prices) and LIFO (higher COGS). It is permitted under both IFRS and Ind AS 2."},
+
+{u:"Unit 6",cs:false,
+q:"Revenue is DISTINCT from 'income' in accounting because:",
+opts:["Revenue includes all gains from asset sales and investments; income covers only sales of goods","Revenue and income are interchangeable terms meaning the same thing under all accounting standards","Revenue arises specifically from ordinary business activities (sales of goods, services, interest, royalties, dividends); income is broader and includes gains from non-core activities such as gains on asset disposal","Revenue is reported only in the balance sheet; income appears only in the cash flow statement"],
+ans:2,
+exp:"Revenue is defined under Ind AS 115 / IFRS 15 as the gross inflow from ordinary business activities — selling goods, rendering services, interest, royalties, dividends. 'Income' is broader and encompasses both revenue and other gains (e.g., gains on disposal of PPE, revaluation surplus releases) that are not part of the entity's normal operations. This distinction matters for evaluating core business performance versus one-off gains."},
+
+{u:"Unit 11",cs:false,
+q:"Under the DIRECT METHOD of preparing a Cash Flow Statement, operating cash flows are presented by:",
+opts:["Starting from net profit and adjusting for non-cash items like depreciation and changes in working capital","Disclosing only the net change in each operating balance sheet account during the period","Showing each major class of gross cash receipts and gross cash payments from operating activities — e.g., cash received from customers, cash paid to suppliers, cash paid for salaries","Aggregating all cash inflows and outflows into a single net operating cash figure"],
+ans:2,
+exp:"The Direct Method presents operating cash flows by showing major classes of gross cash receipts (from customers, from royalties, from dividends received) and gross cash payments (to suppliers, to employees, for taxes). This provides greater transparency than the Indirect Method (which starts from net profit and adjusts for non-cash items). The Indirect Method is more commonly used in practice despite the Direct Method being preferred by regulators."},
+
+{u:"Unit 13",cs:false,
+q:"'Off-balance sheet financing' as a manipulation technique involves:",
+opts:["Recording long-term assets at fair value instead of historical cost to inflate total assets","Issuing equity shares instead of bonds to avoid recording debt on the balance sheet","Using Special Purpose Entities (SPEs) or operating leases to keep liabilities off the main balance sheet, making the company appear less leveraged than it actually is","Overstating cash balances by including short-term investments that are not readily realisable"],
+ans:2,
+exp:"Off-balance sheet financing uses structures like Special Purpose Entities (SPEs), sale-and-leaseback arrangements, or operating lease classification to keep liabilities from appearing on the main balance sheet. This artificially reduces reported debt, improves leverage ratios (debt-to-equity), and projects a stronger financial position. Enron's use of SPEs to hide billions in debt is the most notorious example. Accounting standards (Ind AS 116 on leases) have significantly tightened rules to prevent this."}
+
+]; /* end of qs */
+
+/* ── RUNTIME VALIDATION ── */
+(function validate(){
+  var e=[];
+  if(!Array.isArray(qs)||qs.length===0){e.push("qs array empty");}
+  else{
+    for(var i=0;i<qs.length;i++){
+      var q=qs[i];
+      if(!q.u||!q.q||!q.exp) e.push("Q"+(i+1)+": missing field");
+      if(!Array.isArray(q.opts)||q.opts.length<2) e.push("Q"+(i+1)+": opts<2");
+      if(typeof q.ans!=='number') e.push("Q"+(i+1)+": ans not number");
+      if(typeof q.ans==='number'&&Array.isArray(q.opts)&&(q.ans<0||q.ans>=q.opts.length))
+        e.push("Q"+(i+1)+": ans="+q.ans+" OOB (opts="+q.opts.length+", valid 0-"+(q.opts.length-1)+")");
+    }
+  }
+  if(e.length){
+    window.__qErr=true;
+    document.addEventListener('DOMContentLoaded',function(){
+      document.getElementById('area').innerHTML='<div class="err-banner"><strong>\u26A0 Errors ('+e.length+'):</strong>'+e.map(function(x){return '<br>\u2022 '+x;}).join('')+'</div>';
+    });
+  }
+})();
+
+/* ── ENGINE ── */
+var cur=0,score=0,ans=false;
+function showSplash(){
+  if(window.__qErr)return;
+  var t=qs.length,cs=qs.filter(function(q){return q.cs;}).length,u={};
+  qs.forEach(function(q){u[q.u]=1;});
+  var h='<div class="splash"><div class="splash-icon">\uD83D\uDCCA</div>';
+  h+='<div class="splash-title">Financial Reporting &amp; Analysis</div>';
+  h+='<div class="splash-sub">A comprehensive test across all 14 units \u2014 from financial statements and depreciation to ratio analysis, Du-Pont, cash flows, window dressing, and ethics.</div>';
+  h+='<div class="splash-stats"><div class="splash-stat"><div class="splash-stat-v">'+t+'</div><div class="splash-stat-l">Questions</div></div>';
+  h+='<div class="splash-stat"><div class="splash-stat-v">'+Object.keys(u).length+'</div><div class="splash-stat-l">Units</div></div>';
+  h+='<div class="splash-stat"><div class="splash-stat-v">'+cs+'</div><div class="splash-stat-l">Case Studies</div></div></div>';
+  h+='<button class="start-btn" onclick="startQ()">Start Quiz \u2192</button></div>';
+  document.getElementById('area').innerHTML=h;
+  document.getElementById('prog').style.width='0%';
+  document.getElementById('hbadge').textContent=t+' Questions';
+}
+function startQ(){if(window.__qErr)return;cur=0;score=0;ans=false;render();}
+function render(){
+  if(cur>=qs.length){showResult();return;}
+  var q=qs[cur];
+  document.getElementById('prog').style.width=(cur/qs.length*100)+'%';
+  document.getElementById('hbadge').textContent='Score: '+score+'/'+cur;
+  var h='<div class="q-meta"><span class="q-counter">Q'+(cur+1)+' of '+qs.length+'</span></div>';
+  h+='<div class="q-unit-tag">\uD83D\uDCD6 '+q.u+'</div>';
+  if(q.cs) h+='<div class="case-badge">\uD83D\uDCCB Case Study</div>';
+  h+='<div class="q-card"><div class="q-text">'+q.q+'</div></div>';
+  h+='<div class="opts">';
+  for(var i=0;i<q.opts.length;i++)
+    h+='<button class="opt" onclick="choose('+i+')" id="o'+i+'"><span class="lbl">'+String.fromCharCode(65+i)+'</span><span>'+q.opts[i]+'</span></button>';
+  h+='</div><div class="fb" id="fb"><span class="fb-head" id="fbh"></span><span id="fbt"></span></div>';
+  h+='<div class="nxt-wrap" id="nw"><button class="nxt" onclick="next()">'+(cur<qs.length-1?'Next Question \u2192':'See My Results \u2192')+'</button></div>';
+  document.getElementById('area').innerHTML=h;
+}
+function choose(i){
+  if(ans)return; ans=true;
+  var q=qs[cur];
+  document.querySelectorAll('.opt').forEach(function(b){b.disabled=true;});
+  var ok=(i===q.ans);
+  document.getElementById('o'+i).className='opt '+(ok?'correct':'wrong');
+  if(!ok) document.getElementById('o'+q.ans).className='opt correct';
+  if(ok) score++;
+  var fb=document.getElementById('fb');
+  fb.style.display='block'; fb.className='fb '+(ok?'ok':'bad');
+  document.getElementById('fbh').textContent=ok?'\u2713 Correct!':'\u2717 Incorrect';
+  document.getElementById('fbt').textContent=q.exp;
+  document.getElementById('nw').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function next(){cur++;ans=false;window.scrollTo({top:0,behavior:'smooth'});render();}
+function showResult(){
+  document.getElementById('prog').style.width='100%';
+  document.getElementById('hbadge').textContent='Complete!';
+  var t=qs.length,p=Math.round(score/t*100),w=t-score;
+  var g,m,e;
+  if(score>=63){g='Outstanding!';e='\uD83C\uDFC6';m='Distinction-level. You have mastered Financial Reporting &amp; Analysis across all 14 units.';}
+  else if(score>=56){g='Excellent!';e='\uD83C\uDF1F';m='Merit-level. Strong command from statements and ratios to Du-Pont and ethics.';}
+  else if(score>=42){g='Good Pass';e='\uD83D\uDC4D';m='Solid understanding. Revisit Du-Pont analysis, window dressing, and cash flow components.';}
+  else if(score>=28){g='Getting There';e='\uD83D\uDCDA';m='Keep going! Focus on Units 9-11: liquidity ratios, Du-Pont, and the cash flow statement.';}
+  else{g='Keep Going';e='\uD83D\uDCAA';m='Revisit all 14 units and retake. Consistency will get you there!';}
+  var h='<div class="result"><div class="result-ring"><div class="result-big">'+score+'/'+t+'</div><div class="result-pct">'+p+'%</div></div>';
+  h+='<div style="font-size:32px;margin-bottom:8px">'+e+'</div><div class="result-grade">'+g+'</div>';
+  h+='<div class="result-msg">'+m+'</div>';
+  h+='<div class="stats"><div class="stat"><div class="stat-v" style="color:var(--green)">'+score+'</div><div class="stat-l">Correct</div></div>';
+  h+='<div class="stat"><div class="stat-v" style="color:var(--red)">'+w+'</div><div class="stat-l">Wrong</div></div>';
+  h+='<div class="stat"><div class="stat-v" style="color:var(--primary)">'+p+'%</div><div class="stat-l">Score</div></div></div>';
+  h+='<button class="rst" onclick="restart()">\uD83D\uDD04 Retake Quiz</button></div>';
+  document.getElementById('area').innerHTML=h;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function restart(){cur=0;score=0;ans=false;showSplash();}
+showSplash();
+</script>
+</body>
+</html>
