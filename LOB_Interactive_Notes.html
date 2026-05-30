@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leadership & Organizational Behaviour — Interactive Study Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090f;--bg2:#0e1118;--bg3:#141824;--card:#191e2e;--card2:#1f2538;--border:#272d45;--accent:#7c6af7;--accent2:#f97316;--accent3:#22d3ee;--accent4:#f472b6;--text:#e8eaf0;--text2:#9aa0b8;--text3:#505878;--success:#34d399;--danger:#f87171;--warn:#fbbf24}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:"Source Sans 3",sans-serif;font-size:15px;line-height:1.7;min-height:100vh}
+#topnav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(7,9,15,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:12px;height:56px}
+.logo{font-family:"Playfair Display",serif;font-weight:900;font-size:1.05rem;color:var(--accent);cursor:pointer;white-space:nowrap}
+.nav-links{display:flex;gap:3px;flex:1;overflow-x:auto}
+.nav-links button{background:none;border:none;color:var(--text2);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit;transition:all 0.2s;white-space:nowrap}
+.nav-links button:hover,.nav-links button.active{background:var(--card);color:var(--text)}
+.search-wrap{position:relative}
+#searchInput{background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 12px 6px 30px;border-radius:20px;font-size:13px;width:160px;font-family:inherit;outline:none;transition:width 0.3s}
+#searchInput:focus{width:200px;border-color:var(--accent)}
+.si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:13px;pointer-events:none}
+#progressBar{position:fixed;top:56px;left:0;height:2px;background:var(--accent);z-index:999;transition:width 0.3s;width:0}
+.container{max-width:1160px;margin:0 auto;padding:76px 20px 48px}
+.page{display:none}.page.active{display:block;animation:fadeIn 0.35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.home-hero{text-align:center;padding:50px 0 36px;position:relative}
+.home-hero::before{content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at center,rgba(124,106,247,0.05) 0%,transparent 70%);pointer-events:none}
+.home-hero h1{font-family:"Playfair Display",serif;font-size:clamp(1.8rem,5vw,3.4rem);font-weight:900;line-height:1.1;background:linear-gradient(135deg,var(--accent) 0%,var(--accent4) 50%,var(--accent3) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:14px}
+.home-hero p{color:var(--text2);font-size:1.05rem;max-width:580px;margin:0 auto 36px}
+.stats-bar{display:flex;justify-content:center;gap:36px;flex-wrap:wrap;margin-bottom:44px}
+.stat-item{text-align:center}
+.stat-num{font-family:"Playfair Display",serif;font-size:2.2rem;font-weight:700;color:var(--accent)}
+.stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:14px}
+.mod-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden}
+.mod-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--mc)}
+.mod-card:hover{transform:translateY(-3px);border-color:var(--mc);box-shadow:0 8px 30px rgba(0,0,0,0.4)}
+.mod-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--mc);margin-bottom:6px}
+.mod-title{font-family:"Playfair Display",serif;font-size:.95rem;font-weight:700;margin-bottom:7px}
+.mod-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.mod-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+.tag{font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(255,255,255,0.05);color:var(--text3);border:1px solid var(--border)}
+.unit-header{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:20px;border-left:4px solid var(--mc);position:relative;overflow:hidden}
+.unit-header::after{content:attr(data-num);position:absolute;right:-8px;top:-16px;font-family:"Playfair Display",serif;font-size:7rem;font-weight:900;color:rgba(255,255,255,0.025);line-height:1;pointer-events:none}
+.unit-badge{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:3px 11px;border-radius:20px;margin-bottom:10px}
+.unit-header h2{font-family:"Playfair Display",serif;font-size:1.8rem;font-weight:900;margin-bottom:10px}
+.unit-header p{color:var(--text2);max-width:700px;font-size:14px}
+.sticky-nav{position:sticky;top:56px;z-index:10;background:var(--bg);padding:8px 0 12px}
+.content-tabs{display:flex;gap:4px;background:var(--card);padding:4px;border-radius:10px;border:1px solid var(--border);flex-wrap:wrap}
+.tab-btn{background:none;border:none;color:var(--text2);padding:8px 16px;border-radius:7px;cursor:pointer;font-size:13px;font-family:inherit;font-weight:600;transition:all 0.2s;flex:1;min-width:80px}
+.tab-btn.active{background:var(--bg);color:var(--text)}
+.tab-content{display:none}.tab-content.active{display:block;animation:fadeIn 0.3s ease}
+.section-block{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:14px}
+.section-block h3{font-family:"Playfair Display",serif;font-size:1.05rem;font-weight:700;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-block h3::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;flex-shrink:0}
+.point-list{list-style:none}
+.point-list li{padding:6px 0 6px 18px;position:relative;color:var(--text2);border-bottom:1px solid rgba(255,255,255,0.04);font-size:14px}
+.point-list li:last-child{border-bottom:none}
+.point-list li::before{content:"▸";position:absolute;left:0;color:var(--accent3);font-size:11px;top:8px}
+.point-list li strong{color:var(--text)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:680px){.two-col{grid-template-columns:1fr}}
+.highlight-box{background:rgba(124,106,247,0.06);border:1px solid rgba(124,106,247,0.2);border-radius:8px;padding:14px;margin:10px 0}
+.highlight-box.teal{background:rgba(34,211,238,0.06);border-color:rgba(34,211,238,0.2)}
+.highlight-box.orange{background:rgba(249,115,22,0.06);border-color:rgba(249,115,22,0.2)}
+.highlight-box.pink{background:rgba(244,114,182,0.06);border-color:rgba(244,114,182,0.2)}
+.highlight-box.green{background:rgba(52,211,153,0.06);border-color:rgba(52,211,153,0.2)}
+.hb-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:7px}
+.highlight-box.teal .hb-title{color:var(--accent3)}
+.highlight-box.orange .hb-title{color:var(--accent2)}
+.highlight-box.pink .hb-title{color:var(--accent4)}
+.highlight-box.green .hb-title{color:var(--success)}
+.compare-table{width:100%;border-collapse:collapse;font-size:13px}
+.compare-table th{background:var(--bg);padding:9px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);border-bottom:2px solid var(--border)}
+.compare-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;font-size:13px}
+.compare-table tr:hover td{background:rgba(255,255,255,0.02)}
+.compare-table td:first-child{color:var(--text);font-weight:600}
+.mnemonic-card{background:linear-gradient(135deg,rgba(124,106,247,0.1),rgba(34,211,238,0.08));border:1px solid rgba(124,106,247,0.35);border-radius:12px;padding:18px;margin:14px 0}
+.mnemonic-title{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--accent);font-weight:700;margin-bottom:8px}
+.mnemonic-word{font-family:"Playfair Display",serif;font-size:1.7rem;font-weight:900;color:var(--accent);margin-bottom:10px}
+.mnemonic-items{display:flex;flex-wrap:wrap;gap:7px}
+.mnemonic-item{background:rgba(124,106,247,0.1);border:1px solid rgba(124,106,247,0.2);border-radius:7px;padding:5px 12px;font-size:13px}
+.mnemonic-item span{color:var(--accent);font-weight:700}
+.quiz-q{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:14px;transition:all 0.3s}
+.quiz-q.correct{border-color:var(--success);background:rgba(52,211,153,0.04)}
+.quiz-q.wrong{border-color:var(--danger);background:rgba(248,113,113,0.04)}
+.q-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:8px}
+.q-text{font-size:15px;font-weight:600;margin-bottom:14px;line-height:1.5}
+.q-options{display:flex;flex-direction:column;gap:7px}
+.q-opt{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:11px 14px;cursor:pointer;font-size:14px;transition:all 0.2s;text-align:left;color:var(--text2);font-family:inherit;display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(:disabled){border-color:var(--accent);color:var(--text);background:var(--card)}
+.q-opt.sc{border-color:var(--success);background:rgba(52,211,153,0.1);color:var(--success)}
+.q-opt.sw{border-color:var(--danger);background:rgba(248,113,113,0.1);color:var(--danger)}
+.q-opt.sh{border-color:var(--success);background:rgba(52,211,153,0.05);color:var(--success)}
+.q-opt:disabled{cursor:default}
+.q-exp{display:none;margin-top:12px;padding:11px 14px;background:var(--bg);border-radius:8px;font-size:13px;color:var(--text2);border-left:3px solid var(--accent3);line-height:1.6}
+.q-exp.show{display:block;animation:fadeIn 0.3s ease}
+.quiz-score{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:22px;text-align:center;display:none}
+.score-big{font-family:"Playfair Display",serif;font-size:3.5rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.quiz-actions{display:flex;gap:10px;margin-top:18px;justify-content:flex-end}
+.btn{padding:9px 18px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;transition:all 0.2s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{opacity:0.9;transform:translateY(-1px)}
+.btn-outline{background:none;border:1px solid var(--border);color:var(--text2)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.gloss-search{background:var(--card);border:1px solid var(--border);color:var(--text);padding:11px 14px;border-radius:8px;font-size:14px;width:100%;margin-bottom:16px;font-family:inherit;outline:none}
+.gloss-search:focus{border-color:var(--accent)}
+.gloss-filter{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.gloss-filter button{background:var(--card);border:1px solid var(--border);color:var(--text2);padding:4px 12px;border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.2s}
+.gloss-filter button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.gloss-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:580px){.gloss-grid{grid-template-columns:1fr}}
+.gloss-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:13px;transition:all 0.2s}
+.gloss-item:hover{border-color:var(--accent3)}
+.gloss-term{font-weight:700;color:var(--accent3);font-size:14px;margin-bottom:5px}
+.gloss-def{font-size:13px;color:var(--text2);line-height:1.5}
+.gloss-unit-tag{font-size:10px;color:var(--text3);margin-top:5px;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:"";position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:22px}
+.tl-dot{position:absolute;left:-24px;top:3px;width:13px;height:13px;border-radius:50%;border:2px solid var(--bg)}
+.tl-year{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:600;color:var(--accent);margin-bottom:3px}
+.tl-event{font-size:14px;font-weight:600;margin-bottom:3px}
+.tl-desc{font-size:13px;color:var(--text2)}
+.fc-wrap{perspective:1000px;margin-bottom:18px}
+.flashcard{width:100%;height:210px;position:relative;transform-style:preserve-3d;transition:transform 0.55s;cursor:pointer}
+.flashcard.flipped{transform:rotateY(180deg)}
+.fc-front,.fc-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;padding:28px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.fc-front{background:var(--card2);border:1px solid var(--border)}
+.fc-back{background:linear-gradient(135deg,rgba(124,106,247,0.08),rgba(34,211,238,0.07));border:1px solid rgba(34,211,238,0.3);transform:rotateY(180deg)}
+.fc-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:10px}
+.fc-text{font-size:1rem;font-weight:600;line-height:1.5}
+.fc-answer{font-size:13px;color:var(--text2);line-height:1.6}
+.fc-hint{font-size:11px;color:var(--text3);margin-top:6px}
+.fc-nav{display:flex;align-items:center;gap:12px;justify-content:center}
+.fc-counter{font-size:13px;color:var(--text2);font-family:"JetBrains Mono",monospace}
+.obj-list{counter-reset:oc;list-style:none}
+.obj-list li{counter-increment:oc;padding:9px 9px 9px 40px;position:relative;border-bottom:1px solid var(--border);font-size:14px;color:var(--text2)}
+.obj-list li::before{content:counter(oc);position:absolute;left:0;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:var(--card2);border:1px solid var(--border);color:var(--accent);font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace}
+.summary-box{background:linear-gradient(135deg,rgba(124,106,247,0.05),rgba(34,211,238,0.04));border:1px solid rgba(124,106,247,0.2);border-radius:12px;padding:22px;margin-bottom:14px}
+.summary-box h4{font-family:"Playfair Display",serif;font-size:1rem;color:var(--accent);margin-bottom:10px}
+.sr-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:13px;margin-bottom:7px;cursor:pointer;transition:all 0.2s}
+.sr-item:hover{border-color:var(--accent)}
+.back-btn{background:none;border:1px solid var(--border);color:var(--text2);padding:7px 14px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;margin-bottom:18px;transition:all 0.2s;display:inline-flex;align-items:center;gap:5px}
+.back-btn:hover{border-color:var(--accent);color:var(--accent)}
+mark{background:rgba(124,106,247,0.25);color:var(--text);padding:0 2px;border-radius:2px}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+@media(max-width:580px){#topnav .nav-links{display:none}.home-hero h1{font-size:1.7rem}}
+</style>
+</head>
+<body>
+<nav id="topnav">
+  <div class="logo" onclick="goHome()">LOB Notes</div>
+  <div class="nav-links">
+    <button onclick="goHome()" id="nb-home" class="active">🏠 Home</button>
+    <button onclick="showPage('glossary')" id="nb-glossary">📖 Glossary</button>
+    <button onclick="showPage('timeline')" id="nb-timeline">📅 Theorists</button>
+    <button onclick="showPage('flashcards')" id="nb-flashcards">🃏 Flashcards</button>
+    <button onclick="showPage('quickref')" id="nb-quickref">⚡ Quick Ref</button>
+  </div>
+  <div class="search-wrap">
+    <span class="si">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search topics..." oninput="doSearch(this.value)">
+  </div>
+</nav>
+<div id="progressBar"></div>
+
+<div id="pg-home" class="page active">
+  <div class="container">
+    <div class="home-hero">
+      <h1>Leadership & Organizational Behaviour</h1>
+      <p>Your complete interactive MBA study companion — 14 modules, structured notes, quizzes, mnemonics, flashcards, and more.</p>
+      <div class="stats-bar">
+        <div class="stat-item"><div class="stat-num">14</div><div class="stat-label">Modules</div></div>
+        <div class="stat-item"><div class="stat-num">70+</div><div class="stat-label">Quiz Q&As</div></div>
+        <div class="stat-item"><div class="stat-num">60+</div><div class="stat-label">Key Terms</div></div>
+        <div class="stat-item"><div class="stat-num">25+</div><div class="stat-label">Theorists</div></div>
+        <div class="stat-item"><div class="stat-num">35</div><div class="stat-label">Flashcards</div></div>
+      </div>
+    </div>
+    <div class="modules-grid" id="modulesGrid"></div>
+  </div>
+</div>
+
+<div id="pg-unit" class="page">
+  <div class="container">
+    <button class="back-btn" onclick="goHome()">← All Modules</button>
+    <div id="unitContent"></div>
+  </div>
+</div>
+
+<div id="pg-glossary" class="page">
+  <div class="container">
+    <button class="back-btn" onclick="goHome()">← Home</button>
+    <h2 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:6px">📖 Glossary</h2>
+    <p style="color:var(--text2);margin-bottom:20px">All key terms and definitions from all 14 modules.</p>
+    <input class="gloss-search" placeholder="Search terms or definitions..." oninput="filterGloss(this.value)" id="glossSearch">
+    <div class="gloss-filter" id="glossFilter"></div>
+    <div class="gloss-grid" id="glossGrid"></div>
+  </div>
+</div>
+
+<div id="pg-timeline" class="page">
+  <div class="container">
+    <button class="back-btn" onclick="goHome()">← Home</button>
+    <h2 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:6px">🧠 Key Theorists & Frameworks</h2>
+    <p style="color:var(--text2);margin-bottom:28px">Landmark contributors to management, leadership, and organizational behaviour.</p>
+    <div class="timeline" id="tlContent"></div>
+  </div>
+</div>
+
+<div id="pg-flashcards" class="page">
+  <div class="container">
+    <button class="back-btn" onclick="goHome()">← Home</button>
+    <h2 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:6px">🃏 Flashcards</h2>
+    <p style="color:var(--text2);margin-bottom:16px">Click card to flip and reveal the answer.</p>
+    <div class="gloss-filter" id="fcFilter"></div>
+    <div class="fc-wrap">
+      <div class="flashcard" id="theCard" onclick="flipCard()">
+        <div class="fc-front"><div class="fc-label">Question</div><div class="fc-text" id="fcQ">Loading...</div><div class="fc-hint" id="fcHint"></div></div>
+        <div class="fc-back"><div class="fc-label">Answer</div><div class="fc-answer" id="fcA">Loading...</div></div>
+      </div>
+    </div>
+    <div class="fc-nav">
+      <button class="btn btn-outline" onclick="fcPrev()">← Prev</button>
+      <span class="fc-counter" id="fcCtr">1 / 1</span>
+      <button class="btn btn-primary" onclick="fcNext()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<div id="pg-quickref" class="page">
+  <div class="container">
+    <button class="back-btn" onclick="goHome()">← Home</button>
+    <h2 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:20px">⚡ Quick Reference Sheet</h2>
+    <div id="qrContent"></div>
+  </div>
+</div>
+
+<div id="pg-search" class="page">
+  <div class="container">
+    <button class="back-btn" onclick="goHome()">← Home</button>
+    <h2 style="font-family:'Playfair Display',serif;margin-bottom:16px">Search Results</h2>
+    <div id="srResults"></div>
+  </div>
+</div>
+
+<script>
+const MODULES=[
+{id:1,color:'#7c6af7',title:'Nature and Scope of Management',desc:'Understand what management means, its nature as science/art/profession, scope across functions, managerial roles, and modern challenges.',tags:['POLC','Managerial Roles','Mintzberg','Management Functions'],
+objectives:['Understand what management means and why it is important','Explain how management is like a science, an art, and a profession','Describe the areas where management is applied','Identify the key benefits of good management','Understand what managers do and the different roles they play','Recognise the challenges managers face today'],
+sections:[
+{title:'Definition & Meaning of Management',content:'Management is the process of <strong>planning, organising, leading, and controlling resources</strong> (people, money, materials) to achieve specific goals efficiently and effectively.',points:['<strong>Process-Oriented</strong>: A continuous, coordinated series of activities — not a one-time act','<strong>Goal-Oriented</strong>: All activities are directed towards achieving specific objectives','<strong>Group Activity</strong>: Involves people working together to meet organisational aims','<strong>Dynamic Function</strong>: Adapts to changing business environments and challenges','<strong>Universal Application</strong>: Needed in all types of organisations — business, govt, NGO, hospitals']},
+{title:'Nature of Management: Science, Art & Profession',points:['<strong>As a Science</strong>: Has a systematic body of knowledge, universal principles, cause-and-effect relationships (e.g. motivation → productivity). Not an exact science — human behaviour is unpredictable','<strong>As an Art</strong>: Requires creativity, intuition, judgment — varies from manager to manager; mastery comes from experience and practice','<strong>As a Profession</strong>: Formal education (MBA), code of conduct (AIMA), service motive alongside profit','<strong>Conclusion</strong>: Management is a blend of science (principles), art (skills), and profession (ethics/structure)']},
+{title:'Scope of Management',points:['<strong>Financial Management</strong>: Budgeting, capital allocation, cost control','<strong>Human Resource Management</strong>: Recruitment, training, appraisal, retention','<strong>Marketing Management</strong>: Product, price, place, promotion — customer satisfaction','<strong>Operations Management</strong>: Production, supply chain, quality control','<strong>Strategic Management</strong>: Long-term goal-setting, competitive positioning','<strong>IT Management</strong>: Technology infrastructure, data management, digital transformation']},
+{title:'Mintzberg\'s 10 Managerial Roles',isTable:true,table:{headers:['Category','Role','Description'],rows:[['Interpersonal','Figurehead','Ceremonial duties, signing documents, representing org'],['Interpersonal','Leader','Motivating, hiring, developing subordinates'],['Interpersonal','Liaison','Building external network of contacts'],['Informational','Monitor','Gathering internal/external information'],['Informational','Disseminator','Sharing information with team members'],['Informational','Spokesperson','Communicating to outside world'],['Decisional','Entrepreneur','Initiating change and innovation'],['Decisional','Disturbance Handler','Responding to crises and disruptions'],['Decisional','Resource Allocator','Deciding how to allocate resources'],['Decisional','Negotiator','Negotiating with others for org benefit']]}}
+],
+examples:[{e:'Tata Sons — Figurehead Role',i:'Ratan Tata as Chairman played the figurehead role — representing the conglomerate at national and international forums'},{e:'CEO vs Operations Manager',i:'CEO (conceptual skills dominant) vs Operations Manager (technical skills dominant) — different skill emphasis at different levels'},{e:'Amazon\'s Jeff Bezos',i:'Classic Entrepreneur role — constantly initiated innovative changes (AWS, Prime, Alexa) transforming e-commerce'}],
+mnemonic:{word:'POLC',meaning:'4 Functions of Management',items:[{l:'P',w:'Planning — setting objectives and courses of action'},{l:'O',w:'Organising — arranging resources and tasks'},{l:'L',w:'Leading — directing and motivating people'},{l:'C',w:'Controlling — monitoring and correcting performance'}]},
+quiz:[
+{q:'Management is best described as:',opts:['A one-time decision-making event','A continuous process of planning, organising, leading, and controlling resources to achieve goals','Only the job of top-level executives','Primarily concerned with financial management'],ans:1,exp:'Management is a continuous process (POLC) — planning, organising, leading, and controlling — applicable at all levels and in all types of organisations.'},
+{q:'Which of the following best describes management as an "Art"?',opts:['It has universal principles applicable everywhere','It relies on creativity, intuition, and personal skill that improves with practice','It involves formal education like an MBA','It studies cause-and-effect relationships systematically'],ans:1,exp:'Management as art involves personal creativity, intuition, and judgment — like painting or music, mastery develops through practice and experience. Different managers may handle the same problem differently.'},
+{q:'According to Mintzberg, which role does a manager play when responding to an unexpected crisis?',opts:['Figurehead','Entrepreneur','Disturbance Handler','Liaison'],ans:2,exp:'The Disturbance Handler role involves responding to unexpected crises and disruptions — like handling a labour strike, supplier failure, or PR crisis. It is one of Mintzberg\'s four Decisional roles.'},
+{q:'The POLC framework stands for:',opts:['Planning, Operating, Leading, Coordinating','Planning, Organising, Leading, Controlling','Prioritising, Organising, Learning, Communicating','Planning, Organising, Learning, Controlling'],ans:1,exp:'POLC = Planning (setting goals), Organising (arranging resources), Leading (directing people), Controlling (monitoring performance) — the four classic functions of management.'},
+{q:'AIMA (All India Management Association) is associated with management as:',opts:['A science','An art','A profession','A government function'],ans:2,exp:'AIMA promotes management as a profession by establishing a code of conduct, ethical standards, and professional norms for managers in India — similar to how Bar Council works for lawyers.'}
+]},
+
+{id:2,color:'#f97316',title:'Management Foundations',desc:'Explore the management process, Fayol\'s 14 principles, and the five key functions — Planning, Organising, Staffing, Directing, Controlling.',tags:['Fayol 14 Principles','POSDC','Division of Labour','Unity of Command'],
+objectives:['Understand the steps involved in the management process','Learn the basic principles that guide effective management','Identify the key functions of management','See how these functions help in achieving goals','Understand how principles apply in real-world organisations'],
+sections:[
+{title:'5 Functions of Management (POSDC)',points:['<strong>Planning</strong>: Setting objectives and determining the best course of action to achieve them','<strong>Organising</strong>: Arranging resources and tasks in a structured way to implement plans','<strong>Staffing</strong>: Recruiting, selecting, training, and developing people to fill organisational roles','<strong>Directing</strong>: Leading, motivating, and communicating to guide employees toward goals','<strong>Controlling</strong>: Monitoring actual performance against planned standards and taking corrective action']},
+{title:'Fayol\'s 14 Principles of Management',points:['<strong>1. Division of Work</strong>: Specialisation improves efficiency and productivity','<strong>2. Authority & Responsibility</strong>: Authority to give orders must be balanced with responsibility','<strong>3. Discipline</strong>: Obedience and respect for rules are essential','<strong>4. Unity of Command</strong>: Each employee should receive orders from only ONE superior','<strong>5. Unity of Direction</strong>: One plan, one head for a group of activities with the same objective','<strong>6. Subordination of Individual Interest</strong>: Organisation interest overrides individual interest','<strong>7. Remuneration</strong>: Fair compensation motivates employees','<strong>8. Centralisation</strong>: Optimal balance between centralisation and decentralisation','<strong>9. Scalar Chain</strong>: Clear hierarchy from top to bottom; gangplank for emergencies','<strong>10. Order</strong>: Right person in right place (social order); right material in right place (material order)','<strong>11. Equity</strong>: Fair and kind treatment of all employees','<strong>12. Stability of Tenure</strong>: Low turnover; time to master roles','<strong>13. Initiative</strong>: Encourage employees to think and execute plans','<strong>14. Esprit de Corps</strong>: Team spirit and unity strengthens organisation']},
+{title:'Scientific Management — Frederick Taylor',points:['<strong>Taylor\'s Principles</strong>: Science not rule-of-thumb; scientific selection of workers; scientific training; close cooperation between management and workers','<strong>Time & Motion Study</strong>: Standardise tasks; find the one best way to do a job','<strong>Differential Piece Rate</strong>: Higher pay for meeting targets; lower pay for underperformers','<strong>Mental Revolution</strong>: Both management and workers should change their attitude — focus on increasing surplus, not dividing it','<strong>Criticism</strong>: Treated workers as machines; ignored human behaviour and motivation']}
+],
+examples:[{e:'McDonald\'s — Division of Work',i:'Every McDonald\'s employee has a specific role (grill, counter, packing) — Fayol\'s division of work in action'},{e:'Indian Army — Unity of Command',i:'Soldiers receive orders from ONE commanding officer only — classic Unity of Command principle'},{e:'Taylor at Bethlehem Steel',i:'Taylor studied pig-iron loading tasks; standardised the work; increased output from 12.5 tons to 47.5 tons per worker per day'}],
+mnemonic:{word:'FAYOL-14',meaning:'Remember Fayol\'s Key Principles',items:[{l:'D',w:'Division of Work'},{l:'A',w:'Authority = Responsibility'},{l:'U',w:'Unity of Command'},{l:'U',w:'Unity of Direction'},{l:'S',w:'Subordination to org goals'},{l:'E',w:'Equity & Esprit de Corps'}]},
+quiz:[
+{q:'Which of Fayol\'s principles states that each employee should receive instructions from only ONE superior?',opts:['Unity of Direction','Unity of Command','Scalar Chain','Division of Work'],ans:1,exp:'Unity of Command: each subordinate should receive orders from only one superior. This prevents confusion, conflicting instructions, and divided loyalty.'},
+{q:'"Esprit de Corps" as a management principle means:',opts:['Individual performance incentives','Team spirit and unity among employees strengthens the organisation','Strict discipline and obedience','Top management having final authority'],ans:1,exp:'Esprit de Corps (French for "spirit of the body") means fostering team spirit, unity, and harmony among employees. Fayol believed this was key to organisational strength.'},
+{q:'Frederick Taylor\'s Scientific Management focused on:',opts:['Employee motivation and emotional well-being','Finding the one best way to do a job through time and motion studies and standardisation','Democratic decision-making','Reducing management hierarchy'],ans:1,exp:'Taylor\'s Scientific Management: studying tasks scientifically (time & motion studies) to find the single most efficient method, setting standards, selecting/training workers scientifically, and using differential piece-rate pay.'},
+{q:'The Scalar Chain in Fayol\'s principles refers to:',opts:['A chain of product distribution','A clear line of authority from top to bottom of the organisation with a "gangplank" for emergencies','A financial budget chain','A chain of customer service escalation'],ans:1,exp:'Scalar Chain = the formal hierarchical chain from top management to lowest worker. Communication should follow this chain. The "gangplank" (Fayol\'s Bridge) allows horizontal communication in emergencies.'},
+{q:'Which management function involves monitoring actual performance against planned standards?',opts:['Planning','Organising','Directing','Controlling'],ans:3,exp:'Controlling involves measuring actual performance, comparing it against set standards, and taking corrective action when deviations occur. It "closes the loop" of the management process.'}
+]},
+
+{id:3,color:'#22d3ee',title:'Planning',desc:'Master the meaning, importance, types, and process of planning — from strategic to operational, MBO to decision trees.',tags:['Strategic Planning','MBO','Types of Plans','Planning Process','Forecasting'],
+objectives:['Know what planning means and why it is needed','Understand the steps taken while making a plan','Learn about different types of planning','Recognise the benefits and limitations of planning','Explain how planning helps organisations prepare for the future','Compare short-term and long-term planning'],
+sections:[
+{title:'Definition & Features of Planning',content:'Planning is the process of <strong>setting objectives and deciding in advance the appropriate actions</strong> required to achieve those objectives.',points:['<strong>Goal-Oriented</strong>: Focuses on achieving specific organisational objectives','<strong>Primary Function</strong>: First step in the management process; all other functions follow','<strong>Pervasive</strong>: Required at all levels — top, middle, and supervisory management','<strong>Futuristic</strong>: Involves forecasting and preparing for future activities','<strong>Continuous Process</strong>: Plans are regularly revised as conditions change','<strong>Flexible</strong>: Must allow for adjustments when required']},
+{title:'Planning Process (8 Steps)',points:['<strong>Step 1</strong>: Set objectives — define clear, measurable goals','<strong>Step 2</strong>: Analyse current situation — internal and external environment (SWOT)','<strong>Step 3</strong>: Identify alternatives — brainstorm different courses of action','<strong>Step 4</strong>: Evaluate alternatives — assess costs, benefits, risks of each option','<strong>Step 5</strong>: Select best plan — choose the optimal course of action','<strong>Step 6</strong>: Formulate supporting plans — budgets, schedules, sub-plans','<strong>Step 7</strong>: Implement the plan — execute with assigned responsibilities','<strong>Step 8</strong>: Monitor and evaluate — track progress, make adjustments']},
+{title:'Types of Plans',isTable:true,table:{headers:['Type','Description','Timeframe','Example'],rows:[['Strategic Plan','Long-term organisational direction','3–10 years','Company vision, market expansion strategy'],['Tactical Plan','Medium-term departmental plans','1–3 years','Annual marketing campaign plan'],['Operational Plan','Day-to-day work plans','Days to weeks','Daily production schedule'],['Standing Plans','Repeated use; policies, procedures, rules','Ongoing','Leave policy, safety procedures'],['Single-Use Plans','One-time specific purpose','Project duration','Product launch plan, event plan']]}},
+{title:'Management by Objectives (MBO)',content:'<strong>MBO</strong> — introduced by Peter Drucker — is a collaborative goal-setting process between managers and subordinates.',points:['<strong>Process</strong>: Set objectives jointly → Develop action plans → Monitor progress → Evaluate performance','<strong>SMART Goals</strong>: Specific, Measurable, Achievable, Relevant, Time-bound','<strong>Benefits</strong>: Clarity, alignment, motivation, accountability','<strong>Limitations</strong>: Time-consuming; difficulty setting measurable goals for qualitative work']}
+],
+examples:[{e:'Infosys Strategic Planning',i:'3-5 year strategic plan to diversify from IT services into AI, cloud, and consulting — responding to digital transformation trends'},{e:'MBO at Google',i:'Google uses OKRs (Objectives & Key Results) — a derivative of MBO — set at company, team, and individual levels quarterly'},{e:'McDonald\'s Operational Plans',i:'Daily production schedules, inventory plans, and shift rosters — operational plans ensuring consistent service across 40,000+ outlets'}],
+mnemonic:{word:'SMART',meaning:'Effective Goal-Setting in Planning',items:[{l:'S',w:'Specific — clear and well-defined'},{l:'M',w:'Measurable — trackable with metrics'},{l:'A',w:'Achievable — realistic and attainable'},{l:'R',w:'Relevant — aligned with organisational goals'},{l:'T',w:'Time-bound — has a deadline'}]},
+quiz:[
+{q:'Which feature of planning makes it a continuous process?',opts:['Planning is done only once','Plans must be revised and updated regularly as conditions change','Planning is only done at top management level','Planning applies only to strategic decisions'],ans:1,exp:'Planning is a continuous process because internal and external conditions change — new challenges emerge, resources shift, and goals evolve. Plans must be regularly reviewed and updated.'},
+{q:'Management by Objectives (MBO) was introduced by:',opts:['Henri Fayol','Frederick Taylor','Peter Drucker','Abraham Maslow'],ans:2,exp:'Peter Drucker introduced MBO in his 1954 book "The Practice of Management." MBO is a collaborative process where managers and employees jointly set objectives, monitor progress, and evaluate performance.'},
+{q:'A company\'s "leave policy" is an example of which type of plan?',opts:['Strategic Plan','Single-use Plan','Standing Plan','Operational Plan'],ans:2,exp:'Standing Plans are used repeatedly for recurring situations. Policies, procedures, and rules are standing plans. A leave policy applies every time an employee requests leave — not just once.'},
+{q:'SMART goals in planning means goals that are:',opts:['Simple, Manageable, Actionable, Realistic, Timely','Specific, Measurable, Achievable, Relevant, Time-bound','Strategic, Marketing-focused, Accountable, Rational, Team-based','Special, Major, Attractive, Robust, Transformative'],ans:1,exp:'SMART = Specific (clear), Measurable (trackable), Achievable (realistic), Relevant (aligned with objectives), Time-bound (has a deadline). SMART goals make planning concrete and actionable.'},
+{q:'What is the FIRST step in the planning process?',opts:['Evaluate alternatives','Formulate supporting plans','Set objectives','Analyse current situation'],ans:2,exp:'The first step in planning is to SET OBJECTIVES — defining what the organisation wants to achieve. Without clear goals, there is nothing to plan toward. All subsequent steps flow from this.'}
+]},
+
+{id:4,color:'#f472b6',title:'Organising',desc:'Understand the principles of organising, departmentalisation, delegation, authority, line and staff functions, and formal vs. informal organisations.',tags:['Departmentalisation','Delegation','Span of Control','Formal vs Informal','Line & Staff'],
+objectives:['Understand the meaning and need for organising','Learn how organisations divide and assign work','Know the principles that help in effective organising','Understand line and staff roles','Compare formal and informal organisations','See how good organising improves efficiency'],
+sections:[
+{title:'Definition & Objectives of Organising',content:'Organising is the process of <strong>arranging resources, roles, and responsibilities in a structured way</strong> to achieve business objectives efficiently.',points:['<strong>Clarity of Work</strong>: Every employee understands their tasks and responsibilities','<strong>Efficiency in Resource Use</strong>: Optimal allocation of human, financial, and physical resources','<strong>Coordination</strong>: Aligning departments and teams for harmonious functioning','<strong>Enable Growth</strong>: Creating flexible structures that support business scaling','<strong>Empowerment</strong>: Sharing decision-making through delegation increases productivity']},
+{title:'Key Concepts in Organising',points:['<strong>Division of Work</strong>: Breaking down tasks into manageable, specialised parts','<strong>Departmentalisation</strong>: Grouping similar activities into departments (by function, product, geography, customer)','<strong>Delegation</strong>: Transferring authority and responsibility to subordinates for specific tasks','<strong>Span of Control</strong>: Number of subordinates a manager can effectively supervise (wide vs. narrow)','<strong>Unity of Command</strong>: Each person reports to only one superior','<strong>Centralisation vs Decentralisation</strong>: Decision-making concentrated at top (central) vs. distributed lower levels']},
+{title:'Formal vs Informal Organisations',isTable:true,table:{headers:['Aspect','Formal Organisation','Informal Organisation'],rows:[['Origin','Deliberately created by management','Emerges spontaneously from social interactions'],['Structure','Defined hierarchy, rules, authority','Fluid, no fixed structure'],['Communication','Official channels (memos, emails)','Grapevine — informal networks'],['Purpose','Achieving organisational goals','Social needs, friendships, mutual support'],['Control','Formal authority and rules','Group norms and peer pressure'],['Example','Organisation chart, job descriptions','Lunch group, WhatsApp group of colleagues']]}},
+{title:'Line and Staff Functions',points:['<strong>Line Functions</strong>: Directly contribute to achieving core business goals; have direct authority; e.g. Production, Sales, Finance','<strong>Staff Functions</strong>: Provide advisory/support services to line managers; e.g. HR, Legal, R&D, PR','<strong>Line Authority</strong>: Right to direct the work of subordinates in the chain of command','<strong>Staff Authority</strong>: Advisory — recommend actions but cannot compel compliance','<strong>Conflict</strong>: Line vs Staff conflicts arise when staff try to overstep advisory roles']}
+],
+examples:[{e:'Infosys Functional Departmentalisation',i:'Infosys organised into departments by function — Technology, Sales, HR, Finance, Legal — enabling specialisation'},{e:'Tata Motors — Product Departmentalisation',i:'Organised by product lines — Cars, Commercial Vehicles, Defence — each with dedicated management'},{e:'Starbucks — Delegation in Practice',i:'Store managers are highly delegated: hiring, inventory, local promotions — empowering employees while maintaining brand standards'}],
+mnemonic:{word:'DDSCU',meaning:'Key Elements of Organising',items:[{l:'D',w:'Division of Work — specialise tasks'},{l:'D',w:'Departmentalisation — group similar tasks'},{l:'S',w:'Span of Control — how many to supervise'},{l:'C',w:'Chain of Command — authority hierarchy'},{l:'U',w:'Unity of Command — one boss principle'}]},
+quiz:[
+{q:'Departmentalisation by function means:',opts:['Grouping activities by geographic region','Grouping similar activities by their function (e.g. HR, Marketing, Finance)','Assigning tasks to individual employees','Dividing the organisation by product type'],ans:1,exp:'Functional departmentalisation groups activities by their nature/function — all marketing activities in one dept, all finance in another. Common in medium-sized organisations. Enables specialisation.'},
+{q:'Delegation involves:',opts:['Transferring ownership of the organisation','Assigning authority and responsibility to a subordinate for specific tasks','Centralising all decisions at the top','Dividing the organisation into departments'],ans:1,exp:'Delegation = transferring authority (right to decide) and responsibility (accountability for results) to subordinates for specific tasks. Authority can be delegated; ultimate accountability remains with the delegator.'},
+{q:'The "Grapevine" in organisations refers to:',opts:['A formal communication channel','The official communication policy','The informal communication network that emerges spontaneously','The strategic planning committee'],ans:2,exp:'The Grapevine is the informal communication network in organisations. It is fast, often accurate but sometimes distorted, and carries social/personal information — it is a feature of informal organisations.'},
+{q:'A wide span of control means:',opts:['Many management levels in the hierarchy','One manager supervising many subordinates','Very few people reporting to a manager','Centralised decision-making'],ans:1,exp:'Wide span of control = one manager supervises many subordinates. This creates a flat, horizontal organisational structure. Suited for routine tasks, experienced employees, and decentralised decisions.'},
+{q:'Staff functions in an organisation refer to:',opts:['Functions that directly produce goods/services','Advisory and support functions like HR, Legal, R&D that assist line managers','Financial functions only','Senior management functions'],ans:1,exp:'Staff functions (HR, Legal, R&D, PR) provide advisory and support services to line managers. They have staff authority (advisory) not line authority (command). They support but do not directly execute core business activities.'}
+]},
+
+{id:5,color:'#34d399',title:'Staffing and Controlling',desc:'Recruitment and selection processes, delegation of authority, controlling techniques, and the decision-making process with types and models.',tags:['Recruitment','Selection','Controlling','Decision Making','Delegation','MBO'],
+objectives:['Learn the importance of hiring the right people','Understand the recruitment and selection process','Know what leadership, authority, and delegation mean','Understand how managers control and guide work','Identify different types of control methods','Learn how decisions are made and types of decisions'],
+sections:[
+{title:'Staffing: Recruitment & Selection',points:['<strong>Manpower Planning</strong>: Forecasting human resource needs based on organisational goals','<strong>Recruitment Sources</strong>: Internal (promotion, transfer, internal posting) vs External (campus, portals, agencies, walk-ins)','<strong>Selection Process</strong>: Application → Screening → Testing → Interview → Medical → Appointment letter','<strong>Training & Development</strong>: On-the-job (apprenticeship, job rotation) and Off-the-job (classroom, workshops)','<strong>Performance Appraisal</strong>: 360-degree feedback, MBO-based appraisal, rating scales']},
+{title:'Controlling: Process and Types',content:'Controlling is the process of <strong>monitoring performance, comparing against standards, and taking corrective action</strong>.',points:['<strong>3-Step Process</strong>: Set standards → Measure performance → Compare and take corrective action','<strong>Pre-Control (Feedforward)</strong>: Preventive control before work begins (input quality checks)','<strong>Concurrent Control</strong>: Real-time monitoring while work is in progress (supervisory observation)','<strong>Post-Control (Feedback)</strong>: After-the-fact review of completed activities (financial audits, quality inspection)','<strong>Key Tools</strong>: Budget analysis, statistical reports, Gantt charts, Management Audits']},
+{title:'Decision Making: Process and Types',isTable:true,table:{headers:['Aspect','Programmed Decisions','Non-Programmed Decisions'],rows:[['Nature','Routine, repetitive, structured','Unique, complex, unstructured'],['Response','Standard operating procedures, rules','Judgment, creativity, intuition'],['Level','Lower management','Top management'],['Example','Reorder inventory when stock hits 100 units','Whether to acquire a competitor'],['Time','Quick','Time-consuming']]}},
+{title:'Models of Decision Making',points:['<strong>Rational Model</strong>: Define problem → Generate alternatives → Evaluate → Select best → Implement → Review','<strong>Bounded Rationality (Simon)</strong>: Managers don\'t find optimal solutions; they "satisfice" — pick first satisfactory option','<strong>Intuitive Model</strong>: Relies on gut feeling, experience, and instinct — useful for time-pressed decisions','<strong>Group Decision-Making</strong>: Brainstorming, Delphi Technique, Nominal Group Technique (NGT)']}
+],
+examples:[{e:'Infosys Campus Recruitment',i:'Infosys hires heavily from top engineering colleges — classic external recruitment ensuring fresh talent pipeline'},{e:'Six Sigma at GE',i:'Concurrent control method — monitors defects in real-time during manufacturing; corrects deviations immediately'},{e:'Herbert Simon — Bounded Rationality',i:'Simon showed managers don\'t always seek perfect decisions; they "satisfice" due to time, information, and cognitive limits'}],
+mnemonic:{word:'SMA-CC',meaning:'Controlling Process',items:[{l:'S',w:'Set standards (performance benchmarks)'},{l:'M',w:'Measure actual performance'},{l:'A',w:'Analyse the deviation'},{l:'C',w:'Compare with standards'},{l:'C',w:'Corrective action if deviation found'}]},
+quiz:[
+{q:'Internal sources of recruitment include:',opts:['Campus hiring','Job portals like Naukri','Promotion and internal job posting','Walk-in interviews'],ans:2,exp:'Internal recruitment sources: promotion (moving up), transfer (lateral move), and internal job postings. Advantages: faster, cheaper, boosts morale, ensures cultural fit.'},
+{q:'Concurrent control refers to:',opts:['Control applied before work begins','Real-time monitoring while work is in progress','After-the-fact review of completed activities','Annual financial audit'],ans:1,exp:'Concurrent (real-time) control monitors activities as they happen. Example: supervisors observing workers on the shop floor, managers reviewing dashboards during a project. Allows immediate correction.'},
+{q:'"Bounded Rationality" in decision-making means:',opts:['Managers always find the optimal solution','Managers satisfice — pick the first satisfactory option due to cognitive and information limits','Decisions are always made in groups','All decisions are programmed and routine'],ans:1,exp:'Herbert Simon\'s Bounded Rationality: managers cannot be perfectly rational due to cognitive limits, incomplete information, and time constraints. They "satisfice" — choose the first acceptable option rather than searching for the optimal one.'},
+{q:'Which type of decision involves standard procedures for routine, recurring situations?',opts:['Non-programmed decision','Strategic decision','Programmed decision','Crisis decision'],ans:2,exp:'Programmed decisions: routine, repetitive, handled by rules/SOPs. Example: reordering inventory at a set level. Non-programmed decisions are unique and complex, requiring judgment.'},
+{q:'The 360-degree feedback appraisal system collects feedback from:',opts:['Only the immediate supervisor','Only peers and subordinates','Supervisor, peers, subordinates, and sometimes customers','HR department only'],ans:2,exp:'360-degree feedback collects performance input from all directions: supervisor (downward), peers (horizontal), subordinates (upward), and sometimes customers/clients — giving a comprehensive view of an employee\'s performance.'}
+]},
+
+{id:6,color:'#fbbf24',title:'Leadership Theories',desc:'Explore leadership styles (Autocratic, Democratic, Laissez-faire), Trait Theory, Behavioural theories, and Blake-Mouton\'s Managerial Grid.',tags:['Autocratic','Democratic','Trait Theory','Managerial Grid','Blake-Mouton','Behavioural Theory'],
+objectives:['Learn about different leadership styles','Understand what makes a good leader','Compare trait and behaviour-based leadership theories','Study the Managerial Grid to see how leaders balance tasks and people','See how leadership style affects team performance','Apply theories to real-life leadership examples'],
+sections:[
+{title:'Leadership Styles',isTable:true,table:{headers:['Style','Key Feature','Best For','Drawback'],rows:[['Autocratic','Leader makes all decisions alone; top-down control','Crises, unskilled workers, military','Reduces creativity; low morale; high turnover risk'],['Democratic (Participative)','Team involved in decision-making; consensus-driven','Creative, skilled teams; strategic decisions','Slow; can lead to indecisiveness'],['Laissez-faire (Free Rein)','Minimal leader interference; full autonomy to team','Expert professionals, R&D, creative teams','Lack of direction; chaos if team lacks discipline'],['Paternalistic','Leader acts as a father figure; caring but firm','Family-owned businesses, cultural contexts','Over-dependence; limits individual growth'],['Transformational','Inspires through vision, motivation, and change','Change management, innovation-driven orgs','Can be overwhelming; needs strong communication']]}},
+{title:'Trait Theory of Leadership',content:'Early theory proposing that <strong>leaders are born with innate qualities</strong> that distinguish them from non-leaders.',points:['<strong>Key Traits Identified</strong>: Intelligence, drive/energy, self-confidence, dominance, integrity, and emotional maturity','<strong>Stogdill\'s Research</strong>: Identified common traits but found no universal set that guarantees leadership success','<strong>Strength</strong>: Simple, intuitive; explains charismatic leaders','<strong>Limitation</strong>: Ignores situational factors; fails to explain why some trait-rich people fail as leaders','<strong>Modern view</strong>: Traits may create potential but behaviour and context determine leadership effectiveness']},
+{title:'Behavioural Theories of Leadership',points:['<strong>Ohio State Studies</strong>: Two dimensions — Initiating Structure (task orientation) and Consideration (people/relationship orientation)','<strong>Michigan Studies (Likert)</strong>: Job-centred (task focus) vs Employee-centred (people focus) — employee-centred leads to better performance','<strong>Both/And</strong>: Best leaders score high on BOTH task and people orientation','<strong>Key Insight</strong>: Leadership behaviour can be learned and developed — unlike traits']},
+{title:'Blake-Mouton Managerial Grid',content:'Plots leadership on a 9×9 grid: <strong>Concern for Production (X-axis) vs Concern for People (Y-axis)</strong>.',points:['<strong>(1,1) Impoverished Management</strong>: Low concern for both — minimum effort, mediocre output','<strong>(9,1) Authority-Compliance (Task)</strong>: High task, low people — efficiency but low morale','<strong>(1,9) Country Club Management</strong>: High people, low task — comfortable atmosphere but low productivity','<strong>(5,5) Middle-of-the-Road</strong>: Moderate balance — adequate but not outstanding on either dimension','<strong>(9,9) Team Management ⭐</strong>: High on BOTH — ideal style; builds trust, commitment, and high performance']}
+],
+examples:[{e:'Steve Jobs — Autocratic Style',i:'Jobs made most Apple decisions unilaterally; demanding perfectionism. Yet it produced extraordinary innovation — showing autocratic CAN work with visionary leaders'},{e:'Satya Nadella — Transformational',i:'Microsoft CEO transformed company culture from competition to collaboration; moved to cloud-first — classic transformational leadership'},{e:'Ratan Tata — (9,9) Team Management',i:'Known for high concern for both business results and employee/social welfare — embodies the Team Management style on the Managerial Grid'}],
+mnemonic:{word:'ADL-PT',meaning:'5 Leadership Styles',items:[{l:'A',w:'Autocratic — leader decides alone'},{l:'D',w:'Democratic — team participates in decisions'},{l:'L',w:'Laissez-faire — full freedom to team'},{l:'P',w:'Paternalistic — caring but controlling'},{l:'T',w:'Transformational — inspires through vision'}]},
+quiz:[
+{q:'In the Blake-Mouton Managerial Grid, the ideal (9,9) management style is called:',opts:['Authority-Compliance','Country Club Management','Team Management','Impoverished Management'],ans:2,exp:'Team Management (9,9) = high concern for BOTH production AND people. Leaders build trust and commitment; teams achieve high performance because their needs align with organisational goals. Considered the ideal style.'},
+{q:'Trait Theory of Leadership argues that:',opts:['Leaders can be trained through behaviour modification','Effective leadership depends on the situation','Leaders are born with innate traits that distinguish them from non-leaders','Leadership style should adapt to follower maturity'],ans:2,exp:'Trait Theory (early approach): leaders are born with innate qualities like intelligence, self-confidence, and integrity. However, research found no universal set of traits that always predicts leadership success — context matters.'},
+{q:'Laissez-faire leadership style is BEST suited for:',opts:['New employees who need guidance','Crisis situations requiring quick decisions','Expert professionals and highly skilled creative teams working autonomously','Military operations'],ans:2,exp:'Laissez-faire (Free Rein): minimal leader interference, maximum autonomy. Best for highly competent, self-motivated experts (R&D teams, creative professionals) who need freedom to innovate. Fails with undisciplined or inexperienced teams.'},
+{q:'The Ohio State Studies identified which two leadership dimensions?',opts:['Task orientation and Reward orientation','Initiating Structure (task) and Consideration (people/relationship)','Autocratic style and Democratic style','Production concern and Profit concern'],ans:1,exp:'Ohio State Studies identified: Initiating Structure (setting goals, defining tasks, establishing procedures) and Consideration (building trust, respecting employees, two-way communication). Best leaders score high on both.'},
+{q:'Which leadership style is MOST likely to cause delays in decision-making?',opts:['Autocratic','Laissez-faire','Democratic (Participative)','Authority-Compliance'],ans:2,exp:'Democratic leadership involves the team in decision-making — gathering input, discussing options, building consensus. While it improves quality and buy-in, it is slower than autocratic decision-making, especially for large groups.'}
+]},
+
+{id:7,color:'#818cf8',title:'Situational and Relational Leadership',desc:'Master the Hersey-Blanchard Situational Leadership model, LMX theory, and the key differences between leaders and managers.',tags:['Hersey-Blanchard','Situational Leadership','LMX Theory','Leaders vs Managers','Follower Maturity'],
+objectives:['Understand how leadership should adapt to situations','Learn the Hersey-Blanchard model','Know how leaders build relationships through LMX theory','See the difference between being a leader and a manager','Understand how to move from manager to leader','Apply leadership styles to workplace challenges'],
+sections:[
+{title:'Hersey-Blanchard Situational Leadership Model',content:'Leadership effectiveness depends on <strong>matching leadership style to the follower\'s Development Level</strong> (competence + commitment).',points:['<strong>D1 — Low Competence, High Commitment</strong>: New employee, enthusiastic but unskilled → Use Telling style','<strong>D2 — Some Competence, Low Commitment</strong>: Has some skills but lost motivation → Use Selling style','<strong>D3 — High Competence, Variable Commitment</strong>: Skilled but uncertain/unmotivated → Use Participating style','<strong>D4 — High Competence, High Commitment</strong>: Fully capable and motivated → Use Delegating style']},
+{title:'4 Leadership Styles (Hersey-Blanchard)',isTable:true,table:{headers:['Style','Task Behavior','Relationship Behavior','Match'],rows:[['Telling (S1)','High','Low','D1 followers — define tasks, close supervision'],['Selling (S2)','High','High','D2 followers — explain decisions, encourage feedback'],['Participating (S3)','Low','High','D3 followers — involve in decisions, provide support'],['Delegating (S4)','Low','Low','D4 followers — hand over responsibility, monitor results']]}},
+{title:'Leader-Member Exchange (LMX) Theory',content:'Leaders develop <strong>different quality relationships with different team members</strong> — some form the "in-group", others the "out-group".',points:['<strong>In-Group</strong>: High-quality LMX — mutual trust, respect, obligation; more autonomy, resources, and development opportunities','<strong>Out-Group</strong>: Low-quality LMX — formal, task-based relationship only; limited support and opportunities','<strong>Implication</strong>: Leaders should consciously work to build high-quality LMX with all members — not just favourites','<strong>Research finding</strong>: High LMX → higher job satisfaction, lower turnover, better performance']},
+{title:'Leaders vs Managers: Key Differences',isTable:true,table:{headers:['Dimension','Manager','Leader'],rows:[['Focus','Efficiency ("doing things right")','Effectiveness ("doing the right things")'],['Approach','Planning, organising, controlling','Inspiring, motivating, influencing'],['Authority','Formal position/title','Personal influence, vision, charisma'],['Time Horizon','Short-term operational','Long-term strategic vision'],['Change','Maintains stability','Drives and champions change'],['People','Directs and supervises','Coaches and empowers'],['Example','Operations Manager — meeting today\'s targets','CEO — setting 10-year strategic direction']]}}
+],
+examples:[{e:'New Software Developer (D1)',i:'A fresh hire learning a new coding framework needs a Telling style — clear task instructions, close supervision, step-by-step guidance'},{e:'LMX at Google',i:'Managers who build high-LMX with engineers see higher retention and innovation — Google\'s Project Oxygen research supports this'},{e:'Elon Musk — Leader, not just Manager',i:'Musk drives transformative vision (Tesla, SpaceX) through inspiration and personal influence — archetypal leader, not just an operational manager'}],
+mnemonic:{word:'TSPD',meaning:'Hersey-Blanchard 4 Styles',items:[{l:'T',w:'Telling — High Task, Low Relationship (D1)'},{l:'S',w:'Selling — High Task, High Relationship (D2)'},{l:'P',w:'Participating — Low Task, High Relationship (D3)'},{l:'D',w:'Delegating — Low Task, Low Relationship (D4)'}]},
+quiz:[
+{q:'In Hersey-Blanchard theory, a D1 follower is someone who is:',opts:['Highly competent and highly committed','Highly competent but uncommitted','Low in competence but high in enthusiasm/commitment','Average in both competence and commitment'],ans:2,exp:'D1 = Low Competence + High Commitment — a new, enthusiastic employee who wants to do well but lacks the skills. They need a Telling (S1) style: clear instructions, close supervision, task-focused direction.'},
+{q:'The Selling leadership style (S2) is best matched with:',opts:['D1 followers (new, enthusiastic)','D2 followers (some skills, low motivation)','D3 followers (skilled, variable confidence)','D4 followers (expert, self-directed)'],ans:1,exp:'S2 Selling = High Task + High Relationship. Best for D2 followers who have some competence but lack motivation/confidence. Leader explains decisions, encourages feedback, provides both direction AND support.'},
+{q:'LMX Theory focuses on:',opts:['How leaders adapt styles to different situations','How leaders develop different quality relationships with different team members (in-group vs out-group)','Universal traits of effective leaders','How leaders manage large groups'],ans:1,exp:'LMX (Leader-Member Exchange) Theory: leaders form differentiated relationships. In-group members get more autonomy, trust, and opportunities; out-group members get formal, task-only relationships. Research shows high LMX predicts better performance and satisfaction.'},
+{q:'The key difference between a leader and a manager is:',opts:['Managers are more important than leaders','Leaders focus on inspiration and long-term vision; managers focus on efficiency and operational control','Leaders handle day-to-day operations; managers set strategy','They are completely identical roles'],ans:1,exp:'Managers do things RIGHT (efficiency, control, stability). Leaders do the RIGHT things (effectiveness, vision, change, inspiration). Both are necessary — the best organisations have managers who lead and leaders who manage.'},
+{q:'Which Hersey-Blanchard style involves maximum delegation with minimal task/relationship guidance?',opts:['Telling','Selling','Participating','Delegating'],ans:3,exp:'Delegating (S4) = Low Task + Low Relationship. Used with D4 followers (high competence + high commitment). The leader hands over responsibility and autonomy; monitors results but does not interfere. Trust is the foundation.'}
+]},
+
+{id:8,color:'#f87171',title:'Group Behaviour and Change Management',desc:'Group types, Tuckman\'s stages of development, group dynamics, decision-making techniques, Lewin\'s change model, and overcoming resistance to change.',tags:['Group Behaviour','Tuckman Model','Lewin Change Model','Resistance to Change','Group Dynamics'],
+objectives:['Understand what group behaviour is and why it matters','Learn how groups are formed and grow over time','Study how groups make decisions together','Know what organisational change is and why it happens','Learn about Lewin\'s model for managing change','Identify why people resist change and how to manage it'],
+sections:[
+{title:'Groups: Types and Importance',content:'A group is any collection of two or more people who interact, are aware of each other, and work to achieve shared objectives.',points:['<strong>Formal Groups</strong>: Officially created by management for specific purposes; command groups (boss+subordinates) and task groups (cross-functional projects)','<strong>Informal Groups</strong>: Emerge spontaneously from social interaction; interest groups and friendship groups','<strong>Group Norms</strong>: Unwritten rules that guide member behaviour; influence conformity and performance','<strong>Group Cohesiveness</strong>: Degree of unity; high cohesiveness + aligned goals = high performance','<strong>Social Loafing</strong>: Tendency to exert less effort when working in a group — "free-rider" problem']},
+{title:'Tuckman\'s 5 Stages of Group Development',points:['<strong>1. Forming</strong>: Group comes together; polite, guarded; members get acquainted; leader\'s role is crucial for direction','<strong>2. Storming</strong>: Conflict emerges over roles, power, and approach; most difficult stage; leader must manage conflict','<strong>3. Norming</strong>: Group establishes norms, roles, and relationships; cooperation begins; cohesion develops','<strong>4. Performing</strong>: Group functions smoothly; high productivity; members work interdependently toward goals','<strong>5. Adjourning</strong>: Task completed; group disbands; members move on (temporary/project groups)']},
+{title:'Kurt Lewin\'s 3-Stage Change Model',content:'Classic framework for understanding and managing organisational change: <strong>Unfreeze → Change → Refreeze</strong>.',points:['<strong>Stage 1 — Unfreeze</strong>: Create awareness that change is needed; break down the current mindset; build motivation for change (create dissatisfaction with status quo)','<strong>Stage 2 — Change (Transition)</strong>: Implement new processes, behaviours, structures; provide training and support; manage uncertainty','<strong>Stage 3 — Refreeze</strong>: Stabilise and embed the new state; reinforce new behaviours through culture, rewards, and policies; celebrate success']},
+{title:'Resistance to Change — Causes & Solutions',isTable:true,table:{headers:['Cause of Resistance','Overcoming Strategy'],rows:[['Fear of the unknown','Communicate clearly about what is changing and why'],['Loss of job security','Provide assurances, retraining, and transition support'],['Habit and comfort zone','Gradual introduction; pilot programmes before full rollout'],['Distrust of management','Build trust; involve employees in the change process'],['Perceived loss of status/power','Acknowledge concerns; create new meaningful roles'],['Lack of participation','Involve employees in planning and decision-making']]}}
+],
+examples:[{e:'Tata Steel — Lewin\'s Model',i:'Unfreeze: acknowledged declining steel industry; Change: implemented automation and lean manufacturing; Refreeze: new processes embedded in culture'},{e:'Nokia\'s Failure to Change',i:'Classic resistance to change — Nokia\'s management resisted smartphone shift; insufficient unfreezing led to decline from market leader to irrelevance'},{e:'Google Teams — Tuckman Model',i:'Google\'s Project Aristotle found that teams that pass through Tuckman\'s stages (especially Norming) develop psychological safety essential for high performance'}],
+mnemonic:{word:'FSPA',meaning:'Tuckman\'s Stages of Group Development',items:[{l:'F',w:'Forming — members get acquainted'},{l:'S',w:'Storming — conflict over roles and ideas'},{l:'N',w:'Norming — norms and cooperation emerge'},{l:'P',w:'Performing — high productivity and output'},{l:'A',w:'Adjourning — disbanding after task completion'}]},
+quiz:[
+{q:'In Tuckman\'s model, the STORMING stage is characterised by:',opts:['High productivity and smooth functioning','Members getting acquainted and being polite','Conflict over roles, power, and approach','Group disbanding after task completion'],ans:2,exp:'Storming is the second stage — conflicts emerge as members disagree on roles, leadership, goals, and methods. It is the most difficult stage. A leader must actively manage conflict to move the group to Norming.'},
+{q:'Kurt Lewin\'s change model in the correct order is:',opts:['Change → Unfreeze → Refreeze','Unfreeze → Change → Refreeze','Refreeze → Change → Unfreeze','Plan → Do → Check → Act'],ans:1,exp:'Lewin\'s 3-Stage Model: Unfreeze (break the status quo, create urgency) → Change (implement new behaviours/processes) → Refreeze (stabilise and embed the new state). It is one of the most widely used change models.'},
+{q:'Social Loafing in group behaviour refers to:',opts:['Social events organised by the group','The tendency to exert less effort when working in a group than individually','Groups engaging in creative activities','Building cohesion through social activities'],ans:1,exp:'Social Loafing (Ringelmann Effect): individuals exert less effort in group settings because they believe others will pick up the slack. Solution: assign individual accountability within groups, make contributions visible.'},
+{q:'Group Cohesiveness combined with goals aligned with the organisation results in:',opts:['Resistance to change','High performance','Social loafing','Groupthink'],ans:1,exp:'High cohesiveness (strong group unity) + goals aligned with organisational objectives = high performance. However, high cohesiveness with misaligned goals can lead to groupthink and poor decisions.'},
+{q:'The REFREEZE stage in Lewin\'s model involves:',opts:['Creating urgency and dissatisfaction with the status quo','Implementing new processes and behaviours','Stabilising and embedding the new behaviours through culture, rewards, and policies','Training employees for new skills only'],ans:2,exp:'Refreeze = stabilise and make the change permanent. This includes reinforcing new behaviours through organisational culture, reward systems, updated policies, and celebrating success. Without refreezing, people revert to old habits.'}
+]},
+
+{id:9,color:'#a78bfa',title:'Nature and Scope of Organizational Behaviour',desc:'What is OB, its multidisciplinary foundations (psychology, sociology, anthropology), three levels of analysis, and challenges in the modern workplace.',tags:['OB Definition','Multidisciplinary','Individual Level','Group Level','Org Level','Challenges'],
+objectives:['Know what Organisational Behaviour (OB) is','Understand how OB helps managers understand people at work','Learn which fields contribute to OB','Understand individual, group, and organisational levels of OB','Identify current challenges in studying OB','Apply OB knowledge to real workplace situations'],
+sections:[
+{title:'Definition & Nature of OB',content:'<strong>Organisational Behaviour (OB)</strong> is the systematic study of how individuals and groups act within organisations to improve effectiveness and employee well-being.',points:['<strong>Multidisciplinary</strong>: Draws from psychology, sociology, anthropology, economics, and political science','<strong>Human-Centred</strong>: Focuses on employee attitudes, motivations, relationships, and leadership','<strong>Goal-Oriented</strong>: Enhance individual performance AND organisational productivity','<strong>Systematic Approach</strong>: Uses research and evidence — not just assumptions','<strong>Both Science and Art</strong>: Research-based knowledge + practical skill to manage people','<strong>Dynamic</strong>: Evolves with changes in technology, society, and work culture']},
+{title:'Disciplines Contributing to OB',isTable:true,table:{headers:['Discipline','Contribution to OB','Key Concepts'],rows:[['Psychology','Individual behaviour, mental processes','Motivation, perception, personality, learning, attitudes, stress'],['Sociology','Group and social behaviour','Group dynamics, organisational culture, socialisation, power'],['Anthropology','Culture and human environments','Organisational culture, cross-cultural management, values'],['Economics','Decision-making, incentives','Rational choice, incentive design, labour markets'],['Political Science','Power, authority, conflict','Power dynamics, organisational politics, coalition building']]}},
+{title:'3 Levels of OB Analysis',points:['<strong>Individual Level</strong>: Personality, perception, attitudes, motivation, learning, decision-making, stress — "What makes this person tick?"','<strong>Group Level</strong>: Group behaviour, team dynamics, leadership, communication, conflict, power — "How do people interact in teams?"','<strong>Organisational Level</strong>: Culture, structure, change management, strategy — "How does the whole organisation function?"','<strong>Integration</strong>: OB analyses all three levels and their interactions for comprehensive understanding']},
+{title:'Contemporary Challenges in OB',points:['<strong>Workforce Diversity</strong>: Managing multicultural, multigenerational, and diverse teams','<strong>Remote/Hybrid Work</strong>: Maintaining engagement, collaboration, and culture across distances','<strong>Technological Change</strong>: AI, automation displacing roles; digital transformation of workplaces','<strong>Employee Well-being</strong>: Mental health, work-life balance, burnout prevention','<strong>Ethical Behaviour</strong>: Corruption, harassment, whistleblowing, corporate accountability','<strong>Globalisation</strong>: Cross-cultural management, global teams, international leadership']}
+],
+examples:[{e:'Google\'s Project Aristotle',i:'Google used OB research to find what makes effective teams — answer: psychological safety, not individual brilliance'},{e:'Zoom Fatigue (Post-COVID OB)',i:'Real OB challenge — virtual meetings cause cognitive overload and fatigue; led to new research on remote work design'},{e:'Infosys Diversity Programme',i:'OB-driven initiative to increase gender, cultural, and disability diversity — addressing workforce diversity challenge'}],
+mnemonic:{word:'PASE-P',meaning:'OB\'s Contributing Disciplines',items:[{l:'P',w:'Psychology — individual behaviour and mind'},{l:'A',w:'Anthropology — culture and environment'},{l:'S',w:'Sociology — group and social behaviour'},{l:'E',w:'Economics — incentives and decision-making'},{l:'P',w:'Political Science — power and authority'}]},
+quiz:[
+{q:'Organisational Behaviour is best described as:',opts:['Only studying financial behaviour of organisations','The systematic study of how individuals and groups act within organisations to improve effectiveness','The study of marketing behaviour','A branch of economics focused on labour markets'],ans:1,exp:'OB = systematic study of individual and group behaviour within organisations. It draws from psychology, sociology, anthropology, and other fields to understand and improve workplace behaviour, performance, and well-being.'},
+{q:'Which discipline contributes concepts like "motivation", "perception", and "personality" to OB?',opts:['Sociology','Anthropology','Psychology','Political Science'],ans:2,exp:'Psychology contributes the most to individual-level OB — motivation theories (Maslow, Herzberg), perception processes, personality frameworks (Big Five, MBTI), learning theories, attitude formation, and stress management.'},
+{q:'The "Group Level" of OB analysis focuses on:',opts:['Individual personality traits','Organisational culture and structure','Team dynamics, leadership, communication, and conflict within groups','National economic policies'],ans:2,exp:'Group-level OB examines how people behave in teams — group formation, norms, cohesion, conflict, leadership dynamics, communication patterns, and decision-making in groups.'},
+{q:'"Psychological Safety" in the context of OB refers to:',opts:['Physical safety in the workplace','The feeling that one can speak up, take risks, and make mistakes without fear of punishment or ridicule','Financial security for employees','Legal protection of employee rights'],ans:1,exp:'Psychological safety (Amy Edmondson) = belief that one can speak up, share ideas, question, or make mistakes without fear of negative consequences. Google\'s Project Aristotle found it the #1 predictor of team effectiveness.'},
+{q:'A contemporary challenge in OB related to technology is:',opts:['Introducing assembly line production','Managing AI/automation\'s impact on jobs and digital transformation of workplaces','Returning to classical management','Reducing use of communication tools'],ans:1,exp:'Technology challenges in OB: AI and automation displacing roles (job security, retraining), digital collaboration tools changing team dynamics, algorithmic management, data privacy, and managing virtual teams across time zones.'}
+]},
+
+{id:10,color:'#fb923c',title:'Personality',desc:'Personality types (A/B/introvert/extrovert), factors shaping personality, Big Five model (OCEAN), MBTI framework, and personality-job fit.',tags:['Type A & B','Big Five OCEAN','MBTI','Personality-Job Fit','Introvert/Extrovert'],
+objectives:['Understand what personality is and why it matters at work','Learn about different personality types','Know what factors shape personality','Explore the Big Five personality traits','Learn how MBTI helps in team building','Connect personality traits with work behaviour'],
+sections:[
+{title:'Definition & Types of Personality',content:'<strong>Personality</strong> = unique and stable set of traits, characteristics, and patterns of behaviour defining how an individual interacts with their environment.',points:['<strong>Type A Personality</strong>: Competitive, achievement-oriented, impatient, time-conscious, high stress — takes initiative, meets deadlines, prone to burnout','<strong>Type B Personality</strong>: Relaxed, patient, cooperative, handles stress well, less competitive — works well in teams, maintains calm under pressure','<strong>Introvert</strong>: Energised by solitude; reflective, deep thinker, private — works well in focused, independent tasks','<strong>Extrovert</strong>: Energised by social interaction; outgoing, assertive, expressive — thrives in collaborative, social roles','<strong>Ambivert</strong>: Balances both introversion and extroversion depending on context']},
+{title:'Factors Influencing Personality',points:['<strong>Heredity (Nature)</strong>: Genetic factors, brain structure, inherited temperament — ~50% of personality variation','<strong>Environment (Nurture)</strong>: Family upbringing, culture, education, peer influence, life experiences','<strong>Situation</strong>: Context shapes how personality expresses itself — same person behaves differently in different settings','<strong>Culture</strong>: Collectivist (India, Japan) vs Individualist (USA) cultures shape personality differently']},
+{title:'Big Five Personality Model (OCEAN)',isTable:true,table:{headers:['Trait','High Score','Low Score','Work Relevance'],rows:[['Openness to Experience','Creative, curious, imaginative, open to new ideas','Conventional, routine-oriented, resistant to change','Innovation, creativity, adaptability'],['Conscientiousness','Organised, dependable, hardworking, disciplined','Careless, impulsive, disorganised','Job performance predictor — strongest Big Five predictor of work performance'],['Extraversion','Sociable, assertive, talkative, positive affect','Introverted, reserved, quiet','Leadership emergence, sales roles, management'],['Agreeableness','Cooperative, trusting, empathetic, helpful','Antagonistic, suspicious, critical','Teamwork, customer service, conflict resolution'],['Neuroticism (Emotional Stability)','Anxious, moody, emotionally reactive (high N)','Calm, stable, resilient (low N = Emotional Stability)','Stress management, high-pressure roles']]}},
+{title:'MBTI — Myers-Briggs Type Indicator',content:'Based on Carl Jung\'s theory; identifies 16 personality types from 4 dichotomies:',points:['<strong>E/I</strong>: Extroversion vs Introversion — where you get energy','<strong>S/N</strong>: Sensing vs iNtuition — how you gather information','<strong>T/F</strong>: Thinking vs Feeling — how you make decisions','<strong>J/P</strong>: Judging vs Perceiving — how you approach the outer world','<strong>Application</strong>: Team building, role assignment, leadership development, career counselling','<strong>Limitation</strong>: Low test-retest reliability; oversimplifies complex personality into 16 types']}
+],
+examples:[{e:'Type A vs Type B in Investment Banking',i:'Type A traits dominate Wall Street culture — high competition, long hours, achievement focus. High performance but also high burnout rates'},{e:'Big Five at Work — Conscientiousness',i:'Meta-analyses consistently show Conscientiousness is the single best personality predictor of job performance across all occupations'},{e:'MBTI in Team Building',i:'Many Indian corporates (TCS, Wipro) use MBTI for team composition — pairing complementary types for balance'}],
+mnemonic:{word:'OCEAN',meaning:'Big Five Personality Traits',items:[{l:'O',w:'Openness to Experience'},{l:'C',w:'Conscientiousness (best predictor of performance)'},{l:'E',w:'Extraversion'},{l:'A',w:'Agreeableness'},{l:'N',w:'Neuroticism (Emotional Stability when low)'}]},
+quiz:[
+{q:'The Big Five personality model is also known as:',opts:['MBTI framework','OCEAN model','Type A/B classification','Holland\'s RIASEC'],ans:1,exp:'The Big Five = OCEAN: Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism. It is the most empirically validated personality framework, widely used in organisational research.'},
+{q:'Which Big Five trait is the STRONGEST predictor of overall job performance?',opts:['Openness to Experience','Extraversion','Conscientiousness','Agreeableness'],ans:2,exp:'Conscientiousness (organised, disciplined, hardworking, dependable) is consistently the strongest predictor of job performance across all types of jobs in meta-analytic research. High scorers set goals, persist, and take responsibility.'},
+{q:'A Type A personality individual is characterised by:',opts:['Being relaxed, patient, and cooperative','Being competitive, time-conscious, impatient, and achievement-oriented with high stress levels','Being highly introverted and reflective','Being highly agreeable and empathetic'],ans:1,exp:'Type A (Friedman & Rosenman): competitive, impatient, time-conscious, aggressive, high-achiever — prone to high stress and burnout. Type B is the opposite: relaxed, patient, cooperative. Type A may excel but at health costs.'},
+{q:'MBTI is based on the theoretical work of:',opts:['Sigmund Freud','Abraham Maslow','Carl Jung','Gordon Allport'],ans:2,exp:'MBTI (Myers-Briggs Type Indicator) was developed by Isabel Briggs Myers and Katharine Cook Briggs, based on Carl Jung\'s theory of psychological types from his 1921 book "Psychological Types."'},
+{q:'In the context of personality and OB, "Neuroticism" refers to:',opts:['Creative and open personality','Tendency toward anxiety, moodiness, and emotional instability (vs emotional stability at the low end)','Organised and disciplined behaviour','Outgoing and social behaviour'],ans:1,exp:'Neuroticism = tendency toward negative emotions, anxiety, mood swings, and emotional reactivity. High Neuroticism = emotionally unstable. Low Neuroticism = emotionally stable, calm, resilient. High Neuroticism is associated with poor performance under stress.'}
+]},
+
+{id:11,color:'#2dd4bf',title:'Perception',desc:'The perceptual process, factors influencing selectivity, attribution theory, and perception errors like halo effect, stereotyping, and selective perception.',tags:['Perceptual Process','Attribution Theory','Halo Effect','Stereotyping','Selective Perception'],
+objectives:['Understand how people perceive others and situations','Learn the stages of the perceptual process','Know what affects how we notice and interpret things','Study errors in perception like stereotyping','See how perception influences workplace behaviour','Apply perception knowledge to improve communication'],
+sections:[
+{title:'Definition & Stages of Perception',content:'<strong>Perception</strong> = process by which individuals select, organise, and interpret sensory information to make sense of the environment.',points:['<strong>Stage 1 — Sensation</strong>: Initial detection of stimuli through senses; raw data collected — sight, sound, touch','<strong>Stage 2 — Selection/Attention</strong>: Brain selectively focuses on certain stimuli; filters out irrelevant input','<strong>Stage 3 — Organisation</strong>: Brain groups and structures stimuli using schemas, patterns, and mental frameworks (Gestalt principles)','<strong>Stage 4 — Interpretation</strong>: Assigning meaning to organised information based on past experience, values, and expectations','<strong>Key Insight</strong>: Perception ≠ Reality. Two people in the same meeting may perceive it completely differently']},
+{title:'Factors Influencing Perceptual Selectivity',points:['<strong>Perceiver Factors</strong>: Attitudes, motives, interests, experience, expectations — shape what we notice and how we interpret it','<strong>Target Factors</strong>: Novelty, motion, size, background, proximity, similarity of the object being perceived','<strong>Situational Factors</strong>: Time pressure, work setting, social context — context changes perception','<strong>Example</strong>: Same presentation may be perceived as "brilliant" by one manager (positive attitude toward presenter) and "ordinary" by another (past negative experience)']},
+{title:'Perception Errors in the Workplace',isTable:true,table:{headers:['Error','Definition','Workplace Impact'],rows:[['Halo Effect','One positive trait colours all judgements positively','Promoting a charismatic person despite poor technical skills'],['Horn Effect','One negative trait colours all judgements negatively','Dismissing good ideas from a disliked employee'],['Stereotyping','Judging based on group membership (age, gender, race)','Promotion bias, team assignment discrimination'],['Selective Perception','Seeing only what we expect or want to see','Ignoring negative feedback; confirmation bias in decisions'],['Projection','Attributing own feelings/motives to others','Assuming others are also feeling stressed/competitive'],['Recency Effect','Most recent information dominates judgement','Last-week\'s performance overshadowing year-long record at appraisal']]}},
+{title:'Attribution Theory (Heider / Kelley)',content:'How we explain the causes of behaviour — our own and others\'.',points:['<strong>Internal Attribution</strong>: Behaviour attributed to personal factors (ability, effort, personality)','<strong>External Attribution</strong>: Behaviour attributed to situational factors (luck, task difficulty, others)','<strong>Fundamental Attribution Error</strong>: Over-attributing others\' behaviour to internal causes, under-weighing situational factors','<strong>Self-Serving Bias</strong>: We attribute our successes to internal factors and our failures to external factors','<strong>Kelley\'s Covariation Model</strong>: Uses Consensus, Consistency, Distinctiveness to determine attribution']}
+],
+examples:[{e:'Halo Effect in Hiring',i:'A well-dressed, articulate candidate is assumed to be highly competent even before technical assessment — halo effect distorting hiring decisions'},{e:'Fundamental Attribution Error',i:'Manager blames an employee for missing deadline (internal — laziness) without considering their extra workload (external) — classic FAE'},{e:'Selective Perception at Kodak',i:'Kodak leadership perceived digital photography as a "niche threat" — selective perception filtering out evidence of digital disruption'}],
+mnemonic:{word:'SSOI',meaning:'4 Stages of Perceptual Process',items:[{l:'S',w:'Sensation — raw stimuli received by senses'},{l:'S',w:'Selection — brain filters and focuses attention'},{l:'O',w:'Organisation — groups stimuli into patterns'},{l:'I',w:'Interpretation — assigns meaning based on experience'}]},
+quiz:[
+{q:'The Halo Effect in perception refers to:',opts:['The glow from office lighting affecting work perception','Allowing one POSITIVE trait to colour all other judgements about a person','Projection of one\'s own feelings onto others','The most recent information dominating overall judgement'],ans:1,exp:'Halo Effect: one outstanding positive quality (e.g. charisma, attractive appearance) influences overall evaluation positively, even for unrelated dimensions. Opposite = Horn Effect (one negative trait colours everything negatively).'},
+{q:'The Fundamental Attribution Error involves:',opts:['Attributing our own failures to external causes','Over-attributing others\' behaviour to internal/personal causes while under-weighting situational factors','Judging people by their group membership','Only perceiving information that confirms existing beliefs'],ans:1,exp:'FAE: We tend to explain others\' behaviour by their personality/character (internal) and discount situational influences. Example: "He failed because he\'s lazy" rather than considering his workload, personal issues, or unclear instructions.'},
+{q:'Selective Perception in organisations leads to:',opts:['Fair and balanced evaluation of all information','Ignoring or filtering out information that contradicts existing beliefs or expectations','Greater creativity and innovation','Improved communication between departments'],ans:1,exp:'Selective Perception: we notice and process information consistent with our attitudes, values, or expectations — and filter out contradictory information. This creates confirmation bias in decisions, performance evaluations, and strategy.'},
+{q:'Attribution Theory explains:',opts:['How personality traits develop over time','How people explain the causes of behaviour — their own and others\'','How groups form and develop norms','The process of organisational change'],ans:1,exp:'Attribution Theory (Heider, Kelley): how people assign causes to behaviour. Internal attribution = personal factors (effort, ability). External attribution = situational factors (luck, others). Key biases: FAE and Self-Serving Bias.'},
+{q:'"Self-Serving Bias" in attribution means:',opts:['Attributing everything to situational factors','Attributing successes to internal factors (my skill) and failures to external factors (bad luck, others)','Judging others more harshly than yourself','Consistency in attributing all behaviour to the same cause'],ans:1,exp:'Self-Serving Bias: we protect our self-esteem by taking credit for successes (internal) and blaming external factors for failures. Example: "I got promoted because I\'m talented; I missed the target because the market was bad."'}
+]},
+
+{id:12,color:'#e879f9',title:'Motivation Theories – Part I',desc:'Definition of motivation, intrinsic vs extrinsic, Maslow\'s Hierarchy of Needs, and Adams\' Equity Theory with workplace applications.',tags:['Maslow','Hierarchy of Needs','Equity Theory','Intrinsic Motivation','Extrinsic Motivation'],
+objectives:['Understand what motivation is and types of motivation','Learn about Maslow\'s hierarchy of needs','Apply Maslow\'s theory to workplace motivation','Know what equity theory says about fairness at work','Recognise how motivation affects performance','Compare needs and equity-based approaches'],
+sections:[
+{title:'Definition & Types of Motivation',content:'<strong>Motivation</strong> = internal or external drive that stimulates individuals to act in a certain way to achieve specific goals. It has three elements: Direction, Intensity, and Persistence.',points:['<strong>Intrinsic Motivation</strong>: From WITHIN — driven by personal interest, enjoyment, challenge, purpose; leads to creativity and long-term engagement','<strong>Extrinsic Motivation</strong>: From OUTSIDE — driven by rewards, salary, bonuses, recognition, promotions, or fear of punishment','<strong>Cognitive Dissonance</strong>: Tension when actions don\'t align with beliefs; motivates people to resolve inconsistency','<strong>Key Insight</strong>: Intrinsic motivation tends to be more sustainable and fosters creativity; extrinsic can crowd out intrinsic if overdone (overjustification effect)']},
+{title:'Maslow\'s Hierarchy of Needs',content:'<strong>Abraham Maslow (1943)</strong> — proposed needs are arranged in a hierarchy; lower needs must be largely satisfied before higher needs motivate behaviour.',points:['<strong>Level 1 — Physiological</strong>: Basic survival — food, water, shelter, sleep. Workplace: adequate salary, safe conditions','<strong>Level 2 — Safety/Security</strong>: Physical and financial security. Workplace: job security, safe environment, health insurance','<strong>Level 3 — Social/Love & Belonging</strong>: Friendship, belonging, teamwork. Workplace: team culture, social events, inclusivity','<strong>Level 4 — Esteem</strong>: Recognition, status, achievement, self-respect. Workplace: promotions, awards, feedback, challenging roles','<strong>Level 5 — Self-Actualisation</strong>: Fulfilling one\'s full potential; becoming what one is capable of. Workplace: meaningful work, growth, autonomy','<strong>Limitation</strong>: Not universal; needs don\'t always follow strict hierarchy; hard to measure']},
+{title:'Adams\' Equity Theory',content:'People are motivated when they perceive <strong>fairness in the ratio of inputs to outcomes</strong> compared to others.',points:['<strong>Formula</strong>: My Outcomes/My Inputs = Others\' Outcomes/Others\' Inputs','<strong>Equity</strong>: Perceived fairness → motivation maintained','<strong>Over-reward Inequity</strong>: I get more than I deserve → guilt; may increase effort or rationalise','<strong>Under-reward Inequity</strong>: I get less than I deserve → anger, reduced effort, quitting','<strong>Inputs</strong>: Effort, skills, education, experience, loyalty','<strong>Outcomes</strong>: Salary, promotions, recognition, working conditions','<strong>Response to Inequity</strong>: Change inputs, change outcomes, change comparison person, quit, distort perceptions']}
+],
+examples:[{e:'Maslow at Infosys',i:'Infosys provides: physiological (salary), safety (job security), social (team culture), esteem (awards), self-actualisation (innovation projects) — addressing all five levels'},{e:'Equity Theory at FMCG Sales Teams',i:'When a high-performer sees an equal salary with a lower performer, they reduce effort (under-reward inequity) — classic equity theory in action'},{e:'Google\'s Intrinsic Motivation',i:'20% time policy — engineers could work on passion projects. Gmail and Google News were born from this. Pure intrinsic motivation at work'}],
+mnemonic:{word:'PSS-ES',meaning:'Maslow\'s 5 Levels (Bottom to Top)',items:[{l:'P',w:'Physiological — food, water, shelter'},{l:'S',w:'Safety — security, stability'},{l:'S',w:'Social — belonging, friendship'},{l:'E',w:'Esteem — recognition, status'},{l:'S',w:'Self-Actualisation — reaching full potential'}]},
+quiz:[
+{q:'Which is the HIGHEST level in Maslow\'s Hierarchy of Needs?',opts:['Esteem Needs','Safety Needs','Self-Actualisation','Social Needs'],ans:2,exp:'Self-Actualisation is the highest level — fulfilling one\'s full potential, becoming everything one is capable of becoming. In workplace terms: meaningful, challenging work, autonomy, personal growth opportunities.'},
+{q:'According to Adams\' Equity Theory, under-reward inequity causes:',opts:['Increased effort to restore balance','Reduced effort, frustration, or intention to quit','No change in behaviour','Increased loyalty to the organisation'],ans:1,exp:'Under-reward inequity (I give more but get less than comparable others) creates tension — leading to reduced effort, lower quality work, complaints, absenteeism, or quitting. People restore equity by adjusting inputs or outcomes.'},
+{q:'Intrinsic motivation is best described as:',opts:['Motivation driven by salary and bonuses','Doing something because it is inherently interesting, enjoyable, or personally satisfying','Motivation from external recognition and awards','Being motivated by fear of punishment'],ans:1,exp:'Intrinsic motivation comes from within — personal interest, curiosity, enjoyment, challenge, or a sense of purpose. It is more sustainable than extrinsic motivation and fosters creativity, deep engagement, and self-direction.'},
+{q:'In Maslow\'s theory, which workplace need corresponds to "job security and safe working conditions"?',opts:['Physiological Needs','Safety/Security Needs','Social Needs','Esteem Needs'],ans:1,exp:'Safety Needs (Level 2): physical and psychological security. In the workplace: job security, safe working conditions, health insurance, clear procedures. Once physiological needs are met, safety needs motivate behaviour.'},
+{q:'The "Overjustification Effect" in motivation means:',opts:['Intrinsic motivation increases when extrinsic rewards are added','External rewards can reduce intrinsic motivation by shifting focus from enjoyment to the reward itself','People are always more motivated by external rewards','Job satisfaction and salary are perfectly correlated'],ans:1,exp:'Overjustification Effect: adding extrinsic rewards (money, prizes) to an intrinsically motivating activity can reduce intrinsic motivation — people shift their reason from "I do it because I enjoy it" to "I do it for the reward."'}
+]},
+
+{id:13,color:'#94a3b8',title:'Motivation Theories – Part II',desc:'Douglas McGregor\'s Theory X and Theory Y, Herzberg\'s Two-Factor Theory (motivators vs hygiene factors), and practical job design applications.',tags:['Theory X','Theory Y','Herzberg','Two-Factor Theory','Hygiene Factors','Motivators','McGregor'],
+objectives:['Learn about Theory X and Theory Y views of workers','Understand how managers behave based on these theories','Study Herzberg\'s two-factor theory','Know what motivates and prevents dissatisfaction','Apply these theories to real job situations','Evaluate how motivation theories improve job design'],
+sections:[
+{title:'McGregor\'s Theory X and Theory Y',isTable:true,table:{headers:['Dimension','Theory X','Theory Y'],rows:[['View of Employees','Inherently lazy, dislike work, avoid responsibility','Self-motivated, enjoy work, seek responsibility'],['Management Style','Authoritarian; strict supervision, threats, control','Participative; trust, empowerment, delegation'],['Motivation Approach','External — rewards/punishments, micromanagement','Internal — meaningful work, autonomy, growth'],['Leadership','Autocratic and transactional','Democratic and transformational'],['Effect on Culture','Low trust, rigid hierarchy, low morale','High trust, collaborative, innovation-friendly'],['Indian Example','Old-style factory with strict attendance monitoring','Modern IT firm with flexible work and OKR-based management']]}},
+{title:'Theory X vs Theory Y — Key Insights',content:'Introduced by <strong>Douglas McGregor (1960)</strong> in "The Human Side of Enterprise". These are managerial ASSUMPTIONS, not descriptions of actual workers.',points:['Theory X assumptions create a self-fulfilling prophecy — strict control leads to low morale, which "proves" workers need controlling','Theory Y assumptions unlock human potential — autonomy and trust lead to higher performance','Modern management leans heavily toward Theory Y — especially in knowledge work, IT, and creative industries','Neither theory is universally correct — some situations may require Theory X elements (e.g. safety-critical roles)']},
+{title:'Herzberg\'s Two-Factor Theory',content:'<strong>Frederick Herzberg (1959)</strong> — based on interviews with accountants and engineers about what made them feel good or bad about work.',points:['<strong>Hygiene Factors</strong>: If ABSENT → dissatisfaction; if PRESENT → no dissatisfaction (but not positive motivation). Examples: salary, company policy, supervision, working conditions, job security, interpersonal relations','<strong>Motivators (Satisfiers)</strong>: If PRESENT → satisfaction and motivation; if ABSENT → no satisfaction (but not dissatisfaction). Examples: achievement, recognition, challenging work, responsibility, advancement, personal growth','<strong>Key Insight</strong>: Eliminating dissatisfaction ≠ creating satisfaction. You need BOTH hygiene (to prevent dissatisfaction) AND motivators (to create genuine motivation)']},
+{title:'Herzberg\'s Application — Job Enrichment',points:['<strong>Job Enrichment</strong>: Adding motivators to jobs — greater responsibility, complete meaningful tasks, direct feedback','<strong>Job Enlargement</strong>: Adding more tasks at the SAME level (horizontal) — increases variety but not necessarily motivation','<strong>Job Rotation</strong>: Moving employees between different jobs/departments — builds skills, reduces boredom','<strong>Practical Tip</strong>: Don\'t motivate with only salary increases (hygiene) — give employees meaningful work, recognition, and growth opportunities (motivators)']}
+],
+examples:[{e:'Theory X at Legacy Factories',i:'Pre-1990s Indian public sector factories: time cards, strict supervision, punitive measures — classic Theory X environment with low productivity'},{e:'Theory Y at Infosys/Wipro',i:'Modern IT firms: flexible hours, project ownership, performance-based rewards, open culture — Theory Y assumptions driving high performance'},{e:'Herzberg at a BPO Company',i:'Raising BPO salaries (hygiene) stopped employees quitting but didn\'t increase productivity. Adding client ownership roles and recognition (motivators) did — classic Herzberg in action'}],
+mnemonic:{word:'HARPS',meaning:'Herzberg\'s Motivators',items:[{l:'H',w:'Herzberg said motivators drive SATISFACTION'},{l:'A',w:'Achievement — sense of accomplishing something meaningful'},{l:'R',w:'Recognition — being valued for contributions'},{l:'P',w:'Personal Growth and Advancement'},{l:'S',w:'Stimulating Work (challenging and responsible)'}]},
+quiz:[
+{q:'Theory X managerial assumption is that workers:',opts:['Are self-motivated and seek responsibility','Inherently dislike work, avoid responsibility, and must be controlled through supervision and external pressure','Are creative and require autonomy to perform best','Are primarily motivated by meaningful work and growth'],ans:1,exp:'Theory X (McGregor): managers assume workers are lazy, dislike work, avoid responsibility, and need strict supervision and external controls. This leads to authoritarian management styles, which often becomes self-fulfilling.'},
+{q:'In Herzberg\'s theory, "Hygiene Factors" when PRESENT:',opts:['Create high motivation and satisfaction','Only prevent dissatisfaction — they do NOT create positive motivation','Always increase performance significantly','Replace the need for motivators'],ans:1,exp:'Hygiene factors (salary, job security, working conditions): their presence prevents dissatisfaction but does not create motivation. Herzberg found that truly motivating people requires Motivators (achievement, recognition, meaningful work).'},
+{q:'Which of the following is a MOTIVATOR in Herzberg\'s Two-Factor Theory?',opts:['Company policies','Salary and benefits','Job security','Achievement and recognition'],ans:3,exp:'Motivators (Herzberg): achievement, recognition, challenging/interesting work, responsibility, advancement, and personal growth. These intrinsic factors create genuine satisfaction and motivation — not just absence of dissatisfaction.'},
+{q:'Theory Y is MOST aligned with which leadership style?',opts:['Autocratic Leadership','Theory X management','Democratic/Participative or Transformational Leadership','Transactional Leadership'],ans:2,exp:'Theory Y (workers are self-motivated, responsible, seek growth) aligns with Democratic/Participative leadership — empowering employees, delegating, trusting, and involving them in decisions. Also aligns with Transformational leadership.'},
+{q:'Job Enrichment (based on Herzberg) involves:',opts:['Adding more tasks at the same level (horizontal expansion)','Adding motivators — greater responsibility, meaningful work, direct feedback, and advancement opportunities','Increasing salary and benefits','Reducing workload to prevent stress'],ans:1,exp:'Job Enrichment (vertical expansion): adds motivators like more responsibility, autonomy, complete meaningful tasks, and direct feedback. Different from Job Enlargement (horizontal — more tasks at same level) or Job Rotation (moving between roles).'}
+]},
+
+{id:14,color:'#f43f5e',title:'Stress Management',desc:'Definition and types of stress (eustress vs distress), causes of workplace stress, stress symptoms, impact on performance, and stress management strategies.',tags:['Eustress','Distress','Burnout','Stress Causes','Stress Management','Work-Life Balance'],
+objectives:['Understand what stress is and its meaning','Identify causes of stress at work','Learn different types of stress (positive and negative)','Recognise signs of stress in yourself and others','Know the impact of stress on performance','Explore ways to manage and reduce stress'],
+sections:[
+{title:'Definition and Types of Stress',content:'<strong>Stress</strong> = physiological and psychological response to demands (stressors) that exceed an individual\'s perceived ability to cope.',points:['<strong>Eustress (Positive Stress)</strong>: Optimal level of stress that motivates, focuses, and enhances performance. E.g. pre-presentation nerves boosting alertness','<strong>Distress (Negative Stress)</strong>: Excessive, prolonged stress that impairs health, well-being, and performance','<strong>Acute Stress</strong>: Short-term, intense stress from a specific event; fades quickly (e.g. a tight deadline)','<strong>Chronic Stress</strong>: Long-term, persistent stress from ongoing demands; leads to burnout, health issues','<strong>Burnout</strong>: State of emotional, physical, and mental exhaustion from prolonged stress; loss of motivation and efficacy']},
+{title:'Causes of Workplace Stress',isTable:true,table:{headers:['Category','Causes','Examples'],rows:[['Organisational Factors','Excessive workload, deadlines, lack of resources','100-hour work weeks, unclear KPIs, inadequate staffing'],['Role Factors','Role ambiguity, role conflict, lack of autonomy','Unclear job description, conflicting demands from two bosses'],['Interpersonal Factors','Poor relationships, conflict, harassment','Toxic team culture, bullying, poor communication with manager'],['Environmental Factors','Noise, poor ergonomics, uncomfortable workspace','Open-plan office noise, poor lighting, remote work isolation'],['Personal Factors','Life events, financial worries, health concerns','Marriage, divorce, bereavement, debt, illness'],['Organisational Change','Restructuring, mergers, redundancy threats','Post-acquisition anxiety, digital transformation uncertainty']]}},
+{title:'Yerkes-Dodson Law — Stress and Performance',content:'Performance is related to stress in an <strong>inverted-U relationship</strong>.',points:['<strong>Too Little Stress</strong>: Boredom, low arousal, poor performance — under-challenged','<strong>Optimal Stress (Eustress)</strong>: Peak performance zone — engaged, focused, energised','<strong>Too Much Stress</strong>: Anxiety, cognitive impairment, errors, burnout — overwhelmed','<strong>Individual Differences</strong>: Optimal stress level varies by person, task complexity, and experience','<strong>Management Implication</strong>: Neither eliminate all stress nor overload employees — find the optimum']},
+{title:'Stress Management Strategies',points:['<strong>Individual Strategies</strong>: Exercise, meditation/mindfulness, time management, social support, hobby, adequate sleep','<strong>Cognitive Reframing</strong>: Change how you think about stressors — perceive challenge as opportunity not threat','<strong>Organisational Strategies</strong>: Flexible work arrangements, Employee Assistance Programmes (EAPs), workload management, clear role definition','<strong>Work-Life Balance</strong>: Set clear boundaries between work and personal time; disconnect from digital devices after hours','<strong>Social Support</strong>: Strong networks buffer stress; peer support, mentoring, open communication with manager']}
+],
+examples:[{e:'Google\'s Well-being Programme',i:'Google offers in-house therapy, mindfulness classes, nap pods, fitness centres — comprehensive org-level stress management; linked to high innovation output'},{e:'Burnout in Indian IT Sector',i:'41% of Indian IT professionals report burnout (post-COVID surveys); long hours + remote isolation = chronic stress crisis affecting top talent'},{e:'Yerkes-Dodson at Sports',i:'Athletes perform best under moderate pre-match stress (eustress). Too relaxed = underperform; too anxious = performance collapses under pressure'}],
+mnemonic:{word:'REACT',meaning:'Stress Management Strategies',items:[{l:'R',w:'Reframe — change how you think about stressors'},{l:'E',w:'Exercise and physical activity'},{l:'A',w:'Ask for support (social network)'},{l:'C',w:'Control time and tasks (time management)'},{l:'T',w:'Take breaks and prioritise rest/sleep'}]},
+quiz:[
+{q:'Eustress refers to:',opts:['Chronic negative stress that impairs health','Positive, optimal stress that motivates and enhances performance','Burnout from prolonged overwork','Stress caused by workplace conflict'],ans:1,exp:'Eustress = positive stress at an optimal level. It energises, motivates, and focuses — like pre-exam nervousness that helps you study harder, or pre-presentation tension that sharpens your delivery. Differs from Distress (harmful, prolonged stress).'},
+{q:'The Yerkes-Dodson Law shows the relationship between stress and performance as:',opts:['A linear positive relationship — more stress always means better performance','An inverted-U curve — optimal performance at moderate stress; too little or too much stress impairs performance','A linear negative relationship — stress always hurts performance','No relationship between stress and performance'],ans:1,exp:'Yerkes-Dodson: performance increases with stress up to an optimal point (eustress zone), then decreases as stress becomes excessive. The "sweet spot" is optimal arousal — engaged and focused, but not overwhelmed.'},
+{q:'"Burnout" in the workplace is best described as:',opts:['A single stressful day at work','A state of emotional, physical, and mental exhaustion from prolonged, chronic stress','A short-term stress response to a tight deadline','Taking an extended vacation'],ans:1,exp:'Burnout (Maslach) = state of chronic exhaustion from prolonged workplace stress. Characterised by emotional exhaustion, depersonalisation (detachment), and reduced sense of personal accomplishment. Common in high-demand professions (IT, healthcare, teaching).'},
+{q:'Role Ambiguity as a cause of workplace stress means:',opts:['Having too many tasks to complete','Unclear job expectations, responsibilities, or reporting relationships causing uncertainty','Conflict between two different managers','Having no work to do'],ans:1,exp:'Role Ambiguity = lack of clarity about one\'s job role, responsibilities, expected behaviour, or performance criteria. Creates uncertainty and anxiety. Solution: clear job descriptions, regular check-ins, explicit goal-setting.'},
+{q:'Which organisational stress management strategy provides counselling and mental health support to employees?',opts:['Six Sigma','Employee Assistance Programme (EAP)','Performance Management System','360-degree Feedback'],ans:1,exp:'Employee Assistance Programme (EAP) = org-level programme providing confidential counselling, mental health support, financial advice, and wellness resources to employees. EAPs address personal and work-related stress proactively.'}
+]}
+];
+const GLOSSARY=[
+{term:'Management',def:'The process of planning, organising, leading, and controlling resources to achieve specific goals efficiently and effectively.',unit:1},
+{term:'Mintzberg\'s Managerial Roles',def:'10 roles in 3 categories: Interpersonal (Figurehead, Leader, Liaison), Informational (Monitor, Disseminator, Spokesperson), Decisional (Entrepreneur, Disturbance Handler, Resource Allocator, Negotiator).',unit:1},
+{term:'POLC Framework',def:'Planning, Organising, Leading, Controlling — the four classic functions of management.',unit:1},
+{term:'Fayol\'s 14 Principles',def:'Henri Fayol\'s universal principles of management including Division of Work, Unity of Command, Unity of Direction, Scalar Chain, Equity, and Esprit de Corps.',unit:2},
+{term:'Unity of Command',def:'Each employee should receive instructions from only ONE superior to avoid confusion, conflicting orders, and divided loyalty.',unit:2},
+{term:'Scientific Management',def:'Frederick Taylor\'s approach to finding the "one best way" to do a job using time and motion studies, standardisation, and differential piece-rate pay.',unit:2},
+{term:'Esprit de Corps',def:'Fayol\'s principle promoting team spirit, unity, and harmony among employees as a source of organisational strength.',unit:2},
+{term:'Planning',def:'The process of setting objectives and deciding in advance the appropriate actions required to achieve those objectives.',unit:3},
+{term:'SMART Goals',def:'Specific, Measurable, Achievable, Relevant, Time-bound — criteria for effective goal-setting in planning.',unit:3},
+{term:'Management by Objectives (MBO)',def:'Peter Drucker\'s collaborative goal-setting process where managers and employees jointly set objectives, monitor progress, and evaluate performance.',unit:3},
+{term:'Standing Plans',def:'Plans used repeatedly for recurring situations — policies, procedures, and rules. E.g. leave policy, safety procedures.',unit:3},
+{term:'Organising',def:'The process of arranging resources, roles, and responsibilities in a structured way to achieve business objectives efficiently.',unit:4},
+{term:'Delegation',def:'Transferring authority (right to decide) and responsibility (accountability for results) to subordinates for specific tasks.',unit:4},
+{term:'Span of Control',def:'The number of subordinates a manager can effectively supervise. Wide span = many subordinates; Narrow span = fewer subordinates.',unit:4},
+{term:'Formal Organisation',def:'Deliberately created by management with defined hierarchy, rules, and authority. Reflected in organisation charts and job descriptions.',unit:4},
+{term:'Informal Organisation',def:'Emerges spontaneously from social interactions among employees. Characterised by the grapevine, friendships, and informal networks.',unit:4},
+{term:'Staffing',def:'Management function of recruiting, selecting, training, developing, and retaining human resources to fill organisational roles.',unit:5},
+{term:'Controlling',def:'Management process of monitoring actual performance against set standards and taking corrective action when deviations occur.',unit:5},
+{term:'Bounded Rationality',def:'Herbert Simon\'s concept that managers cannot be perfectly rational due to cognitive limits, incomplete information, and time pressure — they "satisfice" rather than optimise.',unit:5},
+{term:'360-degree Feedback',def:'Performance appraisal collecting input from all directions: supervisor, peers, subordinates, and sometimes customers.',unit:5},
+{term:'Leadership Style',def:'Patterns of behaviour that leaders adopt to guide, motivate, and manage individuals or groups.',unit:6},
+{term:'Autocratic Leadership',def:'A top-down leadership style where the leader makes all decisions alone without consulting the team. Fast but reduces creativity and morale.',unit:6},
+{term:'Democratic Leadership',def:'Participative leadership where the team is involved in decision-making. Improves buy-in and quality but can be slower.',unit:6},
+{term:'Laissez-faire Leadership',def:'Free-rein leadership with minimal leader interference and maximum team autonomy. Best for expert, self-motivated professionals.',unit:6},
+{term:'Trait Theory',def:'Early leadership theory proposing that effective leaders possess innate qualities (intelligence, self-confidence, integrity) that distinguish them from non-leaders.',unit:6},
+{term:'Managerial Grid (Blake-Mouton)',def:'A 9×9 grid plotting leadership based on Concern for Production (X-axis) vs Concern for People (Y-axis). (9,9) Team Management is the ideal style.',unit:6},
+{term:'Situational Leadership (Hersey-Blanchard)',def:'Leadership theory holding that effective leaders adjust their style (Telling, Selling, Participating, Delegating) based on the follower\'s Development Level (D1-D4).',unit:7},
+{term:'LMX Theory',def:'Leader-Member Exchange theory: leaders develop different quality relationships with different team members — in-group (high LMX) and out-group (low LMX).',unit:7},
+{term:'Development Level (D1-D4)',def:'Hersey-Blanchard classification of followers: D1 (low competence, high commitment), D2 (some competence, low commitment), D3 (high competence, variable commitment), D4 (high competence, high commitment).',unit:7},
+{term:'Group Behaviour',def:'How individuals act when they are part of a group — influenced by norms, cohesion, roles, and social dynamics.',unit:8},
+{term:'Tuckman\'s Model',def:'5-stage model of group development: Forming → Storming → Norming → Performing → Adjourning.',unit:8},
+{term:'Group Cohesiveness',def:'The degree of unity, closeness, and loyalty within a group. High cohesiveness + aligned goals = high performance.',unit:8},
+{term:'Social Loafing',def:'The tendency for individuals to exert less effort when working in a group than when working alone (Ringelmann Effect).',unit:8},
+{term:'Kurt Lewin\'s Change Model',def:'Three-stage model: Unfreeze (create urgency, break status quo) → Change (implement new behaviours) → Refreeze (stabilise and embed the new state).',unit:8},
+{term:'Organisational Behaviour (OB)',def:'The systematic study of how individuals and groups act within organisations to improve effectiveness and employee well-being.',unit:9},
+{term:'Psychological Safety',def:'The belief that one can speak up, take risks, and make mistakes without fear of punishment or ridicule. Key predictor of team effectiveness (Google\'s Project Aristotle).',unit:9},
+{term:'Personality',def:'The unique and stable set of traits, characteristics, and patterns of behaviour defining how an individual interacts with their environment.',unit:10},
+{term:'Big Five (OCEAN)',def:'The most validated personality framework: Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism.',unit:10},
+{term:'Type A Personality',def:'Competitive, impatient, time-conscious, achievement-oriented with high stress levels. Prone to burnout but highly driven.',unit:10},
+{term:'MBTI',def:'Myers-Briggs Type Indicator — 16 personality types based on Carl Jung\'s theory. Four dichotomies: E/I, S/N, T/F, J/P.',unit:10},
+{term:'Conscientiousness',def:'Big Five trait: organised, dependable, hardworking, disciplined. The strongest predictor of job performance across all occupations.',unit:10},
+{term:'Perception',def:'The process by which individuals select, organise, and interpret sensory information to make sense of the environment.',unit:11},
+{term:'Halo Effect',def:'One positive trait colours all other judgements about a person positively. E.g. promoting a charismatic person despite poor technical skills.',unit:11},
+{term:'Fundamental Attribution Error (FAE)',def:'Over-attributing others\' behaviour to internal/personal causes while under-weighting situational factors.',unit:11},
+{term:'Selective Perception',def:'The tendency to notice and process only information that is consistent with existing beliefs or expectations — confirmation bias.',unit:11},
+{term:'Attribution Theory',def:'How people explain the causes of behaviour. Internal attribution (personal factors) vs External attribution (situational factors).',unit:11},
+{term:'Self-Serving Bias',def:'Attributing successes to internal factors (my skill) and failures to external factors (bad luck). Protects self-esteem.',unit:11},
+{term:'Motivation',def:'The internal or external drive that stimulates individuals to act in a certain way to achieve specific goals. Has Direction, Intensity, and Persistence.',unit:12},
+{term:'Maslow\'s Hierarchy of Needs',def:'Five-level need hierarchy: Physiological → Safety → Social → Esteem → Self-Actualisation. Lower needs must be largely satisfied before higher needs motivate.',unit:12},
+{term:'Self-Actualisation',def:'Maslow\'s highest need level — fulfilling one\'s full potential and becoming everything one is capable of being.',unit:12},
+{term:'Equity Theory (Adams)',def:'People are motivated when they perceive fairness: My Outcomes/My Inputs = Others\' Outcomes/Others\' Inputs. Inequity creates tension and motivates restoring balance.',unit:12},
+{term:'Intrinsic Motivation',def:'Motivation from within — driven by personal interest, enjoyment, curiosity, or sense of purpose. More sustainable than extrinsic.',unit:12},
+{term:'Theory X',def:'McGregor\'s assumption that workers inherently dislike work, avoid responsibility, and must be controlled through supervision and external pressure.',unit:13},
+{term:'Theory Y',def:'McGregor\'s assumption that workers are self-motivated, seek responsibility, and thrive in environments of autonomy and trust.',unit:13},
+{term:'Herzberg\'s Two-Factor Theory',def:'Hygiene factors (prevent dissatisfaction) and Motivators (create satisfaction). Eliminating dissatisfaction ≠ creating motivation.',unit:13},
+{term:'Hygiene Factors',def:'Herzberg\'s factors that prevent dissatisfaction when present but do not create motivation: salary, job security, company policies, working conditions.',unit:13},
+{term:'Motivators (Herzberg)',def:'Herzberg\'s factors that create genuine satisfaction and motivation: achievement, recognition, challenging work, responsibility, advancement, and growth.',unit:13},
+{term:'Job Enrichment',def:'Adding motivators to jobs — greater responsibility, complete meaningful tasks, direct feedback. Herzberg\'s prescription for lasting motivation.',unit:13},
+{term:'Stress',def:'Physiological and psychological response to demands (stressors) that exceed an individual\'s perceived ability to cope.',unit:14},
+{term:'Eustress',def:'Positive, optimal stress that motivates, focuses, and enhances performance. E.g. pre-deadline urgency that boosts productivity.',unit:14},
+{term:'Distress',def:'Excessive, prolonged negative stress that impairs health, well-being, and performance.',unit:14},
+{term:'Burnout',def:'State of emotional, physical, and mental exhaustion from prolonged, chronic workplace stress. Characterised by exhaustion, depersonalisation, and reduced efficacy.',unit:14},
+{term:'Yerkes-Dodson Law',def:'Inverted-U relationship between stress and performance. Optimal performance at moderate stress; too little or too much stress impairs performance.',unit:14},
+{term:'Employee Assistance Programme (EAP)',def:'Organisational programme providing confidential counselling, mental health support, and wellness resources to employees to manage work-related and personal stress.',unit:14}
+];
+
+const TIMELINE=[
+{y:'1911',e:'Frederick Taylor — The Principles of Scientific Management',d:'Taylor published his landmark book introducing Scientific Management: time-motion studies, standardisation, differential piece-rate pay, and the "one best way" to do a job.',c:'#f97316'},
+{y:'1916',e:'Henri Fayol — Administration Industrielle et Générale',d:'Fayol published his 14 Principles of Management and 5 Functions (POLC+S). French mining executive who developed the first comprehensive management theory.',c:'#7c6af7'},
+{y:'1924',e:'Hawthorne Studies Begin (Elton Mayo)',d:'Western Electric Co. studies showed that social factors, attention, and group dynamics affect productivity more than physical conditions — birth of Human Relations approach to management.',c:'#22d3ee'},
+{y:'1943',e:'Abraham Maslow — Hierarchy of Needs',d:'Maslow published "A Theory of Human Motivation" introducing the 5-level hierarchy: Physiological, Safety, Social, Esteem, Self-Actualisation.',c:'#e879f9'},
+{y:'1954',e:'Peter Drucker — The Practice of Management (MBO)',d:'Drucker introduced Management by Objectives (MBO) — collaborative goal-setting between managers and employees. Laid foundations of modern strategic management.',c:'#34d399'},
+{y:'1957',e:'Douglas McGregor — Theory X and Theory Y',d:'McGregor articulated two contrasting managerial assumptions. Theory X (workers are lazy) vs Theory Y (workers seek meaning). Published in "The Human Side of Enterprise" (1960).',c:'#94a3b8'},
+{y:'1959',e:'Frederick Herzberg — Two-Factor Theory',d:'Herzberg\'s research on accountants and engineers showed hygiene factors prevent dissatisfaction while motivators (achievement, recognition) create positive motivation.',c:'#f87171'},
+{y:'1964',e:'Robert Blake & Jane Mouton — Managerial Grid',d:'Introduced the 9×9 Managerial Grid plotting Concern for People vs Concern for Production. The (9,9) Team Management style identified as ideal.',c:'#fbbf24'},
+{y:'1966',e:'Bruce Tuckman — Stages of Group Development',d:'Tuckman proposed the Forming-Storming-Norming-Performing model of group development. Adjourning was added in 1977. Widely used in team management.',c:'#f97316'},
+{y:'1968',e:'Paul Hersey & Ken Blanchard — Situational Leadership',d:'Introduced Situational Leadership Theory: leaders should adapt their style (Telling, Selling, Participating, Delegating) to follower Development Level (D1-D4).',c:'#818cf8'},
+{y:'1972',e:'Kurt Lewin\'s Change Model (Post-WWII Legacy)',d:'Lewin\'s Unfreeze-Change-Refreeze model from his WWII-era research became the most widely used change management framework in organisational development.',c:'#f87171'},
+{y:'1972',e:'Henry Mintzberg — The Nature of Managerial Work',d:'Mintzberg\'s research challenged Fayol\'s tidy POLC view; showed managers actually play 10 distinct roles in 3 categories (Interpersonal, Informational, Decisional).',c:'#7c6af7'},
+{y:'1978',e:'James MacGregor Burns — Transformational Leadership',d:'Burns distinguished Transactional leadership (exchange-based) from Transformational leadership (inspiring change through vision and values).',c:'#22d3ee'},
+{y:'1978',e:'J. Stacy Adams — Equity Theory',d:'Adams\' Equity Theory: motivation depends on perceived fairness of input-output ratios compared to others. Inequity drives behaviour to restore balance.',c:'#e879f9'},
+{y:'1980',e:'Big Five Personality Model Consolidation',d:'Paul Costa and Robert McCrae refined and validated the Big Five (OCEAN) personality model through extensive research — now the most empirically supported personality framework.',c:'#fb923c'},
+{y:'1985',e:'Bernard Bass — Transformational Leadership Framework',d:'Bass operationalised Burns\' transformational leadership concept, developed measures, and showed transformational leaders inspire beyond self-interest for collective goals.',c:'#22d3ee'},
+{y:'1990',e:'Peter Senge — The Fifth Discipline (Learning Organisations)',d:'Senge introduced the concept of the Learning Organisation — companies that continuously learn and adapt. 5 disciplines: Systems Thinking, Personal Mastery, Mental Models, Shared Vision, Team Learning.',c:'#34d399'},
+{y:'1991',e:'Myers-Briggs Type Indicator (MBTI) Widespread Use',d:'Based on Carl Jung\'s 1921 work, MBTI gained mainstream adoption in corporate training, team building, and career development despite ongoing validity debates.',c:'#fb923c'},
+{y:'1995',e:'Daniel Goleman — Emotional Intelligence (EQ)',d:'Goleman\'s book made EQ mainstream — arguing emotional intelligence (self-awareness, empathy, relationship management) predicts leadership success better than IQ.',c:'#fbbf24'},
+{y:'1999',e:'LMX (Leader-Member Exchange) Theory Maturation',d:'Graen and Uhl-Bien\'s work established LMX as a major leadership theory — showing quality of leader-follower relationship predicts performance, satisfaction, and turnover.',c:'#818cf8'},
+{y:'2001',e:'Google Founded — Theory Y Culture Model',d:'Google\'s early culture became a global example of Theory Y management: 20% time, flat hierarchy, data-driven decisions, psychological safety — resulting in breakthrough innovations.',c:'#34d399'},
+{y:'2015',e:'Google\'s Project Aristotle — Psychological Safety',d:'Google\'s internal research found psychological safety (Amy Edmondson\'s concept) is the #1 predictor of team effectiveness — transforming how organisations think about team dynamics.',c:'#a78bfa'},
+{y:'2020',e:'COVID-19 — Remote Work & OB Revolution',d:'Pandemic forced global organisations to manage remote teams, redefine leadership, manage Zoom fatigue, address burnout, and rethink work-life boundaries — a massive real-world OB experiment.',c:'#f43f5e'},
+{y:'2023',e:'AI & OB — New Management Challenges',d:'Generative AI (ChatGPT, Copilot) transforms job roles, creates new stress factors, changes decision-making processes, and raises new OB questions about human-AI collaboration and algorithmic management.',c:'#94a3b8'}
+];
+
+const FLASHCARDS=[
+{q:'What are the 4 functions of management (POLC)?',a:'Planning (setting goals), Organising (arranging resources), Leading (directing people), Controlling (monitoring performance).',u:1},
+{q:'Name Mintzberg\'s 3 categories of managerial roles.',a:'Interpersonal (Figurehead, Leader, Liaison), Informational (Monitor, Disseminator, Spokesperson), Decisional (Entrepreneur, Disturbance Handler, Resource Allocator, Negotiator).',u:1},
+{q:'What is Fayol\'s principle of Unity of Command?',a:'Each employee should receive instructions from only ONE superior — preventing confusion, conflicting orders, and divided loyalty.',u:2},
+{q:'What is "Esprit de Corps" in Fayol\'s principles?',a:'Team spirit and unity among employees that strengthens the organisation. French for "spirit of the body."',u:2},
+{q:'What does Scientific Management (Taylor) focus on?',a:'Finding the "one best way" to do a job using time-motion studies, standardisation, scientific worker selection, and differential piece-rate pay.',u:2},
+{q:'What are SMART goals in planning?',a:'Specific, Measurable, Achievable, Relevant, Time-bound — criteria for effective goal-setting.',u:3},
+{q:'What is Management by Objectives (MBO) and who introduced it?',a:'Peter Drucker\'s collaborative goal-setting process where managers and employees jointly set objectives, monitor progress, and evaluate performance.',u:3},
+{q:'Difference between Standing Plans and Single-Use Plans?',a:'Standing Plans: used repeatedly for recurring situations (policies, rules). Single-Use Plans: one-time specific purpose (product launch, event).',u:3},
+{q:'What is Delegation in organising?',a:'Transferring authority (right to decide) and responsibility (accountability) to subordinates for specific tasks. Authority can be delegated; ultimate accountability stays with the delegator.',u:4},
+{q:'Formal Organisation vs Informal Organisation?',a:'Formal: deliberately created by management; defined hierarchy. Informal: emerges spontaneously from social interactions; grapevine communication.',u:4},
+{q:'What is Bounded Rationality (Herbert Simon)?',a:'Managers cannot be perfectly rational due to cognitive limits, incomplete information, and time pressure — they "satisfice" (choose first acceptable option) rather than optimise.',u:5},
+{q:'Name 3 types of control in management.',a:'Pre-control/Feedforward (before work begins), Concurrent (real-time, during work), Post-control/Feedback (after completion — audits, inspections).',u:5},
+{q:'What is the Blake-Mouton (9,9) management style?',a:'Team Management — the ideal style with HIGH concern for both production AND people. Builds trust, commitment, and achieves high performance.',u:6},
+{q:'What is Trait Theory of Leadership?',a:'Early theory proposing leaders are born with innate qualities (intelligence, self-confidence, integrity) distinguishing them from non-leaders. Limitation: ignores situational factors.',u:6},
+{q:'Which leadership style works best for expert professionals?',a:'Laissez-faire (Free Rein) — minimal leader interference, maximum autonomy. Best for highly competent, self-motivated experts in R&D or creative fields.',u:6},
+{q:'What are the 4 Hersey-Blanchard leadership styles?',a:'Telling (S1, High Task-Low Rel) → Selling (S2, High Task-High Rel) → Participating (S3, Low Task-High Rel) → Delegating (S4, Low Task-Low Rel). Match to D1→D4 follower levels.',u:7},
+{q:'What is LMX Theory?',a:'Leader-Member Exchange: leaders form different quality relationships — In-group (high LMX: trust, autonomy, resources) vs Out-group (low LMX: formal, task-only). High LMX predicts better performance and satisfaction.',u:7},
+{q:'Key difference: Manager vs Leader?',a:'Manager: efficiency, "doing things right," operational control, stability. Leader: effectiveness, "doing the right things," inspiration, long-term vision, drives change.',u:7},
+{q:'Name Tuckman\'s 5 stages of group development.',a:'Forming (getting acquainted) → Storming (conflict) → Norming (cooperation) → Performing (high productivity) → Adjourning (disbanding).',u:8},
+{q:'What is Kurt Lewin\'s Change Model?',a:'Unfreeze (create urgency, break status quo) → Change (implement new behaviours/processes) → Refreeze (stabilise and embed the new state).',u:8},
+{q:'What is Social Loafing?',a:'The tendency for individuals to exert less effort in a group than when working alone (Ringelmann Effect). Solution: assign individual accountability and make contributions visible.',u:8},
+{q:'What are the 3 levels of OB analysis?',a:'Individual Level (personality, motivation, perception), Group Level (team dynamics, leadership, conflict), Organisational Level (culture, structure, change management).',u:9},
+{q:'What is Psychological Safety?',a:'The belief that one can speak up, take risks, and make mistakes without fear of punishment. Google\'s Project Aristotle found it the #1 predictor of team effectiveness.',u:9},
+{q:'What does OCEAN stand for in personality?',a:'Openness to Experience, Conscientiousness, Extraversion, Agreeableness, Neuroticism — the Big Five personality traits.',u:10},
+{q:'Which Big Five trait is the strongest predictor of job performance?',a:'Conscientiousness (organised, disciplined, hardworking, dependable) — the single best predictor across all occupations in meta-analytic research.',u:10},
+{q:'What is the Fundamental Attribution Error (FAE)?',a:'Over-attributing others\' behaviour to internal/personal causes (laziness, personality) while under-weighting situational factors. Common in performance evaluations.',u:11},
+{q:'What is the Halo Effect?',a:'One positive quality colours all other judgements positively. E.g. promoting a charismatic person despite poor technical skills. Opposite: Horn Effect.',u:11},
+{q:'Maslow\'s 5 Needs (bottom to top)?',a:'Physiological → Safety → Social (Love & Belonging) → Esteem → Self-Actualisation. Lower needs must be largely satisfied before higher needs motivate.',u:12},
+{q:'What is Adams\' Equity Theory?',a:'Motivation depends on perceived fairness: My Outcomes/My Inputs = Others\' Outcomes/Others\' Inputs. Under-reward inequity → reduced effort or quitting.',u:12},
+{q:'Theory X vs Theory Y — key difference?',a:'Theory X: workers are lazy, avoid responsibility, need control (authoritarian management). Theory Y: workers are self-motivated, seek responsibility, thrive with autonomy (participative management).',u:13},
+{q:'Herzberg\'s Hygiene Factors vs Motivators?',a:'Hygiene factors (salary, job security, policies): prevent dissatisfaction but do NOT create motivation. Motivators (achievement, recognition, challenging work): create genuine satisfaction and motivation.',u:13},
+{q:'What is Job Enrichment?',a:'Adding motivators to a job: greater responsibility, autonomy, complete meaningful tasks, direct feedback. Herzberg\'s prescription. Different from Job Enlargement (more tasks at same level).',u:13},
+{q:'What is Eustress vs Distress?',a:'Eustress: positive, optimal stress that motivates and enhances performance (pre-presentation nerves). Distress: excessive, prolonged stress that impairs health and performance.',u:14},
+{q:'What is the Yerkes-Dodson Law?',a:'Inverted-U relationship between stress and performance. Too little stress = boredom; too much = anxiety/burnout; optimal moderate stress = peak performance.',u:14},
+{q:'What is Burnout and what causes it?',a:'State of emotional, physical, and mental exhaustion from prolonged chronic stress. Caused by excessive workload, lack of autonomy, unclear roles, poor support, and sustained work pressure.',u:14}
+];
+let curUnit=null, fcIdx=0, fcList=FLASHCARDS, glossFilter='All';
+
+function setNav(id){document.querySelectorAll('.nav-links button').forEach(b=>b.classList.remove('active'));if(id)document.getElementById(id)?.classList.add('active');}
+function showPg(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function goHome(){showPg('pg-home');setNav('nb-home');}
+function showPage(name){
+  if(name==='glossary'){renderGloss('All','');showPg('pg-glossary');setNav('nb-glossary');}
+  else if(name==='timeline'){renderTL();showPg('pg-timeline');setNav('nb-timeline');}
+  else if(name==='flashcards'){renderFC();showPg('pg-flashcards');setNav('nb-flashcards');}
+  else if(name==='quickref'){renderQR();showPg('pg-quickref');setNav('nb-quickref');}
+}
+function openUnit(id){curUnit=id;renderUnit(id);showPg('pg-unit');setNav(null);}
+
+function renderHomeGrid(){
+  document.getElementById('modulesGrid').innerHTML=MODULES.map(m=>`
+    <div class="mod-card" style="--mc:${m.color}" onclick="openUnit(${m.id})">
+      <div class="mod-num">Module ${m.id}</div>
+      <div class="mod-title">${m.title}</div>
+      <div class="mod-desc">${m.desc}</div>
+      <div class="mod-tags">${m.tags.slice(0,4).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+function renderUnit(id){
+  const m=MODULES.find(x=>x.id===id);
+  const c=m.color;
+  let notes='';
+  notes+=`<div class="section-block"><h3 style="color:${c}">Learning Objectives</h3><ol class="obj-list">${m.objectives.map(o=>`<li>${o}</li>`).join('')}</ol></div>`;
+  m.sections.forEach(s=>{
+    if(s.isTable){
+      notes+=`<div class="section-block"><h3 style="color:${c}">${s.title}</h3><div style="overflow-x:auto"><table class="compare-table"><thead><tr>${s.table.headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${s.table.rows.map(r=>`<tr>${r.map((cell,i)=>`<td${i===0?' style="color:var(--text);font-weight:600"':''}>${cell}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+    } else {
+      notes+=`<div class="section-block"><h3 style="color:${c}">${s.title}</h3>${s.content?`<p style="color:var(--text2);font-size:14px;margin-bottom:10px">${s.content}</p>`:''}${s.points?`<ul class="point-list">${s.points.map(p=>`<li>${p}</li>`).join('')}</ul>`:''}</div>`;
+    }
+  });
+  if(m.mnemonic){notes+=`<div class="mnemonic-card"><div class="mnemonic-title">🧠 Memory Trick — ${m.mnemonic.meaning}</div><div class="mnemonic-word">${m.mnemonic.word}</div><div class="mnemonic-items">${m.mnemonic.items.filter(i=>i.l).map(i=>`<div class="mnemonic-item"><span>${i.l}</span> — ${i.w}</div>`).join('')}</div></div>`;}
+  if(m.examples){notes+=`<div class="section-block"><h3 style="color:${c}">💼 Real-World Examples</h3><div class="two-col">${m.examples.map(ex=>`<div class="highlight-box"><div class="hb-title">📌 ${ex.e}</div><div style="font-size:13px;color:var(--text2)">${ex.i}</div></div>`).join('')}</div></div>`;}
+
+  const qhtml=`<div id="qz-${id}">${m.quiz.map((q,qi)=>`
+    <div class="quiz-q" id="qq-${id}-${qi}">
+      <div class="q-num">Question ${qi+1} of ${m.quiz.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-options">${q.opts.map((o,oi)=>`<button class="q-opt" id="qo-${id}-${qi}-${oi}" onclick="ansQ(${id},${qi},${oi})"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);min-width:18px">${['A','B','C','D'][oi]}</span>${o}</button>`).join('')}</div>
+      <div class="q-exp" id="qe-${id}-${qi}">💡 ${q.exp}</div>
+    </div>`).join('')}
+    <div class="quiz-actions"><button class="btn btn-outline" onclick="resetQz(${id})">🔄 Reset Quiz</button></div>
+    <div class="quiz-score" id="qs-${id}"><div style="font-size:13px;color:var(--text2);margin-bottom:6px">Your Score</div><div class="score-big" id="qsc-${id}">0/${m.quiz.length}</div><div style="font-size:13px;color:var(--text2);margin-top:6px" id="qfb-${id}"></div></div>
+  </div>`;
+
+  const sumhtml=`
+    <div class="summary-box"><h4>Module ${id} — ${m.title}</h4><ul class="point-list">${m.objectives.map(o=>`<li>${o}</li>`).join('')}</ul></div>
+    ${m.mnemonic?`<div class="mnemonic-card"><div class="mnemonic-title">🧠 ${m.mnemonic.meaning}</div><div class="mnemonic-word">${m.mnemonic.word}</div><div class="mnemonic-items">${m.mnemonic.items.filter(i=>i.l).map(i=>`<div class="mnemonic-item"><span>${i.l}</span> — ${i.w}</div>`).join('')}</div></div>`:''}
+    <div class="section-block"><h3 style="color:${c}">🔑 Key Terms — Module ${id}</h3><div class="gloss-grid">${GLOSSARY.filter(g=>g.unit===id).map(g=>`<div class="gloss-item"><div class="gloss-term">${g.term}</div><div class="gloss-def">${g.def}</div></div>`).join('')}</div></div>`;
+
+  document.getElementById('unitContent').innerHTML=`
+    <div class="unit-header" data-num="${id}" style="border-left-color:${c}">
+      <div class="unit-badge" style="background:${c}18;color:${c};border:1px solid ${c}40">Module ${id}</div>
+      <h2>${m.title}</h2>
+      <p>${m.desc}</p>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:10px">${m.tags.map(t=>`<span class="tag" style="border-color:${c}30;color:${c}">${t}</span>`).join('')}</div>
+    </div>
+    <div class="sticky-nav">
+      <div class="content-tabs">
+        <button class="tab-btn active" onclick="switchTab(this,'nt-${id}')">📝 Notes</button>
+        <button class="tab-btn" onclick="switchTab(this,'qz-tab-${id}')">🧪 Quiz (${m.quiz.length}Q)</button>
+        <button class="tab-btn" onclick="switchTab(this,'sm-${id}')">⚡ Summary</button>
+      </div>
+    </div>
+    <div class="tab-content active" id="tab-nt-${id}">${notes}</div>
+    <div class="tab-content" id="tab-qz-tab-${id}">${qhtml}</div>
+    <div class="tab-content" id="tab-sm-${id}">${sumhtml}</div>`;
+}
+
+function switchTab(btn,tid){
+  btn.closest('.content-tabs').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  let sib=btn.closest('.sticky-nav').nextElementSibling;
+  while(sib){if(sib.classList.contains('tab-content'))sib.classList.remove('active');sib=sib.nextElementSibling;}
+  document.getElementById('tab-'+tid).classList.add('active');
+}
+
+const QZ_STATE={};
+function ansQ(uid,qi,oi){
+  const m=MODULES.find(x=>x.id===uid),q=m.quiz[qi];
+  const box=document.getElementById(`qq-${uid}-${qi}`);
+  if(box.dataset.done)return;
+  box.dataset.done='1';
+  box.querySelectorAll('.q-opt').forEach(b=>b.disabled=true);
+  document.getElementById(`qo-${uid}-${qi}-${oi}`).classList.add(oi===q.ans?'sc':'sw');
+  if(oi!==q.ans)document.getElementById(`qo-${uid}-${qi}-${q.ans}`).classList.add('sh');
+  document.getElementById(`qe-${uid}-${qi}`).classList.add('show');
+  box.classList.add(oi===q.ans?'correct':'wrong');
+  if(!QZ_STATE[uid])QZ_STATE[uid]={c:0,tot:0};
+  QZ_STATE[uid].tot++;
+  if(oi===q.ans)QZ_STATE[uid].c++;
+  if(QZ_STATE[uid].tot===m.quiz.length){
+    const s=QZ_STATE[uid],el=document.getElementById(`qs-${uid}`);
+    el.style.display='block';
+    document.getElementById(`qsc-${uid}`).textContent=`${s.c}/${s.tot}`;
+    const p=s.c/s.tot;
+    document.getElementById(`qfb-${uid}`).textContent=p>=0.8?'🏆 Excellent! Module mastered.':p>=0.6?'👍 Good — review highlighted questions.':'📚 Keep studying — revisit notes and retry.';
+  }
+}
+function resetQz(uid){delete QZ_STATE[uid];renderUnit(uid);setTimeout(()=>{document.querySelectorAll('.tab-btn').forEach(b=>{if(b.textContent.includes('Quiz'))b.click();});},80);}
+
+function renderGloss(filter,search){
+  glossFilter=filter||'All';
+  const units=[...new Set(GLOSSARY.map(g=>g.unit))].sort((a,b)=>a-b);
+  document.getElementById('glossFilter').innerHTML=['All',...units.map(u=>`Module ${u}`)].map(f=>`<button onclick="renderGloss('${f}',document.getElementById('glossSearch').value)" class="${glossFilter===f?'active':''}">${f}</button>`).join('');
+  let items=GLOSSARY;
+  if(filter&&filter!=='All'){const n=parseInt(filter.split(' ')[1]);items=items.filter(g=>g.unit===n);}
+  if(search){const s=search.toLowerCase();items=items.filter(g=>g.term.toLowerCase().includes(s)||g.def.toLowerCase().includes(s));}
+  document.getElementById('glossGrid').innerHTML=items.map(g=>`<div class="gloss-item"><div class="gloss-term">${hl(g.term,search)}</div><div class="gloss-def">${hl(g.def,search)}</div><div class="gloss-unit-tag">Module ${g.unit}</div></div>`).join('');
+}
+function filterGloss(v){renderGloss(glossFilter,v);}
+function hl(t,q){if(!q)return t;return t.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'),'<mark>$1</mark>');}
+
+function renderTL(){
+  document.getElementById('tlContent').innerHTML=TIMELINE.map(e=>`<div class="tl-item"><div class="tl-dot" style="background:${e.c}"></div><div class="tl-year">${e.y}</div><div class="tl-event">${e.e}</div><div class="tl-desc">${e.d}</div></div>`).join('');
+}
+
+function renderFC(uf){
+  if(uf&&uf!=='All'){const n=parseInt(uf.split(' ')[1]);fcList=FLASHCARDS.filter(f=>f.u===n);}else{fcList=FLASHCARDS;}
+  fcIdx=0;
+  const units=[...new Set(FLASHCARDS.map(f=>f.u))].sort((a,b)=>a-b);
+  document.getElementById('fcFilter').innerHTML=['All',...units.map(u=>`Module ${u}`)].map(f=>`<button onclick="renderFC('${f}')" class="${(uf||'All')===f?'active':''}">${f}</button>`).join('');
+  updateFC();
+}
+function updateFC(){
+  if(!fcList.length)return;
+  const f=fcList[fcIdx];
+  document.getElementById('fcQ').textContent=f.q;
+  document.getElementById('fcA').textContent=f.a;
+  document.getElementById('fcHint').textContent=`Module ${f.u}`;
+  document.getElementById('fcCtr').textContent=`${fcIdx+1} / ${fcList.length}`;
+  document.getElementById('theCard').classList.remove('flipped');
+}
+function flipCard(){document.getElementById('theCard').classList.toggle('flipped');}
+function fcNext(){fcIdx=(fcIdx+1)%fcList.length;updateFC();}
+function fcPrev(){fcIdx=(fcIdx-1+fcList.length)%fcList.length;updateFC();}
+
+function renderQR(){
+  document.getElementById('qrContent').innerHTML=`
+  <div class="two-col">
+    <div>
+      <div class="section-block">
+        <h3>📊 All Key Theories & Authors</h3>
+        <ul class="point-list">
+          <li><strong>Taylor (1911)</strong> — Scientific Management: one best way, time-motion study</li>
+          <li><strong>Fayol (1916)</strong> — 14 Principles, 5 Functions (POLC+S)</li>
+          <li><strong>Mayo (1924)</strong> — Hawthorne Studies: social factors matter</li>
+          <li><strong>Maslow (1943)</strong> — Hierarchy of Needs (OCEAN)</li>
+          <li><strong>Drucker (1954)</strong> — Management by Objectives (MBO)</li>
+          <li><strong>McGregor (1960)</strong> — Theory X and Theory Y</li>
+          <li><strong>Herzberg (1959)</strong> — Two-Factor Theory (Hygiene + Motivators)</li>
+          <li><strong>Blake & Mouton (1964)</strong> — Managerial Grid: (9,9) ideal</li>
+          <li><strong>Tuckman (1966)</strong> — Forming-Storming-Norming-Performing-Adjourning</li>
+          <li><strong>Hersey & Blanchard (1968)</strong> — Situational Leadership: TSPD</li>
+          <li><strong>Lewin</strong> — Unfreeze-Change-Refreeze change model</li>
+          <li><strong>Mintzberg (1972)</strong> — 10 Managerial Roles</li>
+          <li><strong>Adams (1978)</strong> — Equity Theory: fairness in input-output ratios</li>
+          <li><strong>Simon</strong> — Bounded Rationality: satisficing not optimising</li>
+          <li><strong>Graen & Uhl-Bien</strong> — LMX Theory: in-group vs out-group</li>
+          <li><strong>Goleman (1995)</strong> — Emotional Intelligence (EQ)</li>
+        </ul>
+      </div>
+      <div class="section-block">
+        <h3>🎯 Leadership Styles Quick Reference</h3>
+        <div style="overflow-x:auto"><table class="compare-table">
+          <thead><tr><th>Style</th><th>Key Feature</th><th>Best For</th></tr></thead>
+          <tbody>
+            <tr><td>Autocratic</td><td>Leader decides alone</td><td>Crisis, unskilled workers</td></tr>
+            <tr><td>Democratic</td><td>Team participates</td><td>Creative, skilled teams</td></tr>
+            <tr><td>Laissez-faire</td><td>Full autonomy to team</td><td>Expert professionals</td></tr>
+            <tr><td>Transformational</td><td>Inspires through vision</td><td>Change management</td></tr>
+            <tr><td>Situational</td><td>Adapts to follower D-level</td><td>Varied team experience</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+    <div>
+      <div class="section-block">
+        <h3>🧠 All Mnemonics at a Glance</h3>
+        ${MODULES.filter(m=>m.mnemonic).map(m=>`<div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <div style="font-size:10px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:1px">Module ${m.id}: ${m.mnemonic.meaning}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;color:var(--accent);margin:3px 0">${m.mnemonic.word}</div>
+          <div style="font-size:12px;color:var(--text2)">${m.mnemonic.items.filter(i=>i.l).map(i=>`<span style="color:var(--accent)">${i.l}</span>=${i.w.split(' ')[0]}`).join(' · ')}</div>
+        </div>`).join('')}
+      </div>
+      <div class="section-block">
+        <h3>⚡ Motivation Theories Compared</h3>
+        <div style="overflow-x:auto"><table class="compare-table">
+          <thead><tr><th>Theory</th><th>Focus</th><th>Key Insight</th></tr></thead>
+          <tbody>
+            <tr><td>Maslow</td><td>Needs hierarchy</td><td>Satisfy lower needs first</td></tr>
+            <tr><td>Herzberg</td><td>Hygiene + Motivators</td><td>Hygiene prevents dissatisfaction; motivators drive motivation</td></tr>
+            <tr><td>Theory X/Y</td><td>Managerial assumptions</td><td>Assumptions shape management style</td></tr>
+            <tr><td>Equity Theory</td><td>Perceived fairness</td><td>Inequity drives behaviour to restore balance</td></tr>
+            <tr><td>Intrinsic/Extrinsic</td><td>Source of motivation</td><td>Intrinsic is more sustainable</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+const SDATA=[];
+MODULES.forEach(m=>{
+  m.sections.forEach(s=>{
+    const txt=[(s.content||'').replace(/<[^>]*>/g,''), (s.points||[]).map(p=>p.replace(/<[^>]*>/g,'')).join(' ')].join(' ').substring(0,200);
+    SDATA.push({uid:m.id,title:m.title,section:s.title,txt,color:m.color});
+  });
+  GLOSSARY.filter(g=>g.unit===m.id).forEach(g=>SDATA.push({uid:m.id,title:m.title,section:'Glossary: '+g.term,txt:g.def,color:m.color}));
+});
+let stimer;
+function doSearch(v){
+  clearTimeout(stimer);
+  if(!v.trim()){goHome();return;}
+  stimer=setTimeout(()=>{
+    const q=v.toLowerCase();
+    const res=SDATA.filter(d=>d.section.toLowerCase().includes(q)||d.txt.toLowerCase().includes(q)).slice(0,20);
+    document.getElementById('srResults').innerHTML=res.length?res.map(r=>`
+      <div class="sr-item" onclick="openUnit(${r.uid})">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:${r.color}">Module ${r.uid} — ${r.title}</div>
+        <div style="font-weight:600;font-size:13px;margin:2px 0">${r.section}</div>
+        <div style="font-size:13px;color:var(--text2)">${hl(r.txt.substring(0,150),v)}...</div>
+      </div>`).join(''):'<p style="color:var(--text2);padding:20px 0">No results found for "'+v+'".</p>';
+    showPg('pg-search');
+  },320);
+}
+
+window.addEventListener('scroll',()=>{
+  const tot=document.body.scrollHeight-window.innerHeight;
+  document.getElementById('progressBar').style.width=(tot>0?(window.scrollY/tot*100):0)+'%';
+});
+
+renderHomeGrid();
+renderFC();
+</script></body></html>
